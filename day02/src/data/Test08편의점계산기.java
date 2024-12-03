@@ -1,6 +1,6 @@
 package data;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Test08편의점계산기 {
 
