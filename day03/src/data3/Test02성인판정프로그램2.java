@@ -1,7 +1,6 @@
 package data3;
 
 import java.time.LocalDate;
-import java.time.Year;
 
 public class Test02성인판정프로그램2 {
 	public static void main (String[] args) {
