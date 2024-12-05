@@ -10,7 +10,7 @@ public class Test05지하철요금계산기 {
 		//입력
 		Scanner sc = new Scanner(System.in);
 		System.out.print("출생년도 : ");
-		int birth = sc.nextInt();
+		int birth = sc.nextInt(); 
 		
 		int card = 500;
 		int free = 0, child = 500, teen = 800, adult = 1400;
