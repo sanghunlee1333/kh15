@@ -30,7 +30,7 @@ public class Test07주차요금계산기 {
 		System.out.println("주차시간 총 " + hour + "시간 " + minute + "분");
 		if (time <= 30) {
 			System.out.println("30분 미만 주차(회차)");
-		} else if (time >= 31) {
+		} else if (price > 10000) {
 			System.out.println("주차요금 : 10000원");
 		} else {
 			System.out.println("주차요금 : " + price + "원");
