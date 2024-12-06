@@ -13,7 +13,7 @@ public class Test01카운트세기 {
 				count++; //카운트 증가
 			}
 		}
-		System.out.println(count); //카운트 출력
+		System.out.println("짝수 개수 = " + count); //카운트 출력
 	}
 
 }
