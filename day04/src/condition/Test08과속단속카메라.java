@@ -6,6 +6,7 @@ public class Test08과속단속카메라 {
 
 	public static void main(String[] args) {
 		
+		/*
 		System.out.print("자동차의 속력을 입력하세요 : ");
 		Scanner sc = new Scanner(System.in);
 
@@ -26,6 +27,37 @@ public class Test08과속단속카메라 {
 		}
 		else {
 			System.out.println("범칙금은 " + price + "원입니다.");
+		}
+		*/
+		
+		//입력
+		Scanner sc = new Scanner(System.in);
+		System.out.print("자동차 속도 : ");
+		int speed = sc.nextInt();
+		
+		//처리
+		int limit = 100; //제한속도
+		//int over = 110;
+		int percent = 10; //여유%
+		int over = limit + limit * percent / 100;
+		
+		int base = 40000, plus = 10000, maximum = 100000;
+		
+		if(speed >= over) {
+			//System.out.println("과속");
+			int gap = speed - over;
+			//int fine = 4만원 + 10km당 1만원;
+			int fine = base + gap / 10 * plus;
+			System.out.println("초과한 속도 : " + gap + "km");
+			if (fine < maximum) {
+			System.out.println("범칙금 : " + fine);
+			}
+			else {
+				System.out.println("범칙금 : " + maximum);
+			}
+		}
+		else {
+			System.out.println("정상 통과");
 		}
 
 	}
