@@ -8,6 +8,27 @@ public class Test05구구단게임 {
 	public static void main(String[] args) {
 
 		/*
+		1. 데이터와 변수
+		숫자 o - 정수, 실수, (문자)
+		숫자 x - 논리, 문자열, (클래스)
+		2. 입출력
+		System.out, System.in
+		Scanner
+		3. 조건
+		if
+		switch-case
+		break
+		4. 반복
+		for
+		while
+		do-while
+		5. 배열
+		---- 프로그래밍 공용 기초파트 끝 ----
+		---- 객체 지향 프로그래밍 파트 시작 ----
+		---- 라이브러리 프로그래밍 파트 ----
+		*/
+		
+		/*
 		
 		Random r = new Random();
 		Scanner sc = new Scanner(System.in);
