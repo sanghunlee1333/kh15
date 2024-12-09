@@ -31,16 +31,16 @@ public class Test03성적분석프로그램 {
 			total += score[i];
 			average = (double)total / score.length;
 		}
-		System.out.println(average); // 4. 전체 학생의 점수 평균 구하기
+		System.out.println("전체 학생의 평균 점수는 " + average); // 4. 전체 학생의 점수 평균 구하기
 		
 		int newStudent = 85;
 		
 		for (int i = 0; i < score.length; i++) { 
-			if (newStudent - score[i] <= 0) {
+			if (newStudent < score[i]) {
 				num++;
 			}
 		}
-		System.out.println(num); // 5. 11번째 학생 등수 구하기
+		System.out.println("전학 온 학생의 예상 등수는 " + num); // 5. 11번째 학생 등수 구하기
 
 	}
 
