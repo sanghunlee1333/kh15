@@ -2,19 +2,20 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		
+
 		Scanner sc = new Scanner(System.in);
-		int h1 = sc.nextInt();
-		int m1 = sc.nextInt();
+
+		int num = sc.nextInt();
+
+		for (int i = 0; i < num; i++) {
+			System.out.print("*");
+			for (int j = 4; i <= j; j--) {
+				System.out.print("");
+			}
+			
+			
+		}System.out.println("");
 		
-		int time1 = h1 * 60 + m1;
-		int time2 = time1 - 45;
-		int h2 = time2 / 60;
-				
-		if (time2 < 0) {
-			time2 = 60 - time2;
-		}
-				
-		System.out.print(h2 + " " + time2);
+
 	}
 }
