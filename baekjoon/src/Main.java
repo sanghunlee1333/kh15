@@ -5,16 +5,6 @@ public class Main {
 
 		Scanner sc = new Scanner(System.in);
 
-		int num = sc.nextInt();
-
-		for (int i = 0; i < num; i++) {
-			System.out.print("*");
-			for (int j = 4; i <= j; j--) {
-				System.out.print("");
-			}
-			
-			
-		}System.out.println("");
 		
 
 	}
