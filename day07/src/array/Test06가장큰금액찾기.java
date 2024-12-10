@@ -3,7 +3,7 @@ package array;
 public class Test06가장큰금액찾기 {
 
 	public static void main(String[] args) {
-		
+		 
 		/*
 		int[] priceList = new int[] { 100000, 5000000, 2500000, 30000000, 50000 };
 		int max = 0;
