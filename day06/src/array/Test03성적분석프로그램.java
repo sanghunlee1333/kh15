@@ -33,7 +33,7 @@ public class Test03성적분석프로그램 {
 			total += score[i];
 			average = (double)total / score.length;
 		}
-		System.out.println(average); // 4. 전체 학생의 점수 평균 구하기
+		System.out.println("전체 학생의 평균 점수는 " + average); // 4. 전체 학생의 점수 평균 구하기
 		
 		int newStudent = 85;
 		
