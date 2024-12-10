@@ -32,13 +32,24 @@ public class Test10버블정렬 {
 		// 버블정렬 3회차
 		// - [0] vs [1] , [1] vs [2]
 		// 10 20 30 40 50
-				for (int i = 0; i <= 1; i++) {
-					if (numbers[i] > numbers[i + 1]) {
-						int backup = numbers[i];
-						numbers[i] = numbers[i + 1];
-						numbers[i + 1] = backup;
-					}
-				}
+		for (int i = 0; i <= 1; i++) {
+			if (numbers[i] > numbers[i + 1]) {
+				int backup = numbers[i];
+				numbers[i] = numbers[i + 1];
+				numbers[i + 1] = backup;
+			}
+		}
+				
+		// 버블정렬 4회차
+		// - [0] vs [1]
+		// 10 20 30 40 50
+		for (int i = 0; i <= 0; i++) {
+			if (numbers[i] > numbers[i + 1]) {
+				int backup = numbers[i];
+				numbers[i] = numbers[i + 1];
+				numbers[i + 1] = backup;
+			}
+		}
 
 		// 출력
 		for (int i = 0; i < numbers.length; i++) {
