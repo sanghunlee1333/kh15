@@ -12,7 +12,6 @@ public class Test01배열생성방법 {
 		int[]a = new int[] {10, 20, 30, 40, 50}; 
 		
 		//2
-		//
 		//int[]b = new int[]{0,0,0,0,0}
 		int[]b = new int[5];
 		b[0] = 10;
