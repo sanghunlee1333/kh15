@@ -87,4 +87,21 @@ System.out.println("Hello world!");
 
 만약 내가 가진 이미지를 표시하고 싶다면 저장소에 이미지를 미리 업로드하여 주소를 확보해야 한다.
 
-![내가올린이미지](https://raw.githubusercontent.com/sanghunlee1333/kh15/refs/heads/main/example%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?token=GHSAT0AAAAAAC3JPZGGN7CDUXI5ZIFGZUDWZ2X7GNA))
+![내가올린이미지](https://raw.githubusercontent.com/sanghunlee1333/kh15/refs/heads/main/example%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?token=GHSAT0AAAAAAC3JPZGGN7CDUXI5ZIFGZUDWZ2X7GNA)  
+
+이미지가 같은 위치에 있다면 풀주소가 아니라 상대적인 경로로도 작성이 가능하다
+
+![내가올린이미지](./example이미지.jpg)  
+
+
+## 하이퍼링크
+
+하이퍼링크란 다른 페이지로 연결되는 연결고리를 말한다.  
+클릭을 하면 이동할 수  있도록 표시 및 처리된다.
+
+```
+[표시할글자](이동할주소)
+```
+
+[구글로 이동](https://www.google.com/webhp?hl=k)
+
