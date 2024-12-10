@@ -1,6 +1,6 @@
 package array;
 
-public class Test01배열생성방법 {
+public class Test04배열생성방법 {
 
 	public static void main(String[] args) {
 		//배열 생성 방법은 두 가지가 있다
