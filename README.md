@@ -82,3 +82,9 @@ System.out.println("Hello world!");
 ```
 ![설명](주소)
 ```
+
+![KH정보교육원로고](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsMVZFbqzbFT8FzEa8PbR0lrWpNzbqGQAcEw&s)  
+
+만약 내가 가진 이미지를 표시하고 싶다면 저장소에 이미지를 미리 업로드하여 주소를 확보해야 한다.
+
+![내가올린이미지](https://raw.githubusercontent.com/sanghunlee1333/kh15/refs/heads/main/example%EC%9D%B4%EB%AF%B8%EC%A7%80.jpg?token=GHSAT0AAAAAAC3JPZGGN7CDUXI5ZIFGZUDWZ2X7GNA))
