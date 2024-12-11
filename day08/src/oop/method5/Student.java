@@ -26,7 +26,7 @@ public class Student {
 //		}
 //	}
 	
-	// 위와 동일한 표현! 아래 표현이 더 좋다. 차단하는 조건이 늘어날 가능성이 크므로, if문으로 아래로 코드를 증가시킬 수 있음	
+	// 위와 동일한 표현! 아래 표현이 더 좋다. 차단하는 조건이 늘어나는 가능성이 크므로, if문으로 아래로 코드를 증가시킬 수 있음	
 	void setKorean(int korean) {
 		if(korean < 0 || korean > 100) {
 			return; //메소드 중지 명령 *break은 구문을 나가라는 명령 *return은 중지와 반환의 의미를 가지고 있음
@@ -73,12 +73,12 @@ public class Student {
 		this.setMath(math);
 	}
 	
-	void show() {
+	void show() { //반환이랑 출력은 다르다.
 		System.out.println("이름 : " + this.getName());
 		System.out.println("국어 : " + this.getKorean());
 		System.out.println("영어 : " + this.getEnglish());
 		System.out.println("수학 : " + this.getMath());
-		System.out.println("수학 : " + this.getTotal()); //계산을 getter메소드 한방에 할 수 있다!
+		System.out.println("수학 : " + this.getTotal()); //계산을 아래처럼 복잡하게 적지 않고 getter메소드 한방에 할 수 있다!
 		System.out.println("수학 : " + this.getAverage());
 	}
 	
