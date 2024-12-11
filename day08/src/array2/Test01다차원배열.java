@@ -5,7 +5,7 @@ public class Test01다차원배열 {
 	public static void main(String[] args) {
 		//차원이란 무엇인가?
 		//- 데이터를 바라보는 관점(높이)
-		
+		 
 		//(ex)
 		//3개 지역에서 5개의 학교를 뽑아
 		//각 학년마다 2개씩 반을 정하고 10명씩 추첨하여 성적 정보를 수집
