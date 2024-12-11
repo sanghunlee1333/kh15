@@ -14,9 +14,10 @@ public class Student {
 	//	코드
 	//}
 	
+	//초기화 메소드
 	//이 메소드는 데이터 4개를 줘야 실행된다
 	//외부에서 데이터를 가져와서 저장
-	void init(String name, int korean, int english, int math) {
+	void init(String name, int korean, int english, int math ) {//매개 변수 *외부에서 가져오는 것은 인자 라고 함
 		this.name = name;
 		this.korean = korean;
 		this.english = english;
