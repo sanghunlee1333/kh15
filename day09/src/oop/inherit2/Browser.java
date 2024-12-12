@@ -6,7 +6,7 @@ package oop.inherit2;
 public class Browser {
 			
 	//공통 필드
-	private String url;
+	private String url; //상속받은 클래스에서 private은 방어벽. 그 해결책으로 protected 사용
 	
 	//공통 메소드
 	public String getUrl() {
