@@ -13,6 +13,7 @@ public class Test01폰분납금정보 {
 		p3.init("아이폰16", "LG", 2100000, 36);
 		p4.init("아이폰16", "SK", 2150000);
 		
+		//setter메소드는 만들었다고 꼭 써야하는 것은 아님. 앞으로 설정할 데이터의 필터링을 하기 위해 만든 것.
 //		p1.setName("갤럭시Fold6");
 //		p1.setAgency("SK");
 //		p1.setPrice(2200000);
