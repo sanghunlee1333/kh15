@@ -79,7 +79,7 @@ public class Student {
 		System.out.println("영어 : " + this.getEnglish());
 		System.out.println("수학 : " + this.getMath());
 		System.out.println("수학 : " + this.getTotal()); //계산을 아래처럼 복잡하게 적지 않고 getter메소드 한방에 할 수 있다!
-		System.out.println("수학 : " + this.getAverage());
+		System.out.println("수학 : " + this.getAverage()); //출력하면서 계산하는 것은 별로 좋지 않다.
 	}
 	
 //	void show() {
