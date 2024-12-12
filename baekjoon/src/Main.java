@@ -14,7 +14,7 @@ public class Main {
 			if(a[i] > a[max]) {
 				max = i;
 			}
-		}
+		} 
 
 		
 		System.out.println(a[max]);
