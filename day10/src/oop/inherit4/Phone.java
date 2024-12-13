@@ -10,6 +10,8 @@ package oop.inherit4;
 //protected
 //public
 
+//상속은 클래스가 많을 때 유리하다! 처음에 코드 작성이 오래걸리지만, 작성할 수록 시간이 절감된다.
+
 public /* final */ class Phone { // final을 붙이면 상속 불가
 
 	// 상속과 무관하게 모두 제한(반드시 지켜야되는 설정방식)
