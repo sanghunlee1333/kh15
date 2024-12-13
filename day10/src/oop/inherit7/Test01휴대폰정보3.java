@@ -4,6 +4,8 @@ public class Test01휴대폰정보3 {
 
 	public static void main(String[] args) {
 		
+		//다형성 - 돈까스 -> 안심 / 등심/ 옛날 등등 보는 관점에 따라서
+		
 //		Galaxy24s a = new Galaxy24s("01072577271", "블랙");
 //		GalaxyFold6 b = new GalaxyFold6("01036787272", "네이비");
 //		IPhone15 c = new IPhone15("01012345678", "레드");
