@@ -27,7 +27,7 @@ public class Test01노트북정보 {
 			m2.power();
 		}
 		else if (notebook == 1 && feature == 2) {
-			m2.play();
+			m2.video();
 		}
 		else if (notebook == 1 && feature == 3) {
 			m2.typing();
@@ -36,7 +36,7 @@ public class Test01노트북정보 {
 			g2.power();
 		}
 		else if (notebook == 2 && feature == 2) {
-			g2.play();
+			g2.video();
 		}
 		else {
 			g2.typing();

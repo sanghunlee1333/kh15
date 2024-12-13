@@ -5,7 +5,7 @@ public class Macbook extends Notebook {
 	public void power() {
 		System.out.println("맥북의 전원을 켭니다");
 	}
-	public void play() {
+	public void video() {
 		System.out.println("맥북의 동영상 재생 기능을 실행합니다");
 	}
 	public void typing() {
