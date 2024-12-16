@@ -1,46 +1,40 @@
 package oop.poly2;
 
-import java.util.Scanner;
+// 상속 안한 버전
+// 중복 코드가 있어서 별로다
 
 public class Test01노트북정보 {
 
 	public static void main(String[] args) {
 
-		Scanner sc = new Scanner(System.in);
+		int type = 1; //기종(1. 맥북 2. 갤럭시북
+		int action = 2; //기능(1. 전원 2. 동영상 재생 3. 타이핑 //스캐너 처리해도 됨
 		
-		System.out.println("노트북을 먼저 선택하세요");
-		System.out.print("1. 맥북 2. 갤럭시북 : ");
-		int notebook = sc.nextInt();
-		System.out.println();
+		if (type == 1) { //맥북
+			Macbook notebook = new Macbook();
+			if (action == 1) 
+				notebook.power();
+			else if (action == 2) 
+				notebook.video();
+			else 
+				notebook.typing();
+		}
+		else { //갤럭시북
+			Galaxybook notebook = new Galaxybook(); //서로 다른 괄호이므로
+													//인스턴스 이름이 같아도 노상관
+			if (action == 1) 
+				notebook.power();
+			else if (action == 2) 
+				notebook.video();
+			else 
+				notebook.typing();
+		}
+			
 		
-		System.out.println("테스트할 기능을 선택하세요");
-		System.out.print("1. 전원 2. 동영상재생 : 3. 타이핑 : ");
-		int feature = sc.nextInt();
 		
-		Macbook m1 = new Macbook();
-		Notebook m2 = m1;
+	
 		
-		Galaxybook g1 = new Galaxybook();
-		Notebook g2 = g1;
 		
-		if (notebook == 1 && feature == 1) {
-			m2.power();
-		}
-		else if (notebook == 1 && feature == 2) {
-			m2.video();
-		}
-		else if (notebook == 1 && feature == 3) {
-			m2.typing();
-		}
-		else if (notebook == 2 && feature == 1) {
-			g2.power();
-		}
-		else if (notebook == 2 && feature == 2) {
-			g2.video();
-		}
-		else {
-			g2.typing();
-		}
 	}
 
 }

@@ -1,6 +1,6 @@
 package oop.poly2;
 
-public class Galaxybook extends Notebook {
+public class Galaxybook {
 	
 	public void power() {
 		System.out.println("갤럭시북의 전원을 켭니다");
