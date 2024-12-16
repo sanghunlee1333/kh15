@@ -9,7 +9,7 @@ public class Main {
 		
 		for (int i = 0; i < b.length; i++) {
 			b[i] = i;
-		}
+		} 
 		
 		for (int i = 0; i < a.length; i++) {
 			a[i] = sc.nextInt();
