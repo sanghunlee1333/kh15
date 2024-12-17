@@ -1,6 +1,6 @@
 package oop.multi2;
 
-public class Drone implements Electronic, Transfortation, Flyable {
+public class Drone extends Transportation implements Electronic, Flyable {
 
 	@Override
 	public void on() {

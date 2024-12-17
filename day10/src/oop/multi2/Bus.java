@@ -1,6 +1,6 @@
 package oop.multi2;
 
-public class Bus implements Transfortation {
+public class Bus extends Transportation {
 
 	@Override
 	public void move() {

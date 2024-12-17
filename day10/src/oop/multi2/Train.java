@@ -1,6 +1,6 @@
 package oop.multi2;
 
-public class Train implements Transfortation, Reserve {
+public class Train extends Transportation implements Reserve {
 	
 	@Override
 	public void move() {

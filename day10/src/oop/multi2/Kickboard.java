@@ -1,6 +1,6 @@
 package oop.multi2;
 
-public class Kickboard implements Electronic, Transfortation {
+public class Kickboard extends Transportation implements Electronic {
 	
 	@Override
 	public void on() {

@@ -1,6 +1,6 @@
 package oop.multi2;
 
-public class Airplane implements Transfortation, Flyable, Reserve {
+public class Airplane extends Transportation implements Flyable, Reserve {
 	
 	@Override
 	public void move() {
