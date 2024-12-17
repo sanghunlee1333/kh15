@@ -1,5 +1,22 @@
 package api.lang.string;
 
+//API(Application Programming Interface)
+//- 자바 API는 자바에서 제공해주는 기능들의 총합
+//- API에는 반드시 문서(Document)가 존재
+//- 문서에서 필요한 기능을 찾아 사용할 수 있으면 충분
+//- 문서에서는 코드를 제공하지 않고 간단한 소개만 존재
+//- JDK 버전을 맞춰서 보는 게 좋다
+//
+//자바API의 체계
+//- 모듈(module) > 패키지(package) > 구성요소
+//- 모듈은 배포가 가능한 하나의 단위(ex : 웹개발용 모듈, 데스크탑 개발용 모듈, 모바일 개발용 모듈)
+//- 패키지는 용도별로 구성요소들을 모아둔 단위
+//- 구성요소는 class, interface, enum, annotation, exception, error 등 이 존재
+//
+//Object는 모든 클래스 체계에서 최상위 클래스
+//내가 만든 클래스도 적용될까?
+
+
 public class Test01String클래스 {
 
 	public static void main(String[] args) {
