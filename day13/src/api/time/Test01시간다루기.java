@@ -15,8 +15,8 @@ public class Test01시간다루기 {
 		//왜 이렇게 많을까? 이게 다 Y2K(2000년) 때문!
 	
 		//(ex) Date 클래스
-		Date a = new Date();
-		Date b = new Date(124, 11, 18); //오버로딩 //1900년 기준 & 1~12 -> 0~11 -> 오래됨..
+		Date a = new Date(); //1900년 기준
+		Date b = new Date(124, 11, 18); //오버로딩 // Date는 1900년 기준 & 1~12 -> 0~11 -> 오래됨..
 		
 		System.out.println("a = " + a);
 		System.out.println("b = " + b);
