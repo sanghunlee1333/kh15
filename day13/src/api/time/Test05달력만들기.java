@@ -11,21 +11,34 @@ public class Test05달력만들기 {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		Calendar c = Calendar.getInstance();
 		
-//		System.out.print("연도 : ");
-//		int year = sc.nextInt();
-//		c.set(Calendar.YEAR, year);
-//		
-//		System.out.print("월 : ");
-//		int month = sc.nextInt();		
-//		c.set(Calendar.MONTH, month);
+		int year = sc.nextInt();
+		int month = sc.nextInt();
+		
+		//구해야하는 정보
+		//- 주어진 달의 1일이 무슨 요일인가
+		//- 1일에서 몇일 전으로 이동해야 하는가
 				
-		c.set(Calendar.DAY_OF_WEEK, 1);
-		int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+		Calendar c = Calendar.getInstance();
+		c.set(year, month - 1, 1); //해당 달의 시작일로 달력 설정
+		int week = c.get(Calendar.DAY_OF_WEEK);
 		
-		Format f = new SimpleDateFormat("EEE");
-		System.out.println(f.format(dayOfWeek));
+		c.add(Calendar.DATE, -week + 1 ); //달력의 시작지점(일요일)으로 이동
+		
+		//출력
+		System.out.println("일\t월\t화\t수\t목\t금\t토");
+		for(int i = 0; i < 42; i++) {
+			System.out.print(c.get(Calendar.DATE)); //날짜 출력
+			System.out.print("\t");
+			
+			c.add(Calendar.DATE, 1); //하루 뒤로 이동
+			
+			if(i % 7 == 6) {
+				System.out.println();
+			}
+		}
+		
+
 		
 	
 		
