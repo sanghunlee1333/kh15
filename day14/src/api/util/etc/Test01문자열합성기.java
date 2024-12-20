@@ -14,9 +14,7 @@ public class Test01문자열합성기 {
 		while (true) {
 			System.out.print("단어 입력 : ");
 			String word = sc.next();
-			
 			if (word.equals("종료")) {
-				
 				System.out.println("입력한 단어 목록");
 				System.out.println(sj.toString());
 				System.out.println("총 " + count + "개 입력하셨습니다");
