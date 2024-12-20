@@ -32,7 +32,24 @@ public class Test01문자열합성기 {
 //		}
 //		sc.close(); // 한번 종료하면 다시는 못 부름.
 		
+		Scanner sc = new Scanner(System.in);
+		StringJoiner joiner = new StringJoiner(",", "[", "]"); 
+		int count = 0;
 		
+		while(true) {
+			System.out.print("입력 : ");
+			String word = sc.next();
+			if(word.equals("종료")) break;
+			
+			count++;
+			joiner.add(word);
+		}
+		
+		sc.close();
+		
+		System.out.println("입력한 단어 목록");
+		System.out.println(joiner.toString());
+		System.out.println("총 " + count+"번 입력했습니다");
 	}
 
 }
