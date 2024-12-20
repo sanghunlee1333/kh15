@@ -33,23 +33,22 @@ public class Main {
 //				System.out.println(j);
 //			}
 //		}
+
+//		Scanner sc = new Scanner(System.in);
+//		
+//		int testCase = sc.nextInt();
+//		int[] num = new int[testCase];
+//		String[] s = new String[testCase];
+//		for (int i = 0; i < testCase; i++) {
+//			num[i] = sc.nextInt();
+//			s[i] = sc.next();
+//			char ss = s[i].charAt(i);
+//		}
+//		for (int i = 0; i < testCase; i++) {
+//			System.out.println(s[i].charAt(i) *= num[i]);
+//		}
 		
-		
-			Scanner sc = new Scanner(System.in);
-			
-			int caseNum = sc.nextInt();
-			String[] a = new String[caseNum];
-						
-			for (int i = 0; i < caseNum; i++) {
-				a[i] = sc.next();
-			}
-			for (int i = 0; i < caseNum; i++) {
-				System.out.print(a[i].charAt(0));
-				System.out.print(a[i].charAt(a[i].length()-1));
-				System.out.println();
-			}
-			
-	        
-		}
+
+	}
 
 }
