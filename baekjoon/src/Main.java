@@ -36,19 +36,60 @@ public class Main {
 
 //		Scanner sc = new Scanner(System.in);
 //		
+//		String answer = "";
+//		
 //		int testCase = sc.nextInt();
 //		int[] num = new int[testCase];
 //		String[] s = new String[testCase];
 //		for (int i = 0; i < testCase; i++) {
 //			num[i] = sc.nextInt();
 //			s[i] = sc.next();
-//			char ss = s[i].charAt(i);
 //		}
-//		for (int i = 0; i < testCase; i++) {
-//			System.out.println(s[i].charAt(i) *= num[i]);
+//		for (int i = 0; i < s[i].length(); i++) {
+//			for (int k = 0; k < num[i]; k++ )
+//				
+//				System.out.print(answer + s[i].charAt(i));
+//		}
+
+		
+//		String answer = "";
+//		String my_string = 	  "hahahahahahahahha";
+//        String overwrite_string = "youretoslow";
+//        int s = 4;
+//        
+//        for(int i = 0; i < s; i++){
+//            answer = answer + my_string.charAt(i);   
+//        }    
+//        
+//        for(int i = 0; i < overwrite_string.length(); i++){
+//            answer += overwrite_string.charAt(i);
+//        }
+//        
+//        
+//        for(int i = my_string.length(); i < my_string.length() - answer.length(); i++){
+//            answer += my_string.charAt(i - (my_string.length() - answer.length()));
+//            System.out.println(answer);
+//        }
+//        System.out.println(answer);
+//        //return answer;
 //		}
 		
-
+		Scanner sc = new Scanner(System.in);
+		
+		String sentense = sc.nextLine();
+		int count = 1;
+		
+		for (int i = 0; i < sentense.length(); i++) {
+			
+			if(sentense.charAt(0) != ' ') {
+				i++;
+			}
+			if(sentense.charAt(i) == ' ') {
+				if(sentense.charAt(sentense.length()-1) != ' ')	count++;
+			}
+		}
+		System.out.println(count);	
+		
 	}
 
 }
