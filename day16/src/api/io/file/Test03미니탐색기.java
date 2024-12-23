@@ -30,7 +30,6 @@ public class Test03미니탐색기 {
 			String type = "";
 			for (File file : files) {
 				String[] names = f1.list();
-
 				if (file.isFile()) {
 					type = "[파일]";
 				} else if (file.isDirectory()) {
