@@ -51,7 +51,6 @@ public class Main {
 //				System.out.print(answer + s[i].charAt(i));
 //		}
 
-		
 //		String answer = "";
 //		String my_string = 	  "hahahahahahahahha";
 //        String overwrite_string = "youretoslow";
@@ -73,23 +72,24 @@ public class Main {
 //        System.out.println(answer);
 //        //return answer;
 //		}
-		
+
 		Scanner sc = new Scanner(System.in);
-		
+
 		String sentense = sc.nextLine();
 		int count = 1;
-		
+
 		for (int i = 0; i < sentense.length(); i++) {
+			if (sentense.charAt(0) != ' ') {
+				if (sentense.charAt(i) == ' ') {
+					count++;
+					if (sentense.charAt(sentense.length() - 1) != ' ')
+						count--;
+				}
+			}
 			
-			if(sentense.charAt(0) != ' ') {
-				i++;
-			}
-			if(sentense.charAt(i) == ' ') {
-				if(sentense.charAt(sentense.length()-1) != ' ')	count++;
-			}
 		}
-		System.out.println(count);	
-		
+		System.out.println(count);
+
 	}
 
 }
