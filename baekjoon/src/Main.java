@@ -73,23 +73,42 @@ public class Main {
 //        //return answer;
 //		}
 
-		Scanner sc = new Scanner(System.in);
+//		Scanner sc = new Scanner(System.in);
+//
+//		String sentense = sc.nextLine();
+//		int count = 1;
+//
+//		for (int i = 0; i < sentense.length(); i++) {
+//			if (sentense.charAt(0) != ' ') {
+//				if (sentense.charAt(i) == ' ') {
+//					count++;
+//					if (sentense.charAt(sentense.length() - 1) != ' ')
+//						count--;
+//				}
+//			}
+//			
+//		}
+//		System.out.println(count);
 
-		String sentense = sc.nextLine();
-		int count = 1;
-
-		for (int i = 0; i < sentense.length(); i++) {
-			if (sentense.charAt(0) != ' ') {
-				if (sentense.charAt(i) == ' ') {
-					count++;
-					if (sentense.charAt(sentense.length() - 1) != ' ')
-						count--;
-				}
-			}
+//		String ineq = "<";
+//		String eq = "=";
+//		
+//		int n = 50;
+//		int m = 10;
+//		
+//		int answer = 0;
+//		
+//		if()
+//		
+//		ineq = ineq.replace("\"", "");
+//		eq = eq.replace("\"", "");
+//		
+//		String a = (ineq + eq).replace("\"", "");
+//		
+//		
+//		System.out.println(a);
 			
-		}
-		System.out.println(count);
-
+		
 	}
 
 }
