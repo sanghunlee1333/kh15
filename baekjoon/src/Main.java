@@ -107,7 +107,18 @@ public class Main {
 //		
 //		
 //		System.out.println(a);
-			
+		
+		Scanner sc = new Scanner(System.in);
+		int[] rest = new int[10];
+		
+		for(int i = 0; i < 10; i++) {
+			int num = sc.nextInt();
+			rest[i] = num % 42;
+		}
+//		for(int i = 0; i < 10; i++) {
+//			if(rest[i] = )
+//		}
+		
 		
 	}
 
