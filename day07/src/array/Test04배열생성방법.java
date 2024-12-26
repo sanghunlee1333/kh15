@@ -12,16 +12,17 @@ public class Test04배열생성방법 {
 		int[]a = new int[] {10, 20, 30, 40, 50}; 
 		
 		//2
-		//int[]b = new int[]{0,0,0,0,0}
-		int[]b = new int[5];
+		//int[] b = new int[]{0,0,0,0,0}
+		int[] b = new int[5];
 		b[0] = 10;
 		b[1] = 20;
 		b[2] = 30;
 		b[3] = 40;
-		//b[4] = 50; //error(범위 초과)
+		b[4] = 50; 
+		//b[5] = 60; //error(범위 초과)
 		
 		for (int i = 0; i<a.length; i++) {
-			
+			System.out.println(b[i]);
 		}
 	}
 
