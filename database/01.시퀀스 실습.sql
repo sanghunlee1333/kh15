@@ -87,6 +87,7 @@ country_population number not null,
 check(regexp_like(country_name, '^[가-힣]{1,15}$')),
 check(country_population > 0)
 );
+drop sequence country_seq;
 create sequence country_seq;
 --create sequence country_seq nocache;
 
@@ -95,6 +96,7 @@ values(country_seq.nextval, '한국', '서울', 50000000);
 commit;
 select * from country;
 
+drop table player;
 create table player(
 player_no number primary key,--구분을 위해 추가한 항목
 player_name varchar2(21) not null,
@@ -110,6 +112,7 @@ check(player_gold_medal >= 0),
 check(player_silver_medal >= 0),
 check(player_bronze_medal >= 0)
 );
+drop sequence player_seq;
 create sequence player_seq;
 insert into player(
 	player_no, player_name, player_event, 
