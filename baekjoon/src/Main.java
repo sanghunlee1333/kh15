@@ -69,7 +69,7 @@ public class Main {
 		int n = sc.nextInt();
 		
 		for (int i = n; i >= 1; i--) {
-			System.out.println();
+			System.out.println(); 
 			for (int k = 1; k < n; k++) {
 				System.out.print(" ");	
 										
