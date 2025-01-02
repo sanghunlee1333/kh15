@@ -65,35 +65,40 @@ public class Main {
 //			}
 //		
 
-//		Scanner sc = new Scanner(System.in);
-//		int n = sc.nextInt();
-//		
-//		for (int i = n; i >= 1; i--) {
-//			System.out.println(); 
-//			for (int k = 1; k < n; k++) {
-//				System.out.print(" ");	
-//										
-//			}
-//			System.out.print("*");
-//		}
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		
+		for (int i = n; i >= 1; i--) {
+			for (int k = 1; k < n; k++) {
+				System.out.print(" ");	
+										
+			}
+			System.out.print("*");
+		}
+		
+		
+	
+		
+		
+		
 
-		int[] sides = new int[] {199, 72, 222};
-		int answer = 0;
-        
-        int max = 0;
-        int rest = 0;
-        for(int i = 0; i < 3; i++){
-            if(sides[i] > max){
-                max = sides[i];
-            }
-            else rest += sides[i];
-        }
-        System.out.println(rest);
-        
-        if(max < rest){
-            answer = 1;
-        }
-        else answer = 2;
+//		int[] sides = new int[] {199, 72, 222};
+//		int answer = 0;
+//        
+//        int max = 0;
+//        int rest = 0;
+//        for(int i = 0; i < 3; i++){
+//            if(sides[i] > max){
+//                max = sides[i];
+//            }
+//            else rest += sides[i];
+//        }
+//        System.out.println(rest);
+//        
+//        if(max < rest){
+//            answer = 1;
+//        }
+//        else answer = 2;
 		
 		
 		
