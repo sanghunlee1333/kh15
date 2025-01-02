@@ -68,12 +68,17 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
 		
-		for (int i = n; i >= 1; i--) {
-			for (int k = 1; k < n; k++) {
-				System.out.print(" ");	
+		for (int i = n; i > 0; i--) {
+			for (int k = 0; k < i; k++) {
+				if(k < i) {
+					System.out.print(" ");
+				}
+				else {
+					System.out.print("*");
+				}
 										
 			}
-			System.out.print("*");
+			System.out.println();
 		}
 		
 		
