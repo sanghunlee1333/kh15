@@ -26,6 +26,7 @@ public class PokemonDao {
 	
 	//객체지향스러운 등록 메소드 (추천)
 	public void insert(PokemonDto pokemonDto) {
+		
 		JdbcTemplate jdbctemplate = JdbcFactory.createTemplate();
 		String sql = "insert into pokemon(pokemon_no, pokemon_name, pokemon_type) "
 				+ "values(pokemon_seq.nextval, ?, ?)";
@@ -34,6 +35,7 @@ public class PokemonDao {
 			pokemonDto.getPokemonType()
 		};
 		jdbctemplate.update(sql, data);
+		
 	}
 	
 }

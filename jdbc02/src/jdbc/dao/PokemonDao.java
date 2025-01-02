@@ -1,8 +1,11 @@
 package jdbc.dao;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import jdbc.dto.PokemonDto;
+import jdbc.mapper.PokemonMapper;
 import jdbc.util.JdbcFactory;
 
 //DAO(Data Access Object)
@@ -15,6 +18,15 @@ public class PokemonDao {
 
 	//객체지향스러운 등록 메소드 
 	public void insert(PokemonDto pokemonDto) {
+		
+		JdbcTemplate jdbctemplate = JdbcFactory.createTemplate();
+		String sql = "insert into pokemon(pokemon_no, pokemon_name, pokemon_type) "
+				+ "values(pokemon_seq.nextval, ?, ?)";
+		Object[] data = {
+			pokemonDto.getPokemonName(),
+			pokemonDto.getPokemonType()
+		};
+		jdbctemplate.update(sql, data);
 		
 	}
 	
@@ -36,5 +48,28 @@ public class PokemonDao {
 		return rows > 0; //rows가 0보다 큰지 비교해서 반환하세요
 		
 	}
+	
+	//삭제 메소드
+	public boolean delete(int pokemonNo) { //Dto(포켓몬 정보)로 메소드 매개변수로 받아도 되지만, 1개이므로 그냥 int(PK)로 메소드 매개변수로 받아도 된다
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "delete pokemon where pokemon_no = ?";
+		// 1개여도 무조건 배열을 써야한다.
+		Object[] data = {pokemonNo};	
+//		int rows = jdbcTemplate.update(sql, data);
+//		return rows > 0;
+		return jdbcTemplate.update(sql, data) > 0;
+	}
+	
+	//조회를 위한 Mapper를 필드로 선언
+	private PokemonMapper pokemonMapper = new PokemonMapper();
+	
+	//목록 조회 메소드
+	public List<PokemonDto> selectList() {
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "select * from pokemon";
+		return jdbcTemplate.query(sql, pokemonMapper);
+	}
+	
+	
 	
 }
