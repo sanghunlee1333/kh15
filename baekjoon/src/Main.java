@@ -35,7 +35,7 @@ public class Main {
 //			System.out.print(queen - (queen - 1) + " ");
 //		}
 //		else System.out.print(queen);
-		
+
 //		Scanner sc = new Scanner(System.in);
 //		int n = sc.nextInt();
 //		int m = sc.nextInt();
@@ -64,22 +64,28 @@ public class Main {
 //				//else n -= 10;
 //			}
 //		
-		
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		
-		for (int i = n; i >= 1; i--) {
-			System.out.println(); 
-			for (int k = 1; k < n; k++) {
-				System.out.print(" ");	
-										
-			}
-			System.out.print("*");
-		}
-	        
-	        
-	
 
+//		Scanner sc = new Scanner(System.in);
+//		int n = sc.nextInt();
+//		
+//		for (int i = n; i >= 1; i--) {
+//			System.out.println(); 
+//			for (int k = 1; k < n; k++) {
+//				System.out.print(" ");	
+//										
+//			}
+//			System.out.print("*");
+//		}
+
+		int[] num_list = {1, 2, 3, 4, 5};
+		int[] answer = new int[num_list.length];
+		
+		for(int i = 0; i < num_list.length; i++) {
+			answer[i] = num_list[num_list.length-1-i];
+		}
+		
+		System.out.println(answer);
+		
 	}
 
 }
