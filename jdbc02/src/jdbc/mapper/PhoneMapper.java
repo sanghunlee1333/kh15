@@ -17,7 +17,7 @@ public class PhoneMapper implements RowMapper<PhoneDto>{
 		phoneDto.setPhoneName(rs.getString("phone_name"));
 		phoneDto.setPhoneTelecom(rs.getString("phone_telecom"));
 		//phoneDto.setPhonePrice(rs.getInt("phone_price")); //비추천
-		//phoneDto.setPhoneContract((Integer)rs.getObject("phone_contract")); //추천
+		//phoneDto.setPhoneContract((Integer)rs.getObject("phone_contract")); //비추천
 		phoneDto.setPhoneContract(rs.getObject("phone_contract", Integer.class)); //추천
 		
 		return phoneDto;
