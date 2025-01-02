@@ -77,14 +77,25 @@ public class Main {
 //			System.out.print("*");
 //		}
 
-		int[] num_list = {1, 2, 3, 4, 5};
-		int[] answer = new int[num_list.length];
+		int[] sides = new int[] {199, 72, 222};
+		int answer = 0;
+        
+        int max = 0;
+        int rest = 0;
+        for(int i = 0; i < 3; i++){
+            if(sides[i] > max){
+                max = sides[i];
+            }
+            else rest += sides[i];
+        }
+        System.out.println(rest);
+        
+        if(max < rest){
+            answer = 1;
+        }
+        else answer = 2;
 		
-		for(int i = 0; i < num_list.length; i++) {
-			answer[i] = num_list[num_list.length-1-i];
-		}
 		
-		System.out.println(answer);
 		
 	}
 
