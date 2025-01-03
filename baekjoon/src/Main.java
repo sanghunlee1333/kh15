@@ -65,21 +65,53 @@ public class Main {
 //			}
 //		
 
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
+//		Scanner sc = new Scanner(System.in);
+//		int n = sc.nextInt();
+//		
+//		for (int i = n; i > 0; i--) {
+//			for (int k = 0; k < i; k++) {
+//				if(k < i) {
+//					System.out.print(" ");
+//				}
+//				else {
+//					System.out.print("*");
+//				}
+//										
+//			}
+//			System.out.println();
+//		}
 		
-		for (int i = n; i > 0; i--) {
-			for (int k = 0; k < i; k++) {
-				if(k < i) {
-					System.out.print(" ");
-				}
-				else {
-					System.out.print("*");
-				}
-										
-			}
-			System.out.println();
-		}
+//		Scanner sc = new Scanner(System.in);
+//		
+//		//int[] num = new int[10];
+//		int[] num = new int[] {42,84,252,420,840, 126,42,84,420,126};
+//		int[] rest = new int[10];
+//		for (int i = 0; i < num.length; i++) {
+//			//num[i] = sc.nextInt();
+//			rest[i] = num[i] % 42;
+//		}
+//		int answer = 10;
+//		int target = 0;
+//		for(int k = 0; k < rest.length; k++) {
+//			if(rest[k] == target) {
+//				answer--;
+//			}
+//		}
+//		System.out.println(answer);
+		
+		String[] s1 = new String[] {"n", "omg"};
+		String[] s2 = new String[] {"m", "dot"};
+		
+		int answer = 0;
+		
+		 for(int k = 0; k < s1.length; k++){
+	            for(int i = 0; i < s2.length; i++){
+	                if(s1[k].equals(s2[i])){
+	                    answer++;
+	                } 
+	            }
+	     }
+		 System.out.println(answer);
 		
 		
 	
