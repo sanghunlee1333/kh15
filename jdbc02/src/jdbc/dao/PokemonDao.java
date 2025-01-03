@@ -1,6 +1,7 @@
 package jdbc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -70,6 +71,37 @@ public class PokemonDao {
 		return jdbcTemplate.query(sql, pokemonMapper);
 	}
 	
+	//검색에 사용할 컬럼에 대한 정보를 저장
+	private Map<String, String> columnExamples = Map.of(
+		"이름", "pokemon_name",
+		"속성", "pokemon_type"
+	);
 	
+	//검색 메소드
+	public List<PokemonDto> selectList(String column, String keyword) {
+		String columnName = columnExamples.get(column); //컬럼명 획득(없으면 null)
+		if(columnName == null) {
+			//return null; //없다고 말해주겠다 //비추천
+			//return List.of(); //결과가 비어있다고 말해주겠다
+			throw new RuntimeException("항목 오류"); //너는 문제가 있다고 말해주겠다 //런타임익셉션은 전가를 하지 않아도 됨
+		}
+		
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "select * from pokemon "
+				+ "where instr(" + columnName + ", ?) > 0 " //columnName -> 정적할당, ?(홀더) -> 동적할당(데이터에) // 가공하냐 않하냐의 차이
+				+ "order by " + columnName + " asc, pokemon_no asc";
+		Object[] data = {keyword};
+		return jdbcTemplate.query(sql,pokemonMapper,data); //sql(구문)은 무조건 처음, data는 무조건 마지막에 
+		
+	}
+	
+	//상세조회 메소드
+	public PokemonDto selectOne(int pokemonNo) {
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "select * from pokemon where pokemon_no = ?";
+		Object[] data = {pokemonNo};
+		List<PokemonDto> list = jdbcTemplate.query(sql, pokemonMapper, data); //query의 반환형이 List인데, 목록에서 NO만을 꺼내야 한다
+		return list.isEmpty() ? null : list.get(0); //PK이므로 어차피 list에는 1개만 있든지 아니면 없든지 이므로, 있다면 0번째 방에 있는 것을 꺼내면 된다. 
+	}
 	
 }

@@ -1,6 +1,7 @@
 package jdbc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -53,5 +54,33 @@ public class ItemDao {
 		String sql = "select * from item";
 		return jdbcTemplate.query(sql, itemMapper);
 		
+	}
+	
+	private Map<String, String> columnExamples = Map.of(
+			
+			"아이템명", "item_name",
+			"아이템종류", "item_type"
+		
+	);
+	
+	public List<ItemDto> selectList(String column, String keyword){
+		String columnName = columnExamples.get(column);
+		if(columnName == null) {
+			throw new RuntimeException("항목 오류");
+		}
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "select * from item where instr(#1, ?) > 0 order by #1 asc, item_no asc";
+		sql = sql.replace("#1", columnName);
+		Object[] data = {keyword};
+		return jdbcTemplate.query(sql, itemMapper, data);
+		
+	}
+	
+	public ItemDto selectOne(int itemNo) {
+		JdbcTemplate jdbcTemplate = JdbcFactory.createTemplate();
+		String sql = "select * from item where item_no = ?";
+		Object[] data = {itemNo};
+		List<ItemDto> list = jdbcTemplate.query(sql, itemMapper, data);
+		return list.isEmpty() ? null : list.get(0);
 	}
 }
