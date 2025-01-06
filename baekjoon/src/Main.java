@@ -80,7 +80,7 @@ public class Main {
 //			}
 //			System.out.println();
 //		}
-		
+
 //		Scanner sc = new Scanner(System.in);
 //		
 //		//int[] num = new int[10];
@@ -98,25 +98,37 @@ public class Main {
 //			}
 //		}
 //		System.out.println(answer);
+
+		Scanner sc = new Scanner(System.in);
 		
-		String[] s1 = new String[] {"n", "omg"};
-		String[] s2 = new String[] {"m", "dot"};
+		String answer = "";
 		
-		int answer = 0;
-		
-		 for(int k = 0; k < s1.length; k++){
-	            for(int i = 0; i < s2.length; i++){
-	                if(s1[k].equals(s2[i])){
-	                    answer++;
-	                } 
-	            }
-	     }
-		 System.out.println(answer);
-		
-		
-	
-		
-		
+		while(true) {
+			
+			int num1 = sc.nextInt();
+			int num2 = sc.nextInt();
+			boolean factor = num2 % num1 == 0;
+			boolean multiple = num1 % num2 == 0;
+			
+			if(num1 == 0 & num2 == 0) {
+				break;
+			}
+			else
+			if(factor) {
+				answer = "factor";
+				System.out.println(answer);
+			}
+			else if(multiple) {
+				answer = "multiple";
+				System.out.println(answer);
+			}
+			else if (!(multiple || factor)) {
+				answer = "neither";
+				System.out.println(answer);
+			}
+		}
+				
+	   
 		
 
 //		int[] sides = new int[] {199, 72, 222};
@@ -136,9 +148,7 @@ public class Main {
 //            answer = 1;
 //        }
 //        else answer = 2;
-		
-		
-		
+
 	}
 
 }
