@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/pokemon")
 public class PokemonController {
 	
 	//여기서 어떻게 JdbTemplate를 쓴다는 건가?
