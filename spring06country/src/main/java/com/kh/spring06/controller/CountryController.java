@@ -19,6 +19,7 @@ public class CountryController {
 	//등록 매핑
 	//- @RequestParam은 파라미터 1개를 받는 명령
 	//- @ModelAttribute는 가능한 모든 파라미터를 받는 명령
+	//- 주소는 사용자 친화적으로 작성하는 편
 	@RequestMapping("/add")//상세주소
 	public String add(@ModelAttribute CountryDto countryDto) {
 		countryDao.insert(countryDto);

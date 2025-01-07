@@ -17,9 +17,9 @@ import com.kh.spring06.mapper.CountryMapper;
 public class CountryDao {
 	
 	//여기서 필요로 하는 도구들을 등록된 도구중에서 가지고 온다(DI)
-		@Autowired
+		@Autowired //등록된 도구들만 Autowired로 사용할 수 있다. 당연히 없는 도구는 못함, 어노테이션은 하나밖에 적용을 못함
 		private CountryMapper countryMapper;
-		@Autowired
+		@Autowired //그래서 각각 만들어줘야 한다
 		private JdbcTemplate jdbcTemplate;
 		
 		public void insert(CountryDto countryDto) {
