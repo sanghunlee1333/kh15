@@ -1,5 +1,7 @@
 package com.kh.spring05.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +41,47 @@ public class PokemonController {
 	public String delete(@RequestParam int pokemonNo) {
 		boolean success = pokemonDao.delete(pokemonNo);
 		return success ? "포켓몬 삭제 완료" : "존재하지 않는 포켓몬 번호";
+	}
+	
+	//목록 조회 매핑
+	@RequestMapping("/list")
+	public String list() {
+		List<PokemonDto> list = pokemonDao.selectList();
+		StringBuffer buffer = new StringBuffer();
+		for(PokemonDto pokemonDto : list) {
+			//System.out.println(pokemonDto);
+			buffer.append(pokemonDto.toString());
+			buffer.append("<br>");
+		}
+		return buffer.toString();
+	}
+	
+	//검색 매핑
+	//- column, keyword라는 항목을 전달받아 유사한 항목을 검색
+	@RequestMapping("/search")
+	public String list(@RequestParam String column, 
+						@RequestParam String keyword) {
+		List<PokemonDto> list = pokemonDao.selectList(column, keyword);
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("검색 결과 수 : " + list.size() + "<br>");
+		for(PokemonDto pokemonDto : list) {
+			//System.out.println(pokemonDto);
+			buffer.append(pokemonDto.toString());
+			buffer.append("<br>");
+		}
+		return buffer.toString();
+	}
+	
+	//상세 조회 매핑
+	@RequestMapping("/detail")
+	public String detail(@RequestParam int pokemonNo) {
+		PokemonDto pokemonDto = pokemonDao.selectOne(pokemonNo);
+		if(pokemonDto == null) {
+			return "존재하지 않는 포켓몬 번호";
+		}
+		else {
+			return pokemonDto.toString();
+		}
 	}
 }
 
