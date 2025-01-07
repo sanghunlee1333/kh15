@@ -31,8 +31,8 @@ public class PhoneController {
 	}
 	
 	@RequestMapping("/delete")
-	public String delete(@RequestParam int PhoneNo) {
-		boolean success = phoneDao.delete(PhoneNo);
+	public String delete(@RequestParam int phoneNo) {
+		boolean success = phoneDao.delete(phoneNo);
 		return success ? "휴대폰 삭제 완료" : "존재하지 않은 휴대폰 번호";
 	}
 	
@@ -56,8 +56,8 @@ public class PhoneController {
 	}
 	
 	@RequestMapping("/detail")
-	public String detail(@RequestParam int PhoneNo) {
-		PhoneDto phoneDto = phoneDao.selectOne(PhoneNo);
+	public String detail(@RequestParam int phoneNo) {
+		PhoneDto phoneDto = phoneDao.selectOne(phoneNo);
 		if(phoneDto == null) {
 			return "존재하지 않은 휴대폰 번호";
 		}

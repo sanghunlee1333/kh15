@@ -31,8 +31,8 @@ public class ItemController {
 	}
 	
 	@RequestMapping("/delete")
-	public String delete(@RequestParam int ItemNo) {
-		boolean success = itemDao.delete(ItemNo);
+	public String delete(@RequestParam int itemNo) {
+		boolean success = itemDao.delete(itemNo);
 		return success ? "아이템 삭제 완료" : "존재하지 않은 아이템 번호";
 	}
 	

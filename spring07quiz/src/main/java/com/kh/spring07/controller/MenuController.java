@@ -31,8 +31,8 @@ public class MenuController {
 	}
 	
 	@RequestMapping("/delete")
-	public String delete(@RequestParam int MenuNo) {
-		boolean success = menuDao.delete(MenuNo);
+	public String delete(@RequestParam int menuNo) {
+		boolean success = menuDao.delete(menuNo);
 		return success ? "메뉴 삭제 완료" : "존재하지 않은 메뉴 번호";
 	}
 	
