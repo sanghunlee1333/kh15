@@ -31,7 +31,7 @@ public class CountryController {
 	
 	//수정 매핑
 	@RequestMapping("/edit")
-	public String update(@ModelAttribute CountryDto countryDto) {
+	public String edit(@ModelAttribute CountryDto countryDto) {
 		boolean success = countryDao.update(countryDto);
 		return success ? "나라 변경 완료" : "존재하지 않는 나라 번호";
 	}
@@ -63,7 +63,7 @@ public class CountryController {
 	
 	//검색 매핑
 	@RequestMapping("/search")
-	public String list(@RequestParam String column, 
+	public String search(@RequestParam String column, 
 						@RequestParam String keyword) {
 		List<CountryDto> list = countryDao.selectList(column, keyword);
 		StringBuffer buffer = new StringBuffer();
@@ -132,7 +132,7 @@ public class CountryController {
 			buffer.append("국가명 : " + countryDto.getCountryName() + "<br>");
 			buffer.append("수도명 : " + countryDto.getCountryCapital() + "<br>");
 			buffer.append("인구수 : " + countryDto.getCountryPopulation() + "<br>");
-			return countryDto.toString();
+			return buffer.toString();
 		}
 	}
 
