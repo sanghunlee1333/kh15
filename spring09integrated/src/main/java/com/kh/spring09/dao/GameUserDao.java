@@ -65,8 +65,7 @@ public void insert(GameUserDto gameUserDto) {
 	private Map<String, String> columnExamples = Map.of(
 		
 		"아이디","game_user_id",
-		"직업", "game_user_job",
-		"레벨", "game_user_level"
+		"직업", "game_user_job"
 			
 	);
 

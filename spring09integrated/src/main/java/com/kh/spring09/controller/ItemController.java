@@ -34,4 +34,9 @@ public class ItemController {
 		return "/WEB-INF/views/item/addFinish.jsp";
 	}
 	
+	@RequestMapping("/table")
+	public String table() {
+		return "/WEB-INF/views/item/table.jsp";
+	}
+	
 }

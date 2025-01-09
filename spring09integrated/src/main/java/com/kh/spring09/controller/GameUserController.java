@@ -1,11 +1,15 @@
 package com.kh.spring09.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.GameUserDao;
 import com.kh.spring09.dto.GameUserDto;
@@ -41,6 +45,33 @@ public class GameUserController {
 	@RequestMapping("/add-finish") //방식 무관
 	public String addFinish() {
 		return "/WEB-INF/views/game-user/add-finish.jsp";
+	}
+	
+	//목록 + 검색 매핑
+	@RequestMapping("/list")
+	public String list(@RequestParam(required = false) String column,
+						@RequestParam(required = false) String keyword,
+						Model model) {
+		boolean search = column != null && keyword != null;
+		
+		//List<GameUserDto> list = search ? gameUserDao.selectList(column, keyword) : gameUserDao.selectList();
+		if(search) {
+			model.addAttribute("list", gameUserDao.selectList(column, keyword));
+		}
+		else {
+			model.addAttribute("list", gameUserDao.selectList());
+		}
+		model.addAttribute("search", search);
+		model.addAttribute("column", column);
+		model.addAttribute("keyword", keyword);
+		//model.addAttribute(list);
+		
+		return "/WEB-INF/views/game-user/list.jsp";
+	}
+	
+	@RequestMapping("/table")
+	public String table() {
+		return "/WEB-INF/views/game-user/table.jsp";
 	}
 
 }
