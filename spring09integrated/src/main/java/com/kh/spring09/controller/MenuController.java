@@ -1,71 +1,35 @@
 package com.kh.spring09.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.spring09.dao.MenuDao;
 import com.kh.spring09.dto.MenuDto;
 
-@RestController
+@Controller
 @RequestMapping("/menu")
 public class MenuController {
 
 	@Autowired
 	private MenuDao menuDao;
 	
-	@RequestMapping("/add")
-	public String add(@ModelAttribute MenuDto menuDto) {
+	@GetMapping("/add")
+	public String add() {
+		return "/WEB-INF/views/menu/add.jsp";
+	}
+	
+	@PostMapping("/add")
+	public String add2(@ModelAttribute MenuDto menuDto) {
 		menuDao.insert(menuDto);
-		return "메뉴 등록 완료";
+		return "redirect:addFinish";
 	}
 	
-	@RequestMapping("/edit")
-	public String edit(@ModelAttribute MenuDto menuDto) {
-		boolean success = menuDao.update(menuDto);
-		return success ? "메뉴 수정 완료" : "존재하지 않은 메뉴 번호";
+	@RequestMapping("/addFinish")
+	public String add3() {
+		return "/WEB-INF/views/menu/addFinish.jsp";
 	}
-	
-	@RequestMapping("/delete")
-	public String delete(@RequestParam int menuNo) {
-		boolean success = menuDao.delete(menuNo);
-		return success ? "메뉴 삭제 완료" : "존재하지 않은 메뉴 번호";
-	}
-	
-	@RequestMapping("/list")
-	public String list(@RequestParam(required = false) String column,
-						@RequestParam(required = false) String keyword){
-		boolean search = column != null && keyword != null;
-		
-		List<MenuDto> list = search ? menuDao.selectList(column, keyword) : menuDao.selectList();
-		StringBuffer buffer = new StringBuffer();
-		if(list.isEmpty()) {
-			buffer.append("데이터가 존재하지 않습니다");
-		}
-		else {
-			buffer.append("검색 결과 수 : " + list.size() + "<br>");
-			for(MenuDto menuDto : list) {
-				buffer.append(menuDto);
-				buffer.append("<br>");
-			}
-		}
-		return buffer.toString();
-	}
-	
-	@RequestMapping("/detail")
-	public String detail(@RequestParam int menuNo) {
-		MenuDto menuDto = menuDao.selectOne(menuNo);
-		if(menuDto == null) {
-			return "존재하지 않은 메뉴 번호";
-		}
-		else {
-			return menuDto.toString();
-		}
-	}
-	
-	
 }

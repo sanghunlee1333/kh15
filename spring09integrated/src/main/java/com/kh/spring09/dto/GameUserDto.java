@@ -8,7 +8,7 @@ public class GameUserDto {
 	private int gameUserNo;
 	private String gameUserId;
 	private String gameUserJob;
-	private int gameUserLevel;
+	private int gameUserLevel = 1;
 	private int gameUserMoney;
 	
 }

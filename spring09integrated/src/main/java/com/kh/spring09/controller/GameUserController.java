@@ -1,69 +1,47 @@
 package com.kh.spring09.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.spring09.dao.GameUserDao;
 import com.kh.spring09.dto.GameUserDto;
 
-@RestController
-@RequestMapping("/game-user")
+@Controller
+@RequestMapping("/game-user") //gameUser, game-user, game_user -> 세부경로부터는 대소문자 구분 가능
 public class GameUserController {
 	
 	@Autowired
 	private GameUserDao gameUserDao;
 	
-	@RequestMapping("/add")
-	public String add(@ModelAttribute GameUserDto gameUserDto) {
+	//사용자 입력 페이지
+	@GetMapping("/add") //GET방식만 처리하는 매핑
+	public String add() {
+		return "/WEB-INF/views/game-user/add.jsp"; 
+	}
+	
+	//입력 처리
+	@PostMapping("/add") //POST방식만 처리하는 매핑
+	public String add(@ModelAttribute GameUserDto gameUserDto) { //사용자에게 보여지면 안되는 페이지
+		//방법1
+		//GameUserDto 에서 레벨 필드를 1로 설정
+		
+		//방법2
+		if(gameUserDto.getGameUserLevel() == 0) { //사용자가 레벨을 입력하지 않는다면
+			gameUserDto.setGameUserLevel(1);
+		}
 		gameUserDao.insert(gameUserDto);
-		return "유저 등록 완료";
+		return "redirect:addFinish"; //addFinish으로 쫓아내는 코드(상대경로)
 	}
 	
-	@RequestMapping("/edit")
-	public String edit(@ModelAttribute GameUserDto gameUserDto) {
-		boolean success = gameUserDao.update(gameUserDto);
-		return success ? "유저 수정 완료" : "존재하지 않은 유저 정보";
+	//완료 안내
+	@RequestMapping("/add-finish") //방식 무관
+	public String addFinish() {
+		return "/WEB-INF/views/game-user/add-finish.jsp";
 	}
-	
-	@RequestMapping("/delete")
-	public String delete(@RequestParam int gameUserNo) {
-		boolean success = gameUserDao.delete(gameUserNo);
-		return success ? "유저 삭제 완료" : "존재하지 않은 유저 정보";
-	}
-	
-	@RequestMapping("/list")
-	public String list(@RequestParam(required = false) String column,
-						@RequestParam(required = false) String keyword) {
-		boolean search = column != null && keyword != null;
-		List<GameUserDto> list = search ? gameUserDao.selectList(column, keyword) : gameUserDao.selectList();
-		StringBuffer buffer = new StringBuffer();
-		if(list.isEmpty()) {
-			buffer.append("데이터가 존재하지 않습니다");
-		}
-		else {
-			for(GameUserDto gameUserDto : list) {
-				buffer.append(gameUserDto);
-				buffer.append("<br>");
-			}
-		}
-		return buffer.toString();
-	}
-	
-	@RequestMapping("/detail")
-	public String detail(@RequestParam int gameUserNo) {
-		GameUserDto gameUserDto = gameUserDao.selectOne(gameUserNo);
-		if(gameUserDto == null) {
-			return "존재하지 않은 유저 번호";
-		}
-		else {
-			return gameUserDto.toString();
-		}
-			
-	}
-	
+
 }
+ 
