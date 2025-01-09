@@ -48,8 +48,8 @@ public class PokemonController {
 	public String list(Model model) {
 		List<PokemonDto> list = pokemonDao.selectList();
 		model.addAttribute("list", list);
-		return "/WEB-INF/views/pokemon/list.jsp";
 		
+		return "/WEB-INF/views/pokemon/list.jsp";	
 	}
 
 }
