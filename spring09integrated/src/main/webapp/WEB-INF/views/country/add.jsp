@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
 
 <h1>나라 등록</h1>
 
@@ -9,3 +10,5 @@
 	인구수 <input name = "countryPopulation" type = "number" required min = "1"> <br><br>
 	<button>나라 등록</button>
 </form>
+
+<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
 <h1>포켓몬 등록</h1>
 
 <form action = "add" method="post"> <!-- 메소드=포스트를 안써주면 뺑뻉 돈다  -->
@@ -33,3 +33,5 @@ GET 방식보다 상대적으로 느린 전송 방식
 브라우저 기록: GET 요청은 브라우저 히스토리에 남지만, POST는 남지 않음
 데이터 길이 제한: GET은 URL 길이 제한으로 인해 데이터 길이에 제한이 있지만, POST는 제한이 없음
 -->
+
+<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>   

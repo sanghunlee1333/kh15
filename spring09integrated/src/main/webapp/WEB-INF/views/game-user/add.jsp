@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
 
 <h1>유저 등록</h1>
 
@@ -16,3 +17,5 @@
 	돈 <input name = "gameUserMoney" type = "number" required min = "0"> <br><br>
 	<button>유저 등록</button>
 </form>
+
+<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>

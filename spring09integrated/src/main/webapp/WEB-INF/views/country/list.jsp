@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
+
 <%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix = "fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
@@ -65,7 +67,11 @@
 			<c:forEach var = "countryDto" items = "${list}">
 				<tr>
 					<td>${countryDto.countryNo}</td>
-					<td>${countryDto.countryName}</td>
+					<td>
+						<a href = "detail?countryNo=${countryDto.countryNo}">
+							${countryDto.countryName}
+						</a>
+					</td>
 					<td>${countryDto.countryCapital}</td>
 					<td align = "right">
 						<fmt:formatNumber pattern="#,##0" 
@@ -78,3 +84,4 @@
 	</tbody>
 </table>
 
+<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>    
