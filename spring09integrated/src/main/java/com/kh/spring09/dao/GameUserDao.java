@@ -89,4 +89,13 @@ public void insert(GameUserDto gameUserDto) {
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
+	//레벨업 메소드
+	public boolean updateGameUserLevel(int gameUserNo) {
+		String sql = "update game_user "
+				+ "set game_user_level = game_user_level+1 "
+				+ "where game_user_no = ?";
+		Object[] data = {gameUserNo};
+		return jdbcTemplate.update(sql,data) > 0;
+	}
+	
 }
