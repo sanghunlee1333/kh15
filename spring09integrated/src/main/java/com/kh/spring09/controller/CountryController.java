@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.CountryDao;
 import com.kh.spring09.dto.CountryDto;
+import com.kh.spring09.dto.PokemonDto;
 
 @Controller
 @RequestMapping("/country")
@@ -54,10 +55,46 @@ public class CountryController {
 		return "/WEB-INF/views/country/list.jsp";
 	}
 	
-	//테이블 
-	@RequestMapping("/table")
-	public String table() {
-		return "/WEB-INF/views/country/table.jsp";
+	//상세 매핑
+	@RequestMapping("/detail")
+	public String detail(@RequestParam int countryNo, Model model) {
+		CountryDto countryDto = countryDao.selectOne(countryNo);
+		model.addAttribute("countryDto", countryDto);
+		return "/WEB-INF/views/country/detail.jsp";
 	}
+	
+	//삭제 매핑
+	@RequestMapping("/delete")
+	public String delete(@RequestParam int countryNo) {
+		countryDao.delete(countryNo);
+		return "redirect:list";
+	}
+	
+	//수정 매핑
+	@GetMapping("/edit")
+	public String edit(@RequestParam int countryNo, Model model) {
+		CountryDto countryDto = countryDao.selectOne(countryNo);
+		model.addAttribute("countryDto", countryDto);
+		return "/WEB-INF/views/country/edit.jsp";
+	}
+	
+	@PostMapping("/edit")
+	public String edit(@ModelAttribute CountryDto countryDto) {
+		boolean success = countryDao.update(countryDto);
+		if(success) {
+			return "redirect:detail?countryNo="+countryDto.getCountryNo();
+		}
+		else {
+			return "redirect:list";
+		}
+	}
+	
+	@RequestMapping("/edit")
+	public String edit(@ModelAttribute CountryDto countryDto, Model model) {
+		countryDao.update(countryDto);
+		return "/WEB-INF/views/country/edit.jsp";
+	}
+	
+	
 	
 }

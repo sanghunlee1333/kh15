@@ -33,9 +33,4 @@ public class LectureController {
 		return "/WEB-INF/views/lecture/addFinish.jsp";
 	}
 	
-	@RequestMapping("/table")
-	public String table() {
-		return "/WEB-INF/views/lecture/table.jsp";
-	}
-	
 }
