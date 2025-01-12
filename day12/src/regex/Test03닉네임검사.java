@@ -11,7 +11,7 @@ public class Test03닉네임검사 {
 		System.out.print("닉네임을 입력하세요 : ");
 		String nickname = sc.next();
 		String regex = "^[가-힣][가-힣0-9]{1,9}$"; //일반검사
-		//String regex = "^(?!=*?운영자)[가-힣][가-힣0-9]{1,9}$"; //부정탐색
+		//String regex = "^(?!=.*?운영자)[가-힣][가-힣0-9]{1,9}$"; //부정탐색
 		
 		if(nickname.matches(regex)) {
 				System.out.println("올바른 형식의 닉네임입니다");
