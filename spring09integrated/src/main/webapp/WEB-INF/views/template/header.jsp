@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- 
 	HTML 코드
 	- <!Doctype html>은 HTML의 형태를 선언하기 위한 표식
@@ -30,11 +31,33 @@
 			홈페이지 제작 수업
 		</h1>
 	</div>
+	
+	<!-- 상태확인용 영역 -->
 	<div>
-		<a href = "/member/join">회원가입</a>
-		<a href = "/pokemon/list">포켓몬</a>
-		<a href = "/country/list">국가</a>
-		<a href = "/game-user/list">게임유저</a>
+		세션ID : ${pageContext.session.id},
+		userId : ${sessionScope.userId}
+	</div>
+	<!-- 로그인 여부에 따라 메뉴를 다르게 표시 -->
+	<div>
+		<c:choose>
+			<%-- 회원 --%>
+			<c:when test = "${sessionScope.userId != null}">
+				<a href = "/pokemon/list">포켓몬</a>
+				<a href = "/country/list">국가</a>
+				<a href = "/game-user/list">게임유저</a>
+				<a href = "/member/mypage">내정보</a>
+				<a href = "/member/logout">로그아웃</a>
+			</c:when>
+			
+			<%-- 비회원 --%>
+			<c:otherwise>
+				<a href = "/pokemon/list">포켓몬</a>
+				<a href = "/country/list">국가</a>
+				<a href = "/member/join">회원가입</a>
+				<a href = "/member/login">로그인</a>
+			</c:otherwise>
+		</c:choose>
+		
 	</div>
 	<hr>
 	<div>

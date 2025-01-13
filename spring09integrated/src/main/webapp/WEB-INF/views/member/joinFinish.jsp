@@ -4,4 +4,6 @@
     
 <h1>회원 가입 완료</h1>
 
+<h2><a href ="login">로그인하러가기</a></h2>
+
 <jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>
