@@ -105,8 +105,6 @@ public class MemberController {
 	public String password(@RequestParam String currentPw, @RequestParam String newPw) {
 		if(!currentPw.equals(newPw)) {
 			String regex = "^([A-Z]+)([a-z]+)([0-9]+)([!@#$]+)[A-Za-z0-9!@#$]{8,16}$";
-			newPw = "Testuser2!";
-			System.out.println(newPw.matches(regex));
 			if(newPw.matches(regex)) {
 				MemberDto memberDto = new MemberDto();
 				memberDto.setMemberPw(newPw);
