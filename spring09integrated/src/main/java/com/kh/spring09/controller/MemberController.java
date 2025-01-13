@@ -29,7 +29,7 @@ public class MemberController {
 		memberDao.insert(memberDto);
 		return "redirect:joinFinish"; // joinFinish으로 쫓아내는 코드(상대경로)
 	}
-
+ 
 	// 완료 안내
 	@RequestMapping("/joinFinish") // 방식 무관
 	public String joinFinish() {
