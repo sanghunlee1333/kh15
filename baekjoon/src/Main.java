@@ -99,34 +99,43 @@ public class Main {
 //		}
 //		System.out.println(answer);
 
-		Scanner sc = new Scanner(System.in);
+//		Scanner sc = new Scanner(System.in);
+//		
+//		String answer = "";
+//		
+//		while(true) {
+//			
+//			int num1 = sc.nextInt();
+//			int num2 = sc.nextInt();
+//			boolean factor = num2 % num1 == 0;
+//			boolean multiple = num1 % num2 == 0;
+//			
+//			if(num1 == 0 & num2 == 0) {
+//				break;
+//			}
+//			else
+//			if(factor) {
+//				answer = "factor";
+//				System.out.println(answer);
+//			}
+//			else if(multiple) {
+//				answer = "multiple";
+//				System.out.println(answer);
+//			}
+//			else if (!(multiple || factor)) {
+//				answer = "neither";
+//				System.out.println(answer);
+//			}
+//		}
 		
-		String answer = "";
+		String regex = "^[a-z][a-z0-9\\_]{6,23}[a-z0-9]@(?=.*?[a-z])(?=.*?[0-9])[a-z0-9]{4,15}\\.(co\\.kr|net|com|org)$";
+		String test = "abcd5aaada__a@abc012.org";
 		
-		while(true) {
-			
-			int num1 = sc.nextInt();
-			int num2 = sc.nextInt();
-			boolean factor = num2 % num1 == 0;
-			boolean multiple = num1 % num2 == 0;
-			
-			if(num1 == 0 & num2 == 0) {
-				break;
-			}
-			else
-			if(factor) {
-				answer = "factor";
-				System.out.println(answer);
-			}
-			else if(multiple) {
-				answer = "multiple";
-				System.out.println(answer);
-			}
-			else if (!(multiple || factor)) {
-				answer = "neither";
-				System.out.println(answer);
-			}
-		}
+//		String regex = "^[ㄱ-ㅎㅏ-ㅣ가-힣0-9]{1,10}$";
+//		String test = "ㅡㅡ";
+		
+		
+		System.out.println(test.matches(regex));
 				
 	   
 		
