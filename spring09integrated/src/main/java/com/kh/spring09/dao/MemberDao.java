@@ -51,10 +51,44 @@ public class MemberDao {
 		return list.isEmpty() ? null : list.get(0);
 	}
 	
-//	public Timestamp updateMemberlogin(Timestamp timestamp) {
-//		String sql = "insert ino member(" 
-//	}
+	//최종 로그인 시각 갱신 메소드
+	public boolean updateMemberLogin(String memberId) {
+		String sql = "update member set member_login = systimestamp where member_id = ?";
+		Object[] data = {memberId};
+		return jdbcTemplate.update(sql,data) > 0;		
+	}
+	
+	//비밀번호 변경 시 최종 비밀번호 변경일도 같이 변경되게 구현
+	public boolean updateMemberPassword(MemberDto memberDto) {
+		String sql = "update member set member_pw = ?, member_change = systimestamp where member_id = ?";
+		Object[] data = {memberDto.getMemberPw(), memberDto.getMemberId()};
+		return jdbcTemplate.update(sql, data) > 0;
+	}
 
+	public boolean update(MemberDto memberDto) {
+		String sql = "update member set "
+				+ "member_pw = ?, member_nickname = ?, "
+				+ "member_birth = ?, member_contact = ?, "
+				+ "member_email = ?, member_post = ?, "
+				+ "member_address1 = ?, member_address2 = ?, "
+				+ "member_level = ?, member_point = ? "
+				+ "where member_id = ?";
+		Object[] data = {
+				memberDto.getMemberPw(), memberDto.getMemberNickname(),
+				memberDto.getMemberBirth(), memberDto.getMemberContact(),
+				memberDto.getMemberEmail(), memberDto.getMemberPost(),
+				memberDto.getMemberAddress1(), memberDto.getMemberAddress2(),
+				memberDto.getMemberLevel(), memberDto.getMemberPoint(),
+				memberDto.getMemberId()
+		};		
+		return jdbcTemplate.update(sql, data) > 0;	
+	}
+	
+	public boolean delete(String memberId) {
+		String sql = "delete member where member_id = ?";
+		Object[] data = {memberId};
+		return jdbcTemplate.update(sql, data) > 0;
+	}
 	
 
 }

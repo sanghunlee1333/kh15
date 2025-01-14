@@ -40,7 +40,7 @@
 	<!-- 로그인 여부에 따라 메뉴를 다르게 표시 -->
 	<div>
 		<c:choose>
-			<%-- 회원 --%>
+			<%-- 로그인 --%>
 			<c:when test = "${sessionScope.userId != null}">
 				<a href = "/pokemon/list">포켓몬</a>
 				<a href = "/country/list">국가</a>
@@ -49,7 +49,7 @@
 				<a href = "/member/logout">로그아웃</a>
 			</c:when>
 			
-			<%-- 비회원 --%>
+			<%-- 비로그인 --%>
 			<c:otherwise>
 				<a href = "/pokemon/list">포켓몬</a>
 				<a href = "/country/list">국가</a>
@@ -60,4 +60,4 @@
 		
 	</div>
 	<hr>
-	<div>
+	<div style = "min-height : 400px">

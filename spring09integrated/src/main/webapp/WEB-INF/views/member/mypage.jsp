@@ -63,9 +63,9 @@
 	</tr>
 </table>
 
-<h2><a href = "/member/password">비밀번호 변경</a></h2>
-<h2><a href = "#">개인정보 변경</a></h2>
-<h2><a href = "#">회원 탈퇴</a></h2>
+<h2><a href = "password">비밀번호 변경</a></h2> <!-- 같은 위치에 있다 -> 엔드포인트가 같다 /member/password = /password -->
+<h2><a href = "change">개인정보 변경</a></h2>
+<h2><a href = "exit">회원 탈퇴</a></h2>
 
 
 <jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>

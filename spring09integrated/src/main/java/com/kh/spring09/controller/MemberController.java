@@ -72,8 +72,12 @@ public class MemberController {
 			//(+추가)세션에 userId란 이름으로 사용자의 ID를 저장
 			session.setAttribute("userId", findDto.getMemberId()); 
 			
+			//(+추가)최종 로그인 시각을 갱신 처리
+			memberDao.updateMemberLogin(findDto.getMemberId());
+			
 			return "redirect:/";
-		} else {// 비밀번호 다름
+		} 
+		else {// 비밀번호 다름
 			return "redirect:login";// 로그인 페이지로 쫓아낸다
 		}
 	}
@@ -96,24 +100,91 @@ public class MemberController {
 		return "/WEB-INF/views/member/mypage.jsp";
 	}
 	
+	//비밀번호 변경 매핑
 	@GetMapping("/password")
 	public String password() {
-		return "/WEB-INF/views/member/password.jsp";
+		return "/WEB-INF/views/member/password.jsp"; //포워드
 	}
 	
 	@PostMapping("/password")
-	public String password(@RequestParam String currentPw, @RequestParam String newPw) {
-		if(!currentPw.equals(newPw)) {
-			String regex = "^([A-Z]+)([a-z]+)([0-9]+)([!@#$]+)[A-Za-z0-9!@#$]{8,16}$";
-			if(newPw.matches(regex)) {
-				MemberDto memberDto = new MemberDto();
-				memberDto.setMemberPw(newPw);
-				return "redirect:mypage";
-			}
-			else return "redirect:password?error";
+	public String password(@RequestParam String currentPw, @RequestParam String newPw, HttpSession session) { //아이디를 꺼내야 됨
+		String userId = (String) session.getAttribute("userId"); //세션은 꺼낼 때 아무거나 꺼낼 수 있도록 Object형태로 꺼내기 때문에 다운캐스팅 필요함
+		MemberDto memberDto = memberDao.selectOne(userId);
+		boolean isValid = currentPw.equals(memberDto.getMemberPw());
+		if(isValid == false) { //비밀번호가 일치하지 않는 경우
+			return "redirect:password?error=1";
 		}
-		else return "redirect:password?error";
+		
+		//(+추가) 동일한 비밀번호를 변경할 수 없도록 차단 처리
+		if(currentPw.equals(newPw)) {
+			return "redirect:password?error=2"; //위와 다른 에러이기 때문에 구분해야 함
+		}
+		
+		memberDto.setMemberPw(newPw); //비밀번호 변경
+		memberDao.updateMemberPassword(memberDto);
+		return "redirect:mypage";
+		
 	}
-
+	
+	//개인정보 변경 매핑
+	//- 비밀번호는 검사용으로 사용
+	//- 닉네임, 생년월일, 연락처, 이메일, 주소(우편, 기본, 상세) 변경 가능
+	@GetMapping("/change")
+	public String change(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		MemberDto memberDto = memberDao.selectOne(userId);
+		model.addAttribute("memberDto", memberDto);
+		return "/WEB-INF/views/member/change.jsp";
+	}
+	
+	@PostMapping("/change")
+	public String change(@ModelAttribute MemberDto memberDto, HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		MemberDto findDto = memberDao.selectOne(userId);
+		boolean isValid = findDto.getMemberPw().equals(memberDto.getMemberPw()); //사용자가 입력한 비밀번호가 데이터베이스 비밀번호와 일치하지 않을 경우
+		if(!isValid) {
+			return "redirect:change?error";
+		}
+	
+		//findDto에 원하는 항목을 교체한 뒤 수정 요청
+		findDto.setMemberNickname(memberDto.getMemberNickname());
+		findDto.setMemberBirth(memberDto.getMemberBirth());
+		findDto.setMemberContact(memberDto.getMemberContact());
+		findDto.setMemberEmail(memberDto.getMemberEmail());
+		findDto.setMemberPost(memberDto.getMemberPost());
+		findDto.setMemberAddress1(memberDto.getMemberAddress1());
+		findDto.setMemberAddress2(memberDto.getMemberAddress2());
+		
+		memberDao.update(findDto);
+		return "redirect:mypage";
+	}
+	
+	//회원 탈퇴 매핑
+	@GetMapping("/exit")
+	public String exit(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		MemberDto memberDto = memberDao.selectOne(userId);
+		model.addAttribute("memberDto", memberDto);
+		return "/WEB-INF/views/member/exit.jsp";
+	}
+	
+	@PostMapping("/exit")
+	public String exit(@RequestParam String memberPw, HttpSession session) {
+		String userId = (String) session.getAttribute("userId");
+		MemberDto memberDto = memberDao.selectOne(userId);
+		boolean isValidPw = memberPw.equals(memberDto.getMemberPw()); 
+		if(isValidPw == false) {
+			return "redirect:exit?error";
+		}
+		memberDao.delete(userId);
+		//return "redirect:logout";
+		session.removeAttribute("userId");
+		return "redirect:exitFinish";
+	}
+	
+	@RequestMapping("/exitFinish")
+	public String exitFinish() {
+		return "/WEB-INF/views/member/exitFinish.jsp";
+	}
 	
 }
