@@ -26,7 +26,7 @@ public class BoardDao {
 	public List<BoardDto> selectList() {
 		String sql = "select * from board order by board_no desc"; //*와일드카드 대신 content빼고 전부 다 쓸 수도 있다.
 		return jdbcTemplate.query(sql, boardListMapper);
-	}
+	} 
 	
 	// 검색 목록 조회
 	public List<BoardDto> selectList(String column, String keyword) {
