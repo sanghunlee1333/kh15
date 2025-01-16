@@ -26,21 +26,21 @@
 </form>
 
 <!-- choose로 다른 when(if) - otherwise(else)와 겹치지 않게 범위를 지정해준다. -->
-<c:choose>
-	<c:when test = "${list.isEmpty()}">
-		<h2>데이터가 존재하지 않습니다</h2>
-	</c:when>
-	<c:otherwise>
-		<c:forEach var = "countryDto" items = "${list}">
-			<h2>
-				번호 : ${countryDto.countryNo},
-				나라명 : ${countryDto.countryName},
-				수도명 : ${countryDto.countryCapital},
-				인구수 : ${countryDto.countryPopulation}명
-			</h2>
-		</c:forEach>
-	</c:otherwise>
-</c:choose>
+<%-- <c:choose> --%>
+<%-- 	<c:when test = "${list.isEmpty()}"> --%>
+<!-- 		<h2>데이터가 존재하지 않습니다</h2> -->
+<%-- 	</c:when> --%>
+<%-- 	<c:otherwise> --%>
+<%-- 		<c:forEach var = "countryDto" items = "${list}"> --%>
+<!-- 			<h2> -->
+<%-- 				번호 : ${countryDto.countryNo}, --%>
+<%-- 				나라명 : ${countryDto.countryName}, --%>
+<%-- 				수도명 : ${countryDto.countryCapital}, --%>
+<%-- 				인구수 : ${countryDto.countryPopulation}명 --%>
+<!-- 			</h2> -->
+<%-- 		</c:forEach> --%>
+<%-- 	</c:otherwise> --%>
+<%-- </c:choose> --%>
 
 <h1 align = "center">나라 테이블</h1>
 <hr width = "400" align = "center">

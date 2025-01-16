@@ -47,6 +47,7 @@
 				<a href = "/game-user/list">게임유저</a>
 				<a href = "/member/mypage">내정보</a>
 				<a href = "/member/logout">로그아웃</a>
+				<a href = "/board/list">게시판</a>
 			</c:when>
 			
 			<%-- 비로그인 --%>
@@ -55,6 +56,7 @@
 				<a href = "/country/list">국가</a>
 				<a href = "/member/join">회원가입</a>
 				<a href = "/member/login">로그인</a>
+				<a href = "/board/list">게시판</a>
 			</c:otherwise>
 		</c:choose>
 		
