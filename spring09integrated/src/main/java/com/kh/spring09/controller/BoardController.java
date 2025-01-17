@@ -1,7 +1,5 @@
 package com.kh.spring09.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.BoardDao;
-import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dto.BoardDto;
-import com.kh.spring09.dto.MemberDto;
+import com.kh.spring09.vo.PageVO;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,15 +23,60 @@ public class BoardController {
 	private BoardDao boardDao;
 
 	// 목록 + 검색 매핑
+	//- 검색을 위해 column, keyword 항목을 수신
+	//- 페이징을 위해 page, size 항목을 수신
+//	@RequestMapping("/list")
+//	public String list(Model model,
+//		@RequestParam(required = false) String column, 
+//		@RequestParam(required = false) String keyword,
+//		@RequestParam(required = false, defaultValue = "1") int page,
+//		@RequestParam(required = false, defaultValue = "10") int size) {
+//		boolean search = column != null && keyword != null;
+//
+//		List<BoardDto> list = search ? boardDao.selectListByPaging(column, keyword, page, size) : boardDao.selectListByPaging(page, size); // 검색 : 목록
+//		model.addAttribute("list", list);
+//		
+//		//페이징에 필요한 데이터들을 전달
+//		model.addAttribute("search", search); //검색 여부
+//		model.addAttribute("page", page); //현재 페이지 번호
+//		model.addAttribute("size", size); //현재 페이지 크기
+//		model.addAttribute("column", column); //검색항목
+//		model.addAttribute("keyword", keyword); //검색어
+//		int startBlock = (page - 1) / 10 * 10 + 1;
+//		int finishBlock = (page - 1) / 10 * 10 + 10;
+//		model.addAttribute("startBlock", startBlock); //블록의 시작번호
+//		//model.addAttribute("finishBlock", finishBlock); //블록의 종료번호
+//
+//		//게시글 수
+//		int count;
+//		if(search) {
+//			count = boardDao.count(column, keyword);
+//		}
+//		else {
+//			count = boardDao.count();
+//		}
+//		//페이지 수 
+//		int pageCount = (count - 1) / size + 1;
+//		model.addAttribute("count", count);
+//		model.addAttribute("pageCount", pageCount);
+//		
+//		model.addAttribute("finishBlock", Math.min(pageCount, finishBlock)); //둘 중의 작은 것이 나감
+//		
+//		return "/WEB-INF/views/board/list.jsp";
+//	}
+	
+	//VO를 이용하여 구조를 개선한 매핑
+	//- @ModelAttribute는 자동으로 Model에 추가되는 숨겨진 기능이 있다
+	//- @ModelAttrubute("pageVO")로 작성하면 model에 pageVO란 이름으로 
 	@RequestMapping("/list")
-	public String list(@RequestParam(required = false) String column, @RequestParam(required = false) String keyword,
-			Model model) {
-		boolean search = column != null && keyword != null;
-
-		List<BoardDto> list = search ? boardDao.selectList(column, keyword) : boardDao.selectList();
-
-		model.addAttribute("list", list);
-
+	public String list(Model model, @ModelAttribute("pageVO") PageVO pageVO) {
+		//model.addAttribute("pageVO", pageVO);
+		model.addAttribute("list", boardDao.selectListByPaging(pageVO));
+		
+		//게시글 수
+		int count = boardDao.count(pageVO);
+		pageVO.setCount(count);
+		
 		return "/WEB-INF/views/board/list.jsp";
 	}
 
