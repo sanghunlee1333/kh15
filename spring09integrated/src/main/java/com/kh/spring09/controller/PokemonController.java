@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.PokemonDao;
 import com.kh.spring09.dto.PokemonDto;
+import com.kh.spring09.vo.PageVO;
 
 @Controller
 @RequestMapping("/pokemon")
@@ -46,7 +47,7 @@ public class PokemonController {
 	// 목록 매핑
 	// - 데이터베이스에서 조회환 결과(List<PokemonDto>)를 화면에 전달
 	@RequestMapping("/list")
-	public String list(Model model) {
+	public String list(Model model /*,  @ModelAttribute("pageVO") PageVO pageVO */) {
 		List<PokemonDto> list = pokemonDao.selectList();
 		model.addAttribute("list", list);
 
