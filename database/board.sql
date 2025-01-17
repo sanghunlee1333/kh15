@@ -56,3 +56,41 @@ INSERT INTO board (board_no, board_title, board_content, board_writer, board_wti
 (10, '오늘의 명언', '노력은 배신하지 않는다.', 'testuser2', SYSTIMESTAMP - INTERVAL '9' DAY, NULL, 100, 500, 50);
 
 commit;
+
+BEGIN
+    FOR i IN 1..1000 LOOP
+        INSERT INTO board (board_no, board_title, board_content, board_writer)
+        VALUES (
+            board_seq.nextval,
+            CASE MOD(i, 10)
+                WHEN 0 THEN '오늘 하루 어땠나요?'
+                WHEN 1 THEN '맛집 추천 좀 해주세요!'
+                WHEN 2 THEN '최근 본 영화 추천받아요'
+                WHEN 3 THEN '자바 개발 공부 어떻게 하시나요?'
+                WHEN 4 THEN '강아지 산책하기 좋은 곳 추천'
+                WHEN 5 THEN '취업 준비 어떻게 하고 계신가요?'
+                WHEN 6 THEN '내일 날씨 아시는 분?'
+                WHEN 7 THEN '좋은 책 추천해주세요'
+                WHEN 8 THEN 'IT 트렌드에 대해 이야기해요'
+                ELSE '오늘 운동 다녀오신 분?'
+            END,
+            CASE MOD(i, 10)
+                WHEN 0 THEN '오늘 하루도 고생 많으셨어요! 다들 어떻게 보내셨나요?'
+                WHEN 1 THEN '서울에 분위기 좋은 맛집 추천 부탁드립니다!'
+                WHEN 2 THEN '요즘 재미있게 본 영화 있으신가요? 추천해 주세요!'
+                WHEN 3 THEN '자바 웹 개발 공부 방법 공유해요!'
+                WHEN 4 THEN '강아지랑 산책하기 좋은 공원 어디 있을까요?'
+                WHEN 5 THEN '취업 준비 중인데, 정보 공유해요!'
+                WHEN 6 THEN '내일 우산 챙겨야 할까요? 날씨 아시는 분!'
+                WHEN 7 THEN '자기계발에 도움 되는 책 추천 부탁드려요.'
+                WHEN 8 THEN '요즘 뜨는 IT 기술에 대해 이야기 나눠요.'
+                ELSE '운동 루틴 공유해요! 오늘 어떤 운동 하셨나요?'
+            END,
+            CASE WHEN MOD(i, 2) = 0 THEN 'testuser1' ELSE 'testuser3' END
+        );
+    END LOOP;
+END;
+
+commit;
+
+SELECT COUNT(*) FROM board;
