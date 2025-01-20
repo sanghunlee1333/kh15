@@ -7,5 +7,5 @@
 						 enctype = "multipart/form-data"> 
 	<input type = "text" name = "uploader"> <br><br>
 	<input type = "file" name = "attach"> <br><br>
-	<button>업로드</button>
+	<button>업로드</button> 
 </form>
