@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.BoardDao;
+import com.kh.spring09.dao.BoardListViewDao;
 import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dto.BoardDto;
+import com.kh.spring09.dto.MemberDto;
 import com.kh.spring09.vo.PageVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +27,9 @@ public class BoardController {
 	
 	@Autowired
 	private MemberDao memberDao;
+	
+	@Autowired
+	private BoardListViewDao boardListViewDao;
 
 	// 목록 + 검색 매핑
 	//- 검색을 위해 column, keyword 항목을 수신
@@ -75,8 +80,8 @@ public class BoardController {
 	@RequestMapping("/list")
 	public String list(Model model, @ModelAttribute("pageVO") PageVO pageVO) {
 		//model.addAttribute("pageVO", pageVO);
-		model.addAttribute("list", boardDao.selectListByPaging(pageVO));
-		
+		//model.addAttribute("list", boardDao.selectListByPaging(pageVO));
+		model.addAttribute("list", boardListViewDao.selectList(pageVO));
 		//게시글 수
 		int count = boardDao.count(pageVO);
 		pageVO.setCount(count);
@@ -91,7 +96,11 @@ public class BoardController {
 		BoardDto boardDto = boardDao.selectOne(boardNo);
 		model.addAttribute("boardDto", boardDto);
 		
-		//만약 
+		//만약 작성자가 존재한다면 해당 작성자의 정보를 추가로 조회해서 전달
+		if(boardDto.getBoardWriter() != null) {
+			MemberDto memberDto = memberDao.selectOne(boardDto.getBoardWriter());	
+			model.addAttribute("memberDto", memberDto);
+		}
 		
 		return "/WEB-INF/views/board/detail.jsp";
 	}

@@ -5,7 +5,11 @@
 
 <h1>${boardDto.boardTitle}</h1>
 <div>
-	${boardDto.boardWriter}<br>
+<%-- ${boardDto.boardWriter} --%>
+<%-- ${memberDto.memberId} --%>	
+	${memberDto.memberNickname}
+	(${memberDto.memberLevel})
+	<br>
 	${boardDto.boardWtime}
 	조회 ${boardDto.boardRead}
 </div>

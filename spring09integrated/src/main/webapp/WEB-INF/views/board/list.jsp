@@ -38,38 +38,47 @@
 				</tr>
 			</c:when>
 			<c:otherwise>
-				<c:forEach var="boardDto" items="${list}">
+				<c:forEach var="boardListViewDto" items="${list}">
 					<tr>
-						<td>${boardDto.boardNo}</td>
+						<td>${boardListViewDto.boardNo}</td>
 						<td align = "left">
+						
+							<!--[멘션버전] 답글이라면 상위글 제목을 표시 -->
+							<c:if test = "${boardListViewDto.targetNo > 0}">
+								<a href = "detail?boardNo=${boardListViewDto.targetNo}">
+									${boardListViewDto.targetTitle}
+								</a>
+								<br>
+							</c:if>
+						
 							<!-- 글의 차수(board_depth)에 따라 띄어쓰기 부여 -->
-							<c:if test = "${boardDto.boardDepth > 0}">
+							<c:if test = "${boardListViewDto.boardDepth > 0}">
 								
-								<c:forEach var = "i" begin = "1" end = "${boardDto.boardDepth}" step = "1">
+								<c:forEach var = "i" begin = "1" end = "${boardListViewDto.boardDepth}" step = "1">
 									&nbsp;&nbsp;
 								</c:forEach>
 								<!-- → -->
 								<img src="/images/reply.png" alt="Reply arrow" style="width: 15px; height: 15px;">
 							</c:if>
 							<!-- 게시글 제목 -->
-							<a href="detail?boardNo=${boardDto.boardNo}">
-								${boardDto.boardTitle} 
+							<a href="detail?boardNo=${boardListViewDto.boardNo}">
+								${boardListViewDto.boardTitle} 
 							</a>
 							
 							<!-- 댓글 표시 -->
-							<c:if test = "${boardDto.boardReply > 0}">
-								[${boardDto.boardReply}]
+							<c:if test = "${boardListViewDto.boardReply > 0}">
+								[${boardListViewDto.boardReply}]
 							</c:if>
 						</td>
-						<td>${boardDto.boardWriter}</td>
-						<td>${boardDto.boardWtimeString}
-					  <%-- ${boardDto.getBoardWtimeString()}  --%>
+						<td>${boardListViewDto.memberNickname}</td>
+						<td>${boardListViewDto.boardWtimeString}
+					  <%-- ${boardListViewDto.getBoardWtimeString()}  --%>
 						</td>
-						<td>${boardDto.boardRead}</td>
-						<td>${boardDto.boardLike}</td>
-						<td>${boardDto.boardGroup}</td>
-						<td>${boardDto.boardTarget}</td>
-						<td>${boardDto.boardDepth}</td>
+						<td>${boardListViewDto.boardRead}</td>
+						<td>${boardListViewDto.boardLike}</td>
+						<td>${boardListViewDto.boardGroup}</td>
+						<td>${boardListViewDto.boardTarget}</td>
+						<td>${boardListViewDto.boardDepth}</td>
 					</tr>
 				</c:forEach>
 			</c:otherwise>
