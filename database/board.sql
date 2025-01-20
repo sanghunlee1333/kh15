@@ -1,5 +1,8 @@
 drop sequence board_seq;
 create sequence board_seq;
+
+delete board;
+commit;
 	
 drop table board;
 create table board(
@@ -21,6 +24,80 @@ check(board_like >= 0),
 check(board_read >= 0),
 check(board_reply >= 0)
 );
+
+--테이블을 지우지 않고 항목만 변경
+--alter table 테이블 명 add/modify/drop 항목정보
+alter table board add(
+	board_group number not null,
+	board_target number,
+	board_depth number not null,
+	check(board_group > 0),
+	check(board_target > 0),
+	check(board_depth >= 0)
+);
+
+--더미 데이터 추가
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(1, '첫 번째 게시글', '.', 'testuser1', 1, null, 0);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(2, '두 번째 게시글', '.', 'testuser1', 2, null, 0);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(3, '세 번째 게시글', '.', 'testuser1', 3, null, 0);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(4, '네 번째 게시글', '.', 'testuser1', 3, 3, 1);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(5, '다섯 번째 게시글', '.', 'testuser1', 3, 3, 1);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(6, '여섯 번째 게시글', '.', 'testuser1', 3, 4, 2);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) 
+commit;
+
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(7, '일곱 번째 게시글', '.', 'testuser1', 7, null, 0);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(8, '여덟 번째 게시글', '.', 'testuser1', 7, 7, 1);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(9, '아홉 번째 게시글', '.', 'testuser1', 7, 7, 1);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(10, '열 번째 게시글', '.', 'testuser1', 7, 8, 2);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(11, '열한 번째 게시글', '.', 'testuser1', 7, 8, 2);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(12, '열두 번째 게시글', '.', 'testuser1', 7, 7, 1);
+insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(13, '열세 번째 게시글', '.', 'testuser1', 13, null, 0);
+commit;
+
+--게시글을 조회하겠습니다
+--select 항목 from board;
+
+--게시글은 상하관계가 있습니다(트리 구조이며 글번호↑ = 타겟번호↓)
+--connect by prior board_no = board_target
+
+--연결된 구조의 시작점은 상위글이 없는 항목입니다
+--start with board_target is null
+
+--조회할 때는 연결 항목을 우선시하고
+--order siblings by
+
+--(1) 그룹이 큰 것부터
+--board_group desc,
+
+--(2) 번호가 작은 것부터
+--board_no asc
+
+
+
+--게시글 목록을 조회하면서 회원의 정보를 연결해서 조회(table join)
+--select 항목 from 테이블A 조인키워드 테이블B on 조인조건;
+--조인키워드 (inner join, outer join)
+--inner join은 서로 연결된 항목이 존재하는 것들만 출력 (커플만 조회)
+--outer join은 특정 테이블을 기준으로 연결과 상관없이 출력 (커플, 싱글 모두 조회)
+-- * outer join 시 중요한 테이블을 먼저 쓰고 left outer join으로 연결
+
+--view는 테이블은 아니고 구문을 테이블 처럼 보이게 함(insert 불가 -> 조회용)
+grant create view to kh15;
+create or replace view board_list_view as --create or replace -> view는 지웠다가 다시 만들 필요없음
+select 
+	T.board_no target_no, T.board_title target_title,
+	B.board_no, B.board_title, B.board_content, 
+	B.board_writer, B.board_wtime, B.board_etime,
+	B.board_like, B.board_read, B.board_reply, 
+	B.board_group, B.board_target, B.board_depth,
+	M.*
+	from board B 
+		left outer join member M on B.board_writer=M.member_id --left/right outer join--
+		left outer join board T on T.board_no = B.board_target;
+		
+select * from board_list_view;
+
 
 --select max(board_no) from board
 select board_seq.nextval from dual
@@ -90,7 +167,5 @@ BEGIN
         );
     END LOOP;
 END;
-
-commit;
 
 SELECT COUNT(*) FROM board;
