@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.BoardDao;
+import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dto.BoardDto;
 import com.kh.spring09.vo.PageVO;
 
@@ -21,6 +22,9 @@ public class BoardController {
 
 	@Autowired
 	private BoardDao boardDao;
+	
+	@Autowired
+	private MemberDao memberDao;
 
 	// 목록 + 검색 매핑
 	//- 검색을 위해 column, keyword 항목을 수신
@@ -86,6 +90,9 @@ public class BoardController {
 	public String detail(@RequestParam int boardNo, Model model) {
 		BoardDto boardDto = boardDao.selectOne(boardNo);
 		model.addAttribute("boardDto", boardDto);
+		
+		//만약 
+		
 		return "/WEB-INF/views/board/detail.jsp";
 	}
 
