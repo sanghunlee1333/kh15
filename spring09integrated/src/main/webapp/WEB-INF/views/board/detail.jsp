@@ -21,6 +21,7 @@
 
 <div>
 	<a href="write">글쓰기</a>
+	<a href="write?boardTarget=${boardDto.boardNo}">답글쓰기</a>
 	
 	<!-- 소유자일 경우에만 수정과 삭제 표시 -->
 	<c:if test = "${sessionScope.userId != null}"> <!-- 탈퇴해서 작성자가 null인상태와 비로그인 상태의 null도 소유자로 판단하게 되므로 이 경우도 안되게 처럼 -->

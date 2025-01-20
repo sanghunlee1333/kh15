@@ -19,6 +19,10 @@ public class BoardDto {
 	private int boardLike;
 	private int boardRead;
 	private int boardReply;	
+	//답변형 게시판을 위해 추가한 데이터
+	private int boardGroup;
+	private Integer boardTarget; //null이 가능한 데이터 항목이므로 Integer
+	private int boardDepth;
 	
 	//날짜를 출력하기 위한 가상의 메소드
 	//- boardWtime과 현재날짜를 비교

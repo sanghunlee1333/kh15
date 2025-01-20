@@ -25,7 +25,11 @@ public class BoardDao {
 	// 게시글 목록 조회
 	public List<BoardDto> selectList() {
 		String sql = "select board_no, board_title, board_writer, board_wtime, board_etime, "
-				+ "board_like, board_read, board_reply " + "from board order by board_no desc"; // *와일드카드 대신 content빼고
+						+ "board_like, board_read, board_reply, board_group, board_target, board_depth "
+						+ "from board "
+						+ "connect by prior board_no = board_target "
+						+ "start with board_target is null "
+						+ "order siblings by board_group desc, board_no asc"; // *와일드카드 대신 content빼고
 																								// 전부 다 쓸 수도 있다.
 		return jdbcTemplate.query(sql, boardListMapper);
 	}
@@ -34,9 +38,14 @@ public class BoardDao {
 		int begin = page * size - (size - 1);
 		int end = page * size;
 		String sql = "select * from (" + "select rownum rn , TMP.* from (" + "select "
-				+ "board_no, board_title, board_writer, board_wtime, board_etime, "
-				+ "board_like, board_read, board_reply " + "from board order by board_no desc" + ")TMP "
-				+ ")where rn between ? and ?";
+						+ "board_no, board_title, board_writer, board_wtime, board_etime, "
+						+ "board_like, board_read, board_reply, board_group, board_target, board_depth "
+						+ "from board "
+						+ "connect by prior board_no = board_target "
+						+ "start with board_target is null "
+						+ "order siblings by board_group desc, board_no asc"
+						+ ")TMP "
+						+ ")where rn between ? and ?";
 		Object[] data = { begin, end };
 		return jdbcTemplate.query(sql, boardListMapper, data);
 	}
@@ -52,9 +61,13 @@ public class BoardDao {
 			throw new NoPermissionException("검색할 수 없는 항목");
 		}
 
-		String sql = "select board_no, board_title, board_writer, board_wtime, board_like, " // content 제외
-				+ "board_read, board_reply " + "from board " + "where instr(#1, ?) > 0 "
-				+ "order by #1 asc, board_no desc";
+		String sql = "select board_no, board_title, board_writer, board_wtime, board_like, " // content 제외 
+						+ "board_read, board_reply, board_group, board_target, board_depth "
+						+ "from board "
+						+ "where instr(#1, ?) > 0 "
+						+ "connect by prior board_no = board_target "
+						+ "start with board_target is null "
+						+ "order siblings by board_group desc, board_no asc"; // (그룹/상위글/차수 추가전 정렬) by #1 asc, board_no desc
 		sql = sql.replace("#1", column);
 		Object[] data = { keyword };
 		return jdbcTemplate.query(sql, boardListMapper, data);
@@ -74,8 +87,14 @@ public class BoardDao {
 		}
 
 		String sql = "select * from (" + "select rownum rn, TMP.* from (" + "select " + "board_no, board_title, "
-				+ "board_writer, board_wtime, board_etime, " + "board_like, board_read, board_reply " + "from board "
-				+ "where instr(#1, ?) > 0 " + "order by board_no desc" + ") TMP" + ") where rn between ? and ?";
+						+ "board_writer, board_wtime, board_etime, board_like, board_read, board_reply, board_group, board_target, board_depth "
+						+ "from board "
+						+ "where instr(#1, ?) > 0 "
+						+ "connect by prior board_no = board_target "
+						+ "start with board_target is null "
+						+ "order siblings by board_group desc, board_no asc"
+						+ ")TMP"
+						+ ")where rn between ? and ?";
 		sql = sql.replace("#1", column);
 		Object[] data = { keyword, begin, end };
 		return jdbcTemplate.query(sql, boardListMapper, data);
@@ -137,18 +156,21 @@ public class BoardDao {
 	// 시퀀스 발급과 등록을 분리
 	public int sequence() {
 		String sql = "select board_seq.nextval from dual"; // dual = 임시테이블
-		return jdbcTemplate.queryForObject(sql, int.class); // 기존의 query는 DTO를 반환해서 안되므로 다른 메소드를 씀. int.class는 자료형이
-															// int라고 알려주는 것
+		return jdbcTemplate.queryForObject(sql, int.class); // 기존의 query는 DTO를 반환해서 안되므로 다른 메소드를 씀. int.class는 자료형이 int라고 알려주는 것
 	}
 
 	public void insert2(BoardDto boardDto) {
-		String sql = "insert into board(board_no, board_title, board_content, board_writer) " + "values(?, ?, ?, ?)"; // 커피를
-																														// 다
-																														// 마시고
-																														// 돈준다하는
-																														// 느낌
-		Object[] data = { boardDto.getBoardNo(), boardDto.getBoardTitle(), boardDto.getBoardContent(),
-				boardDto.getBoardWriter() };
+		String sql = "insert into board("
+						+ "board_no, board_title, board_content, board_writer, "
+						+ "board_group, board_target, board_depth"
+					+ ") "
+					+ "values(?, ?, ?, ?, ?, ?, ?)"; // 커피를 다 마시고 돈준다하는 느낌
+		Object[] data = { 
+				boardDto.getBoardNo(), boardDto.getBoardTitle(), 
+				boardDto.getBoardContent(),	boardDto.getBoardWriter(),
+				boardDto.getBoardGroup(), boardDto.getBoardTarget(),
+				boardDto.getBoardDepth()
+		};
 		jdbcTemplate.update(sql, data);
 	}
 

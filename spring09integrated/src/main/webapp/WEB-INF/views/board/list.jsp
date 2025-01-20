@@ -24,6 +24,9 @@
 			<th>작성일</th>
 			<th>조회수</th>
 			<th>좋아요</th>
+			<th>그룹</th>
+			<th>상위글</th>
+			<th>차수</th>
 		</tr>
 	</thead>
 	<tbody align = "center">	
@@ -39,8 +42,20 @@
 					<tr>
 						<td>${boardDto.boardNo}</td>
 						<td align = "left">
-						<!-- 게시글 제목 -->
-							<a href="detail?boardNo=${boardDto.boardNo}">${boardDto.boardTitle} </a>
+							<!-- 글의 차수(board_depth)에 따라 띄어쓰기 부여 -->
+							<c:if test = "${boardDto.boardDepth > 0}">
+								
+								<c:forEach var = "i" begin = "1" end = "${boardDto.boardDepth}" step = "1">
+									&nbsp;&nbsp;
+								</c:forEach>
+								<!-- → -->
+								<img src="/images/reply.png" alt="Reply arrow" style="width: 15px; height: 15px;">
+							</c:if>
+							<!-- 게시글 제목 -->
+							<a href="detail?boardNo=${boardDto.boardNo}">
+								${boardDto.boardTitle} 
+							</a>
+							
 							<!-- 댓글 표시 -->
 							<c:if test = "${boardDto.boardReply > 0}">
 								[${boardDto.boardReply}]
@@ -52,6 +67,9 @@
 						</td>
 						<td>${boardDto.boardRead}</td>
 						<td>${boardDto.boardLike}</td>
+						<td>${boardDto.boardGroup}</td>
+						<td>${boardDto.boardTarget}</td>
+						<td>${boardDto.boardDepth}</td>
 					</tr>
 				</c:forEach>
 			</c:otherwise>

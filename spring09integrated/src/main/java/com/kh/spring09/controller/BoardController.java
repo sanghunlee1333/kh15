@@ -117,6 +117,23 @@ public class BoardController {
 
 		int boardNo = boardDao.sequence();// 시퀀스 번호 발행
 		boardDto.setBoardNo(boardNo); // 번호설정
+		
+		//새글과 답글을 구분하여 정보를 설정한 뒤 등록하도록 처리
+		//- 새글일 경우 그룹번호 = 글번호, 상위글 = null, 차수 = 0으로 설정
+		//- 답글일 경우 그룹번호 = 대상글과 동일, 상위글 = 대상글의 글번호, 차수 = 대상글의 차수 + 1
+		//- boardTarget이 없으면 새글, 있으면 답글
+		if(boardDto.getBoardTarget() == null) {//새글이라면
+			boardDto.setBoardGroup(boardNo); //그룹번호는 글번호로 설정
+			boardDto.setBoardTarget(null); //상위글 번호는 null로 설정. 안써도 되긴 함
+			boardDto.setBoardDepth(0); //차수는 0으로 설정
+		}
+		else {//답글이라면
+			BoardDto targetDto = boardDao.selectOne(boardDto.getBoardTarget()); //원본글 정보를 조회
+			boardDto.setBoardGroup(targetDto.getBoardGroup()); //그룹번호는 원본글의 그룹번호
+			boardDto.setBoardTarget(targetDto.getBoardNo()); //상위글 번호는 원본글의 글번호
+			boardDto.setBoardDepth(targetDto.getBoardDepth()+1); //차수는 원본글의 차수 + 1
+		}
+		
 		boardDao.insert2(boardDto); // 등록
 
 		return "redirect:detail?boardNo=" + boardNo; // 상세로 리다이렉트
