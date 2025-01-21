@@ -4,8 +4,8 @@ package com.kh.spring08.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.spring08.dao.AttachmentDao;
+import com.kh.spring08.dto.AttachmentDto;
+import com.kh.spring08.service.AttachmentService;
+
 @Controller
 @RequestMapping("/fileupload")
 public class FileUploadController {
+	
+	@Autowired
+	private AttachmentDao attachmentDao;
 	
 	@RequestMapping("/test1")
 	public String test1() {
@@ -54,6 +61,7 @@ public class FileUploadController {
 			@RequestParam MultipartFile attach) throws IllegalStateException, IOException {
 		System.out.println("uploader = " + uploader);
 		System.out.println("attach = " + attach);
+		//(*주의) 파일이 오지 않아도 attach는 생긴다(isEmpty())로 구분)
 		System.out.println(" -> empty = " + attach.isEmpty());
 		System.out.println(" -> filename = " + attach.getOriginalFilename());
 		System.out.println(" -> filesize = " + attach.getSize());
@@ -65,6 +73,7 @@ public class FileUploadController {
 		//- DB는 파일의 정보만 저장을 하고 실물은 하드디스크에 저장한다
 		
 		//파일의 이름이 중복되는 현상을 해결하는 방법
+		// - 사용자가 올리는 파일명 그대로 저장하면 안된다 (폴더로 구분할게 아니라면)
 		//[1] DB를 쓰지 않는다면 UUID를 생성하여 해결할 수 있다 -> DB를 안쓰는 것은 문제가 있음
 		// - UUID는 시간이 포함된 랜덤시리얼 번호(중복이 불가능)
 		//[2] DB를 쓴다면 UUID대신 시퀀스번호를 파일명으로 사용할 수 있다
@@ -73,10 +82,37 @@ public class FileUploadController {
 		File dir = new File("D:/upload");
 		dir.mkdirs();
 		//File target = new File(dir, attach.getOriginalFilename());
-		File target = new File(dir, UUID.randomUUID().toString()); //[1]
-		attach.transferTo(target);
+		//File target = new File(dir, UUID.randomUUID().toString()); //[1]
+		
+		//첨부파일 저장 서비스(@Service)
+		//물리파일 저장
+		int attachmentNo = attachmentDao.sequence(); //시퀀스번호 추출
+		File target = new File(dir, String.valueOf(attachmentNo)); //파일명으로 설정 
+		attach.transferTo(target); //저장
+		//데이터베이스 등록
+		AttachmentDto attachmentDto = new AttachmentDto();
+		attachmentDto.setAttachmentNo(attachmentNo);
+		attachmentDto.setAttachmentName(attach.getOriginalFilename());
+		attachmentDto.setAttachmentType(attach.getContentType());
+		attachmentDto.setAttachmentSize(attach.getSize());
+		attachmentDao.insert(attachmentDto);
 		
 		return "redirect:test3";
+	}
+	
+	//최종 파일 저장 코드
+	@Autowired
+	private AttachmentService attachmentService;
+	
+	@RequestMapping("/test4")
+	public String test4() {
+		return "/WEB-INF/views/fileupload/test4.jsp";
+	}
+	
+	@PostMapping("/upload4")
+	public String upload4(@RequestParam String uploader, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+		attachmentService.save(attach); //파일 저장(물리+DB)
+		return "redirect:test4";
 	}
 
 }
