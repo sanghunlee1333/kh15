@@ -34,6 +34,24 @@ public class PokemonDao {
 		};
 		jdbcTemplate.update(sql, data);
 	}
+	
+	//시퀀스+등록
+	public int sequence() {
+		String sql = "select pokemon_seq.nextval from dual";
+		return jdbcTemplate.queryForObject(sql,  int.class);
+	}
+	
+	public void insert2(PokemonDto pokemonDto) {
+		String sql = "insert into pokemon("
+						+ "pokemon_no, pokemon_name, pokemon_type"
+					+ ") values(?, ?, ?)";
+		Object[] data = {
+				pokemonDto.getPokemonNo(),
+				pokemonDto.getPokemonName(),
+				pokemonDto.getPokemonType()
+		};
+		jdbcTemplate.update(sql, data);
+	}
 
 	//수정 메소드
 	public boolean update(PokemonDto pokemonDto) {
@@ -98,6 +116,23 @@ public class PokemonDao {
 		Object[] data = {pokemonNo};
 		List<PokemonDto> list = jdbcTemplate.query(sql, pokemonMapper, data);
 		return list.isEmpty() ? null : list.get(0);
+	}
+	
+	//포켓몬 이미지 등록(연결)
+	public void connect(int pokemonNo, int attachmentNo) {
+		String sql = "insert into pokemon_image ("
+						+ "pokemon_no, attachment_no"
+				+ ") values(?, ?)";
+		Object[] data = { pokemonNo, attachmentNo };
+		jdbcTemplate.update(sql, data);
+	}
+	
+	//포켓몬 이미지 찾기
+	//- 반환형이 int이기 때문에 만약 이미지가 없으면 예외가 발생함
+	public int findAttachment(int pokemonNo) { //Integer로도 가능함. 다만, 외부에서 null이 나올 경우를 처리해야 함
+		String sql = "select attachment_no from pokemon_image where pokemon_no = ?";
+		Object[] data = {pokemonNo};
+		return jdbcTemplate.queryForObject(sql, int.class, data);
 	}
 	
 }

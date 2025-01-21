@@ -18,7 +18,7 @@ public class GameUserDao {
 	@Autowired
 	private GameUserMapper gameUserMapper;
 	
-public void insert(GameUserDto gameUserDto) {
+	public void insert(GameUserDto gameUserDto) {
 		
 		String sql = "insert into game_user(game_user_no, game_user_id, game_user_job, game_user_level, game_user_money) "
 				+ "values(game_user_seq.nextval, ?, ?, ?, ?)";
@@ -29,6 +29,23 @@ public void insert(GameUserDto gameUserDto) {
 		};
 		jdbcTemplate.update(sql, data);
 		
+	}
+	
+	public int sequence() {
+		String sql = "select game_user_seq.nextval from dual";
+		return jdbcTemplate.queryForObject(sql, int.class);
+	}
+	
+	public void insert2(GameUserDto gameUserDto) {
+		String sql = "insert into game_user(game_user_no, game_user_id, game_user_job, game_user_level, game_user_money) "
+				+ "values(?, ?, ?, ?, ?)";
+		Object[] data = {
+			gameUserDto.getGameUserNo(), 
+			gameUserDto.getGameUserId(), gameUserDto.getGameUserJob(), 
+			gameUserDto.getGameUserLevel(), gameUserDto.getGameUserMoney()				
+				
+		};
+		jdbcTemplate.update(sql, data);
 	}
 	
 	public boolean update(GameUserDto gameUserDto) {
@@ -96,6 +113,20 @@ public void insert(GameUserDto gameUserDto) {
 				+ "where game_user_no = ?";
 		Object[] data = {gameUserNo};
 		return jdbcTemplate.update(sql,data) > 0;
+	}
+	
+	public void connect(int gameUserNo, int attachmentNo) {
+		String sql = "insert into game_user_profile ("
+						+ "game_user_no, attachment_no"
+					+ ") values(?, ?)";
+		Object[] data = { gameUserNo, attachmentNo };
+		jdbcTemplate.update(sql, data);
+	}
+	
+	public int findAttachment(int gameUserNo) {
+		String sql = "select attachment_no from game_user_profile where game_user_no = ?";
+		Object[] data = {gameUserNo};
+		return jdbcTemplate.queryForObject(sql, int.class, data);
 	}
 	
 }

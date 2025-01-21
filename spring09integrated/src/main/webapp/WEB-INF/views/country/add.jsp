@@ -4,10 +4,12 @@
 
 <h1>나라 등록</h1>
 
-<form action = "add" method="post">
-	나라명 <input name = "countryName" type = "text" required> <br><br>
-	수도명 <input name = "countryCapital" type = "text" required> <br><br>
-	인구수 <input name = "countryPopulation" type = "number" required min = "1"> <br><br>
+<!-- <form action = "add" method="post"> -->
+<form action = "add" method = "post" enctype = "multipart/form-data">
+	* 나라명 <input name = "countryName" type = "text" required> <br><br>
+	* 수도명 <input name = "countryCapital" type = "text" required> <br><br>
+	* 인구수 <input name = "countryPopulation" type = "number" required min = "1"> <br><br>
+	국기 이미지 <input type = "file" name = "attach" accept = ".png, .jpg"> <br><br>
 	<button>나라 등록</button>
 </form>
 

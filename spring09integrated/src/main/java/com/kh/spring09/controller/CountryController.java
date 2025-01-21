@@ -1,5 +1,6 @@
 package com.kh.spring09.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring09.dao.CountryDao;
 import com.kh.spring09.dto.CountryDto;
-import com.kh.spring09.dto.PokemonDto;
+import com.kh.spring09.service.AttachmentService;
 
 @Controller
 @RequestMapping("/country")
@@ -22,16 +24,33 @@ public class CountryController {
 	@Autowired
 	private CountryDao countryDao;
 	
+	@Autowired
+	private AttachmentService attachmentService;
+	
 	@GetMapping("/add")
 	public String add() {
 		return "/WEB-INF/views/country/add.jsp";
 	}
 	
+//	@PostMapping("/add")
+//	public String add(@ModelAttribute CountryDto countryDto) { //메소드 오버로딩
+//		countryDao.insert(countryDto);
+//		return "redirect:addFinish"; //상대 경로
+//		//return "redirect:/country/addFinish"; //절대 경로 - 둘다 상관없지만 add.jsp파일 바로 옆에 Finish파일이 있으므로 상대 경로 사용
+//	}
+	
 	@PostMapping("/add")
-	public String add(@ModelAttribute CountryDto countryDto) { //메소드 오버로딩
-		countryDao.insert(countryDto);
-		return "redirect:addFinish"; //상대 경로
-		//return "redirect:/country/addFinish"; //절대 경로 - 둘다 상관없지만 add.jsp파일 바로 옆에 Finish파일이 있으므로 상대 경로 사용
+	public String add(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+		int countryNo = countryDao.sequence();
+		countryDto.setCountryNo(countryNo);
+		countryDao.insert2(countryDto);
+		
+		if(attach.isEmpty() == false) {
+			int attachmentNo = attachmentService.save(attach);
+			
+			countryDao.connect(countryNo, attachmentNo);
+		}
+		return "redirect:addFinish";		
 	}
 	
 	@RequestMapping("/addFinish")
@@ -78,15 +97,34 @@ public class CountryController {
 		return "/WEB-INF/views/country/edit.jsp";
 	}
 	
+//	@PostMapping("/edit")
+//	public String edit(@ModelAttribute CountryDto countryDto) {
+//		boolean success = countryDao.update(countryDto);
+//		if(success) {
+//			return "redirect:detail?countryNo="+countryDto.getCountryNo();
+//		}
+//		else {
+//			return "redirect:list";
+//		}
+//	}
+	
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute CountryDto countryDto) {
+	public String edit(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
 		boolean success = countryDao.update(countryDto);
-		if(success) {
-			return "redirect:detail?countryNo="+countryDto.getCountryNo();
-		}
-		else {
+		if(!success) {
 			return "redirect:list";
 		}
+		
+		if(attach.isEmpty() == false) {
+			try {
+				int attachmentNo = countryDao.findAttachment(countryDto.getCountryNo());
+				attachmentService.delete(attachmentNo);
+			} catch(Exception e) { }
+			
+			int newAttachmentNo = attachmentService.save(attach);
+			countryDao.connect(countryDto.getCountryNo(), newAttachmentNo);
+		}
+		return "redirect:detail?countryNo="+countryDto.getCountryNo();
 	}
 	
 	@RequestMapping("/edit")

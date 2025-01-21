@@ -1,6 +1,6 @@
 package com.kh.spring09.controller;
 
-import java.util.List;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring09.dao.GameUserDao;
-import com.kh.spring09.dto.CountryDto;
 import com.kh.spring09.dto.GameUserDto;
+import com.kh.spring09.service.AttachmentService;
 
 @Controller
 @RequestMapping("/game-user") // gameUser, game-user, game_user -> 세부경로부터는 대소문자 구분 가능
@@ -22,6 +23,9 @@ public class GameUserController {
 	@Autowired
 	private GameUserDao gameUserDao;
 
+	@Autowired
+	private AttachmentService attachmentService;
+	
 	// 사용자 입력 페이지
 	@GetMapping("/add") // GET방식만 처리하는 매핑
 	public String add() {
@@ -29,17 +33,36 @@ public class GameUserController {
 	}
 
 	// 입력 처리
-	@PostMapping("/add") // POST방식만 처리하는 매핑
-	public String add(@ModelAttribute GameUserDto gameUserDto) { // 사용자에게 보여지면 안되는 페이지
-		// 방법1
-		// GameUserDto 에서 레벨 필드를 1로 설정
-
-		// 방법2
+//	@PostMapping("/add") // POST방식만 처리하는 매핑
+//	public String add(@ModelAttribute GameUserDto gameUserDto) { // 사용자에게 보여지면 안되는 페이지
+//		// 방법1
+//		// GameUserDto 에서 레벨 필드를 1로 설정
+//
+//		// 방법2
+//		if (gameUserDto.getGameUserLevel() == 0) { // 사용자가 레벨을 입력하지 않는다면
+//			gameUserDto.setGameUserLevel(1);
+//		}
+//		gameUserDao.insert(gameUserDto);
+//		return "redirect:addFinish"; // addFinish으로 쫓아내는 코드(상대경로)
+//	}
+	
+	@PostMapping("/add")
+	public String add(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+		
 		if (gameUserDto.getGameUserLevel() == 0) { // 사용자가 레벨을 입력하지 않는다면
 			gameUserDto.setGameUserLevel(1);
 		}
-		gameUserDao.insert(gameUserDto);
-		return "redirect:addFinish"; // addFinish으로 쫓아내는 코드(상대경로)
+		
+		int gameUserNo = gameUserDao.sequence();
+		gameUserDto.setGameUserNo(gameUserNo);
+		gameUserDao.insert2(gameUserDto);
+		
+		if(attach.isEmpty() == false) {
+			int attachmentNo = attachmentService.save(attach);
+			gameUserDao.connect(gameUserNo, attachmentNo);
+		}
+		
+		return "redirect:add-finish";
 	}
 
 	// 완료 안내
@@ -94,15 +117,33 @@ public class GameUserController {
 		return "/WEB-INF/views/game-user/edit.jsp";
 	}
 	
+//	@PostMapping("/edit")
+//	public String edit(@ModelAttribute GameUserDto gameUserDto) {
+//		boolean success = gameUserDao.update(gameUserDto);
+//		if(success) {
+//			return "redirect:detail?gameUserNo="+gameUserDto.getGameUserNo();
+//		}
+//		else {
+//			return "redirect:list";
+//		}
+//	}
+	
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute GameUserDto gameUserDto) {
+	public String edit(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
 		boolean success = gameUserDao.update(gameUserDto);
-		if(success) {
-			return "redirect:detail?gameUserNo="+gameUserDto.getGameUserNo();
-		}
-		else {
+		if(!success) {
 			return "redirect:list";
 		}
+		if(attach.isEmpty() == false) {
+			try {
+				int attachmentNo = gameUserDao.findAttachment(gameUserDto.getGameUserNo());
+				attachmentService.delete(attachmentNo);
+			} catch(Exception e) { }
+			
+			int newAttachmentNo = attachmentService.save(attach);
+			gameUserDao.connect(gameUserDto.getGameUserNo(), newAttachmentNo);
+		}
+		return "redirect:detail?gameUserNo="+gameUserDto.getGameUserNo();
 	}
 	
 	@RequestMapping("/edit")
