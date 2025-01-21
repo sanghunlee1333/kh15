@@ -1,6 +1,9 @@
+drop table pokemon_image;
 create table pokemon_image (
 	pokemon_no references pokemon(pokemon_no) on delete cascade,
 	attachment_no references attachment(attachment_no) on delete cascade
+primary key(pokemon_no, attachment_no)
+unique(pokemon_no)
 );
 
 create table country_flag (
