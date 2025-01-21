@@ -103,9 +103,15 @@ public class GameUserController {
 	//삭제 매핑
 	@RequestMapping("/delete")
 	public String delete(@RequestParam int gameUserNo) {
+		try {
+			int attachmentNo = gameUserDao.findAttachment(gameUserNo);
+			attachmentService.delete(attachmentNo);
+		}
+		catch(Exception e) { }
+		
 		gameUserDao.delete(gameUserNo);
-		//return "redirect:list";
 		return "redirect:/game-user/list"; //redirect -> 주소가 바뀜, 끝나고 다른 곳으로 이동
+		//return "redirect:list";
 		//return "/WEB-INF/views/country/list.jsp"; //forward -> 주소가 유지되고 화면만 연결
 	}
 	

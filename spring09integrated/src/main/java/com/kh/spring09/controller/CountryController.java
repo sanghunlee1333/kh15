@@ -85,6 +85,11 @@ public class CountryController {
 	//삭제 매핑
 	@RequestMapping("/delete")
 	public String delete(@RequestParam int countryNo) {
+		try {
+			int attachmentNo = countryDao.findAttachment(countryNo);
+			attachmentService.delete(attachmentNo);
+		} catch(Exception e) { }
+		
 		countryDao.delete(countryNo);
 		return "redirect:list";
 	}
