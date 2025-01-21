@@ -4,6 +4,7 @@ package com.kh.spring08.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -113,6 +114,23 @@ public class FileUploadController {
 	public String upload4(@RequestParam String uploader, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
 		attachmentService.save(attach); //파일 저장(물리+DB)
 		return "redirect:test4";
+	}
+	
+	//여러 개의 파일이 업로드 되는 경우에 대한 처리
+	//- 수신할 때 Collection 또는 배열 형태로 수신할 수 있다
+	@RequestMapping("/test5")
+	public String test5() {
+		return "/WEB-INF/views/fileupload/test5.jsp";
+	}
+	
+	//(*주의) 파일이 전송되지 않아도 attachList의 사이즈는 1이다 (isEmpty로 구분해야 함)
+	@PostMapping("/upload5")
+	public String upload5(@RequestParam String uploader, @RequestParam("attach") List<MultipartFile> attachList) throws IllegalStateException, IOException {
+		for(MultipartFile attach : attachList) {
+			//System.out.println("전송된 파일 개수 : " + attachList.size());
+			attachmentService.save(attach); //파일 저장(물리+DB)
+		}
+		return "redirect:test5";
 	}
 
 }
