@@ -1,5 +1,8 @@
 package com.kh.spring08.dto;
 
+import java.text.DecimalFormat;
+import java.text.Format;
+
 import lombok.Data;
 
 @Data
@@ -8,4 +11,21 @@ public class AttachmentDto {
 	private String attachmentName; //업로드한 파일명
 	private String attachmentType; //업로드한 파일유형
 	private long attachmentSize; //업로드한 파일크기
+	
+	public String getAttachmentSizeString() {
+		Format fmt = new DecimalFormat("#,##0.00");
+		if(attachmentSize >= 1024L * 1024L * 1024L) { //GB단위로 표현해야 한다면
+			return fmt.format((double)attachmentSize / (1024L * 1024L * 1024L)) + "GB";
+		}
+		else if(attachmentSize >= 1024L * 1024L) { //MB단위로 표현해야 한다면 
+			return fmt.format((double)attachmentSize / (1024L * 1024L)) + "MB";
+		}
+		else if(attachmentSize >= 1024L) { //KB단위로 표현해야 한다면
+			return fmt.format((double)attachmentSize / 1024L) + "KB";
+		}
+		else {
+			return attachmentSize + "Byte";
+		}
+			
+	}
 }
