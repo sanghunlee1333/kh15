@@ -42,7 +42,6 @@ public class MemberController {
 	}
 
 	// 로그인 판정
-
 	@GetMapping("/login")
 	public String login() {
 		return "/WEB-INF/views/member/login.jsp";
@@ -71,6 +70,8 @@ public class MemberController {
 			
 			//(+추가)세션에 userId란 이름으로 사용자의 ID를 저장
 			session.setAttribute("userId", findDto.getMemberId()); 
+			//(+추가)세션에 userLevel이란 이름으로 사용자의 등급을 저장
+			session.setAttribute("userLevel", findDto.getMemberLevel());
 			
 			//(+추가)최종 로그인 시각을 갱신 처리
 			memberDao.updateMemberLogin(findDto.getMemberId());

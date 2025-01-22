@@ -6,6 +6,8 @@
     
 <h1>[${gameUserDto.gameUserId}] 유저 정보</h1>
 
+<img src = "profile?gameUserNo=${gameUserDto.gameUserNo}" width = "300">
+
 <table border="1" width="300">
 	<tr>
 		<th width="30%">번호</th>

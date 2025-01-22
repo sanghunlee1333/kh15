@@ -138,6 +138,18 @@ public class CountryController {
 		return "/WEB-INF/views/country/edit.jsp";
 	}
 	
+	@RequestMapping("/flag")
+	public String flag(@RequestParam int countryNo) {
+		try {
+			int attachmentNo = countryDao.findAttachment(countryNo);
+			return "redirect:/attachment/download?attachmentNo=" + attachmentNo;
+		}
+		catch (Exception e) {
+			return "redirect:/images/standard.jpg";
+			//return "redirect:https://placehold.co/400x400?text=P";
+		}
+	}
+	
 	
 	
 }

@@ -5,6 +5,9 @@
 
 <h1>[${pokemonDto.pokemonName}] 몬스터 정보</h1>
 
+<!-- 동적 이미지 주소 (참고)헤더에는 정적 이미지 주소 사용했음 -->
+<img src = "image?pokemonNo=${pokemonDto.pokemonNo}" width = "300">
+
 <table border="1" width="300">
 	<tr>
 		<th width="30%">번호</th>

@@ -35,7 +35,8 @@
 	<!-- 상태확인용 영역 -->
 	<div>
 		세션ID : ${pageContext.session.id},
-		userId : ${sessionScope.userId}
+		userId : ${sessionScope.userId},
+		userLevel : ${sessionScope.userLevel}
 	</div>
 	<!-- 로그인 여부에 따라 메뉴를 다르게 표시 -->
 	<div>
@@ -48,6 +49,10 @@
 				<a href = "/member/mypage">내정보</a>
 				<a href = "/member/logout">로그아웃</a>
 				<a href = "/board/list">게시판</a>
+				
+				<c:if test = "${sessionScope.userLevel == '관리자'}">
+				<a href = "/admin/home">[관리자메뉴]</a>
+				</c:if>
 			</c:when>
 			
 			<%-- 비로그인 --%>

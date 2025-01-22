@@ -18,22 +18,12 @@
 	<button>검색</button>
 </form>
 
-<!-- 데이터 표시 영역 -->
-<c:forEach var = "gameUserDto" items = "${list}">
-	<h2>
-		아이디 : ${gameUserDto.gameUserId},
-		직업 : ${gameUserDto.gameUserJob},
-		레벨 : ${gameUserDto.gameUserLevel},
-		소지금 : ${gameUserDto.gameUserMoney}
-	</h2>
-</c:forEach>
-
-<h1 align = "center">유저 테이블</h1>
-<hr width = "400" align = "center">
+<h1>유저 테이블</h1>
+<hr width = "400" align = "left">
 
 <br>
 
-<table border = "1" width = "400" align = "center">
+<table border = "1" width = "400">
 	<thead>
 		<tr>
 			<th>아이디</th>

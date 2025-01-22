@@ -11,6 +11,7 @@
 <table border="1" width="400">
 	<thead>
 		<tr>
+			<th>이미지</th>
 			<th>번호</th>
 			<th>이름</th>
 			<th>속성</th>
@@ -19,6 +20,9 @@
 	<tbody align="center">
 		<c:forEach var="pokemonDto" items="${list}">
 		<tr>
+			<td>
+				<img src="image?pokemonNo=${pokemonDto.pokemonNo}" width="50" height="50">
+			</td>
 			<td>${pokemonDto.pokemonNo}</td>
 			<td>
 				<a href="detail?pokemonNo=${pokemonDto.pokemonNo}">

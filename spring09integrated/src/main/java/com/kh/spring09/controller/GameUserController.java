@@ -172,4 +172,16 @@ public class GameUserController {
 				
 	}
 	
+	@RequestMapping("/profile")
+	public String profile(@RequestParam int gameUserNo) {
+		try {
+			int attachmentNo = gameUserDao.findAttachment(gameUserNo);
+			return "redirect:/attachment/download?attachmentNo=" + attachmentNo;
+		}
+		catch (Exception e) {
+			return "redirect:/images/standard.jpg";
+			//return "redirect:https://placehold.co/400x400?text=P";
+		}
+	}
+	
 }

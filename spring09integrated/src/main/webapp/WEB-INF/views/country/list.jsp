@@ -42,12 +42,12 @@
 <%-- 	</c:otherwise> --%>
 <%-- </c:choose> --%>
 
-<h1 align = "center">나라 테이블</h1>
-<hr width = "400" align = "center">
+<h1>나라 테이블</h1>
+<hr width = "400" align = "left">
 
 <br>
 
-<table border = "1" width = "400" align = "center">
+<table border = "1" width = "400">
 	<thead>
 		<tr>
 			<th>번호</th>
@@ -67,7 +67,8 @@
 			<c:forEach var = "countryDto" items = "${list}">
 				<tr>
 					<td>${countryDto.countryNo}</td>
-					<td>
+					<td align = "left">
+						<img src = "flag?countryNo=${countryDto.countryNo}" width = "50" height = "50">
 						<a href = "detail?countryNo=${countryDto.countryNo}">
 							${countryDto.countryName}
 						</a>
