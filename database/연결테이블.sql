@@ -20,3 +20,10 @@ create table game_user_profile (
 select * from pokemon_image;
 select * from country_flag;
 select * from game_user_profile;
+
+
+select pokemon.*, pokemon_image.attachment_no from POKEMON
+	left outer join pokemon_image on pokemon.pokemon_no = pokemon_image.POKEMON_NO ;
+
+select country.*, country_flag.attachment_no from COUNTRY
+	left outer join country_flag on country.country_no = country_flag.COUNTRY_NO ;
