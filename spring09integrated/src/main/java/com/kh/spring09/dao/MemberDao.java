@@ -127,23 +127,4 @@ public class MemberDao {
 		}
 	}
 
-	// 검색 목록 조회
-	public List<MemberDto> selectList(String column, String keyword) {
-		// 검색 항목 검사
-		switch (column) {
-		case "member_id":
-		case "member_nickname":
-			break;
-		default:
-			throw new NoPermissionException("검색할 수 없는 항목");
-		}
-
-		String sql = "select * from member "
-				+ "where instr(#1, ?) > 0 ";
-		sql = sql.replace("#1", column);
-		Object[] data = { keyword };
-		return jdbcTemplate.query(sql, memberMapper, data);
-
-	}
-
 }

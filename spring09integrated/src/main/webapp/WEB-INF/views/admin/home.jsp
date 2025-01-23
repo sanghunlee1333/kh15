@@ -8,9 +8,10 @@
 <h2><a href = "/admin/member/list">회원 관리</a></h2>
 
 <h2><a href = "/admin/status/pokemon">포켓몬 현황</a></h2>
-<h2><a href = "#">국가 현황</a></h2>
 <h2><a href = "/admin/status/game-user">게임유저 현황</a></h2>
 <h2><a href = "/admin/status/member">회원 현황</a></h2>
-<h2><a href = "#">게시글 현황</a></h2>
+<h2><a href = "/admin/status/member-join">회원가입 현황</a></h2>
+<h2><a href = "/admin/status/board-write">게시글 작성 현황</a></h2>
+
 
 <jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>   

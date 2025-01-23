@@ -35,11 +35,27 @@ public class StatusDao {
 		return jdbcTemplate.query(sql, statusMapper);
 	}
 
-	// 회원 현황
+	// 등급별 회원 현황
 	public List<StatusVO> member() {
 		String sql = "select member_level key, count(*) value from member "
 						+ "group by member_level "
 						+ "order by value desc, key asc";
 		return jdbcTemplate.query(sql, statusMapper);
 	}
+	
+	// 회원가입 현황
+	public List<StatusVO> memberJoin() {
+		String sql = "select to_char(member_join, 'YYYY-MM') key, count(*) value "
+						+ "from member group by to_char(member_join, 'YYYY-MM') "
+						+ "order by key desc";
+		return jdbcTemplate.query(sql, statusMapper);
+	}
+		
+	// 게시글 작성 현황
+	public List<StatusVO> boardWrite() {
+		String sql = "select to_char(board_wtime, 'YYYY-MM') key, count(*) value "
+						+ "from board group by to_char(board_wtime, 'YYYY-MM') "
+						+ "order by key desc";
+		return jdbcTemplate.query(sql, statusMapper);
+	}	
 }

@@ -79,7 +79,7 @@
 								${boardListViewDto.memberNickname}
 							</c:otherwise>
 						</c:choose>
-						/td>
+						</td>
 						<td>${boardListViewDto.boardWtimeString}
 					  <%-- ${boardListViewDto.getBoardWtimeString()}  --%>
 						</td>
