@@ -1,60 +1,64 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<h1>회원 목록 및 검색</h1>
+<h1>회원 관리</h1>
 
-<c:if test="${search == true}">
-	<h1>회원 검색</h1>
-</c:if>
-<c:if test="${search == false}">
-	<h1>회원 목록</h1>
-</c:if>
+<!-- 검색창 -->
+<form action="list" method="get">
+	<select name="column">
+		<option value="member_id"
+			${pageVO.column == 'member_id' ? 'selected' : ''}>아이디</option>
+		<option value="member_nickname"
+			${pageVO.column == 'member_nickname' ? 'selected' : ''}>닉네임</option>
+		<option value="member_birth"
+			${pageVO.column == 'member_birth' ? 'selected' : ''}>생년월일</option>
+		<option value="member_contact"
+			${pageVO.column == 'member_contact' ? 'selected' : ''}>연락처</option>
+		<option value="member_email"
+			${pageVO.column == 'member_email' ? 'selected' : ''}>이메일</option>
+	</select> <input type="text" name="keyword" value="${pageVO.keyword}">
+	<button>검색</button>
+</form>
 
 <!-- 테이블 -->
-<table border="1" width="300">
+<table border="1" width="800">
 	<thead>
 		<tr>
 			<th>아이디</th>
 			<th>닉네임</th>
+			<th>생년월일</th>
+			<th>연락처</th>
+			<th>이메일</th>
+			<th>가입일</th>
+			<th>등급</th>
 		</tr>
 	</thead>
-	<tbody align = "center">	
-		<!-- choose로 다른 when(if) - otherwise(else)와 겹치지 않게 범위를 지정해준다. -->
-		<c:choose>
-			<c:when test="${list.isEmpty()}">				
-				<tr height = "150">
-					<td colspan="2">등록된 회원이 없습니다</td>
-				</tr>
-			</c:when>
-			<c:otherwise>
-				<c:forEach var="memberDto" items="${list}">
-					<tr>
-						<td>${memberDto.memberId}</td>
-						<td align = "left">
-							<a href="detail?memberId=${memberDto.memberId}">
-								${memberDto.memberNickname} 
-							</a>
-						</td>
-					</tr>
-				</c:forEach>
-			</c:otherwise>
-		</c:choose>
+	<tbody align="center">
+		<c:forEach var="memberDto" items="${list}">
+			<tr>
+				<td>
+					<a href="detail?memberId=${memberDto.memberId}">
+						${memberDto.memberId}
+					</a>
+				</td>
+				<td>${memberDto.memberNickname}</td>
+				<td>${memberDto.memberBirth}</td>
+				<td>${memberDto.memberContact}</td>
+				<td>${memberDto.memberEmail}</td>
+				<td><fmt:formatDate pattern="yyyy-MM-dd"
+						value="${memberDto.memberJoin}"></fmt:formatDate></td>
+				<td>${memberDto.memberLevel}</td>
+			</tr>
+		</c:forEach>
 	</tbody>
 </table>
 
-<!-- 검색창 - /country/list?column=국가명&keyword=한국-->
-<form action="list" method="get">
-	<!-- get은 주소창으로 처리하는 방식 -->
-	<select name="column">
-		<option value = "member_id" ${param.column == 'member_no' ? 'selected' : ''}>아이디</option>
-		<option value = "member_nickname" ${param.column == 'member_id' ? 'selected' : ''}>닉네임</option>
-		<!-- equals로도 가능 -->
-	</select> <input type="text" name="keyword" value="${param.keyword}">
-	<button>검색</button>
-</form>
+<!--  페이지 네비게이터 -->
+<jsp:include page="/WEB-INF/views/template/pagination.jsp"></jsp:include>
 
 
 
-<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>   
+<jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>

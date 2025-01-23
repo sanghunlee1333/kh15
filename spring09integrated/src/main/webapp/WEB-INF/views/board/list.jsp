@@ -15,11 +15,11 @@
 <h2><a href="write">글 쓰기</a></h2>
 
 <!-- 테이블 -->
-<table border="1" width="800">
+<table border="1" width="1000">
 	<thead>
 		<tr>
 			<th>번호</th>
-			<th width = "45%">제목</th>
+			<th width = "30%">제목</th>
 			<th>작성자</th>
 			<th>작성일</th>
 			<th>조회수</th>
@@ -53,24 +53,33 @@
 						
 							<!-- 글의 차수(board_depth)에 따라 띄어쓰기 부여 -->
 							<c:if test = "${boardListViewDto.boardDepth > 0}">
-								
 								<c:forEach var = "i" begin = "1" end = "${boardListViewDto.boardDepth}" step = "1">
 									&nbsp;&nbsp;
 								</c:forEach>
 								<!-- → -->
 								<img src="/images/reply.png" alt="Reply arrow" style="width: 15px; height: 15px;">
 							</c:if>
+							
 							<!-- 게시글 제목 -->
 							<a href="detail?boardNo=${boardListViewDto.boardNo}">
 								${boardListViewDto.boardTitle} 
 							</a>
 							
 							<!-- 댓글 표시 -->
-							<c:if test = "${boardListViewDto.boardReply > 0}">
+							<c:if test="${boardListViewDto.boardReply > 0}">
 								[${boardListViewDto.boardReply}]
 							</c:if>
 						</td>
-						<td>${boardListViewDto.memberNickname}</td>
+						<td>
+						<c:choose>
+							<c:when test="${boardListViewDto.memberNickname == null}">
+								(탈퇴한 사용자)
+							</c:when>
+							<c:otherwise>
+								${boardListViewDto.memberNickname}
+							</c:otherwise>
+						</c:choose>
+						/td>
 						<td>${boardListViewDto.boardWtimeString}
 					  <%-- ${boardListViewDto.getBoardWtimeString()}  --%>
 						</td>
