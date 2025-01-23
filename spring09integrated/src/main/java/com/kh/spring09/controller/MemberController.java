@@ -63,8 +63,8 @@ public class MemberController {
 			return "redirect:login?error"; // 로그인페이지로 쫒아낸다 //GET의 login으로 리다이렉트된다. 원래 리다이렉트는 get밖에 안되긴 함
 		}
 		// 아이디가 있으면 비밀번호 검사를 진행
-		System.out.println(memberDto);
-		System.out.println(findDto);
+//		System.out.println(memberDto);
+//		System.out.println(findDto);
 		boolean isValid = findDto.getMemberPw().equals(memberDto.getMemberPw());
 		if (isValid) {// 로그인 성공 시
 			
@@ -79,13 +79,14 @@ public class MemberController {
 			return "redirect:/";
 		} 
 		else {// 비밀번호 다름
-			return "redirect:login";// 로그인 페이지로 쫓아낸다
+			return "redirect:login?error";// 로그인 페이지로 쫓아낸다
 		}
 	}
 	
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("userId");
+		session.removeAttribute("userLevel");
 		//session.invalidate(); //세션 소멸 명령
 		return "redirect:/";
 	}
