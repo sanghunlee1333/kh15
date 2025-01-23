@@ -1,0 +1,10 @@
+select made, count(*) from product group by made;
+
+-- (ex) 연도별 생산 제품 수
+select extract(year from made) key, count(*) value from product group by extract(year from made) order by value desc, key asc;
+
+-- (ex) 연/월별 생산 제품 수
+select extract(year from made), extract(month from made), count(*)
+from product group by extract(year from made), extract(month from made);
+
+select to_char(made, 'YYYY-MM') key, count(*) value from product group by to_char(made, 'YYYY-MM') order by key asc;
