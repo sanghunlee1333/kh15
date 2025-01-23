@@ -1,4 +1,4 @@
-package com.kh.spring09.controller;
+package com.kh.spring09.controller.admin;
 
 import java.util.List;
 
