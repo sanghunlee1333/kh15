@@ -33,4 +33,12 @@ public class ErrorExceptionControllerAdvice {
 		model.addAttribute("message", e.getMessage());
 		return "/WEB-INF/views/error/notfound.jsp";
 	}
+	
+	//나머지 전체 예외에 대한 처리
+	@ExceptionHandler(Exception.class)
+	public String error(Exception e, Model model) {
+		e.printStackTrace();
+		model.addAttribute("message", e.getMessage());
+		return "/WEB-INF/views/error/etc.jsp";
+	}
 }
