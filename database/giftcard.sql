@@ -21,7 +21,7 @@ attachment_no references attachment(attachment_no) on delete cascade
 );
 
 -- 상품권 구매이력 테이블
-drop table giftcard_purchase cascade constraint;
+drop table giftcard_purchase cascade constraint; --외래키 무시하고 테이블 삭제
 create table giftcard_purchase(
 giftcard_purchase_no number primary key,
 giftcard_purchase_target references giftcard(giftcard_no) on delete cascade,
@@ -33,3 +33,20 @@ check(giftcard_purchase_qty > 0)
 
 drop sequence giftcard_purchase_seq;
 create sequence giftcard_purchase_seq;
+
+select * from giftcard_image;
+select * from giftcard_purchase;
+
+-----------------------------------
+--testuser1 이라는 회원의 구매내역
+create or replace view PURCHASE_HISTORY as 
+select 
+	HISTORY.*, 
+	CARD.GIFTCARD_NAME, 
+	CARD.GIFTCARD_CHARGE,
+	CARD.GIFTCARD_PRICE 
+from giftcard_purchase HISTORY 
+	left outer join giftcard CARD 
+	on HISTORY.GIFTCARD_PURCHASE_TARGET = CARD.GIFTCARD_NO;
+
+select * from purchase_history where giftcard_purchase_member = 'testuser1';
