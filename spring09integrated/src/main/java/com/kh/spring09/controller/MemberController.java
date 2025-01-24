@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.spring09.dao.MemberDao;
+import com.kh.spring09.dao.PurchaseHistoryDao;
 import com.kh.spring09.dto.MemberDto;
+import com.kh.spring09.mapper.PurchaseHistoryMapper;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -21,8 +23,11 @@ public class MemberController {
 
 	@Autowired
 	private MemberDao memberDao;
-
-	// 사용자 입력 페이지
+	
+	@Autowired
+	private PurchaseHistoryDao purchaseHistoryDao;
+	
+	// 회원가입 매핑
 	@GetMapping("/join") // GET방식만 처리하는 매핑
 	public String join() {
 		return "/WEB-INF/views/member/join.jsp";
@@ -41,7 +46,7 @@ public class MemberController {
 		return "/WEB-INF/views/member/joinFinish.jsp";
 	}
 
-	// 로그인 판정
+	// 로그인 매핑
 	@GetMapping("/login")
 	public String login() {
 		return "/WEB-INF/views/member/login.jsp";
@@ -99,6 +104,8 @@ public class MemberController {
 		String userId = (String) session.getAttribute("userId"); //내 아이디 추출
 		MemberDto memberDto = memberDao.selectOne(userId); //내 정보 획득
 		model.addAttribute("memberDto", memberDto);
+		
+		model.addAttribute("purchaseHistoryList", purchaseHistoryDao.selectList(userId));
 		return "/WEB-INF/views/member/mypage.jsp";
 	}
 	

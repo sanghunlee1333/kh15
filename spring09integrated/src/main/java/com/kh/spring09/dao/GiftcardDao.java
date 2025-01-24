@@ -1,5 +1,7 @@
 package com.kh.spring09.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +24,7 @@ public class GiftcardDao {
 		return jdbcTemplate.queryForObject(sql, int.class);
 	}
 	
-	public void add(GiftcardDto giftcardDto) {
+	public void insert(GiftcardDto giftcardDto) {
 		String sql = "insert into giftcard("
 							+ "giftcard_no, giftcard_name, giftcard_content, giftcard_charge, giftcard_price"
 						+ ") "
@@ -38,17 +40,31 @@ public class GiftcardDao {
 	}
 	
 	public void connect(int giftcardNo, int attachmentNo) {
-		String sql = "insert into giftcard_purchase ("
+		String sql = "insert into giftcard_image ("
 						+ "giftcard_no, attachment_no"
 				+ ") values(?, ?)";
 		Object[] data = { giftcardNo, attachmentNo };
 		jdbcTemplate.update(sql, data);
 	}
 	
+	public List<GiftcardDto> selectList() {
+		String sql = "select * from giftcard "
+					+ "order by giftcard_price asc, "
+						+ "giftcard_charge desc, giftcard_no asc";
+		return jdbcTemplate.query(sql, giftcardMapper);
+	}
+	
 	public int findAttachment(int giftcardNo) { //Integer로도 가능함. 다만, 외부에서 null이 나올 경우를 처리해야 함
-		String sql = "select attachment_no from giftcard_purchase where giftcard_no = ?";
+		String sql = "select attachment_no from giftcard_image where giftcard_no = ?";
 		Object[] data = {giftcardNo};
 		return jdbcTemplate.queryForObject(sql, int.class, data);
+	}
+	
+	public GiftcardDto selectOne(int giftcardNo) {
+		String sql = "select * from giftcard where giftcard_no = ?";
+		Object[] data = {giftcardNo};
+		List<GiftcardDto> list = jdbcTemplate.query(sql , giftcardMapper, data);
+		return list.isEmpty() ? null : list.get(0);
 	}
 	
 }

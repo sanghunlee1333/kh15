@@ -47,7 +47,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 		// - 와일드카드를 한개(*) 쓰면 엔드포인트를 유지하며 패턴 검색
 		// - 와일드카드를 두개(**) 쓰면 엔드포인트 이하의 모든 주소 패턴 검색
 		registry.addInterceptor(memberLoginInterceptor)
-				.addPathPatterns(List.of("/member/**", "/game-user/**", "/board/**")).excludePathPatterns(List.of(
+				.addPathPatterns(List.of("/member/**", "/game-user/**", "/board/**", "/giftcard/**")).excludePathPatterns(List.of(
 						// "/member/join",
 						// "/member/joinFinish",
 						"/member/join*", // join어쩌구

@@ -126,5 +126,13 @@ public class MemberDao {
 			return jdbcTemplate.queryForObject(sql, int.class, data);
 		}
 	}
+	
+	public boolean plusMemberPoint(String memberId, int value) {
+		String sql = "update member "
+						+ "set member_point = member_point + ? "
+						+ "where member_id = ?";
+		Object[] data = {value, memberId};
+		return jdbcTemplate.update(sql, data) > 0;
+	}
 
 }

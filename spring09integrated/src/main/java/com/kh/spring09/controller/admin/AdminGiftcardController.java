@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.spring09.dao.AttachmentDao;
 import com.kh.spring09.dao.GiftcardDao;
 import com.kh.spring09.dto.GiftcardDto;
 import com.kh.spring09.service.AttachmentService;
@@ -23,6 +25,9 @@ public class AdminGiftcardController {
 	private GiftcardDao giftcardDao;
 	
 	@Autowired
+	private AttachmentDao attachmentDao;
+	
+	@Autowired
 	private AttachmentService attachmentService;
 	
 	@GetMapping("/add")
@@ -33,18 +38,37 @@ public class AdminGiftcardController {
 	@PostMapping("/add")
 	public String add(@ModelAttribute GiftcardDto giftcardDto, @RequestParam MultipartFile attach)
 			throws IllegalStateException, IOException {
+		
+		if(attach.isEmpty()) {
+			return "redirect:add?error";
+		}
+	
 		int giftcardNo = giftcardDao.sequence();
 		giftcardDto.setGiftcardNo(giftcardNo);
-		giftcardDao.add(giftcardDto);
-
-		if (attach.isEmpty() == false) { // 비어있지 않다면(첨부파일이 있을 경우)
-			// [2] 첨부파일 등록 -> 첨부파일번호(시퀀스)
-			int attachmentNo = attachmentService.save(attach);
-
-			// [3] 포켓몬 이미지 등록(연결) -> 1, 2번에서 뽑은 포켓몬번호, 첨부파일번호
-			giftcardDao.connect(giftcardNo, attachmentNo);
-		}
+		giftcardDao.insert(giftcardDto);
+		
+		int attachmentNo = attachmentService.save(attach);
+		giftcardDao.connect(giftcardNo, attachmentNo);
 		return "redirect:list";
+	}
+	
+	//목록 매핑
+	@RequestMapping("/list")
+	public String list(Model model) {
+		model.addAttribute("list", giftcardDao.selectList());
+		return "/WEB-INF/views/admin/giftcard/list.jsp";
+	}
+	
+	//이미지 매핑
+	@RequestMapping("/image")
+	public String image(@RequestParam int giftcardNo) {
+		try {
+			int attachmentNo = giftcardDao.findAttachment(giftcardNo);
+			return "redirect:/attachment/download?attachmentNo=" + attachmentNo;
+		}
+		catch(Exception e) {
+			return "redirect:https://placehold.co/200x80?text=GIFT";
+		}
 	}
 	
 }

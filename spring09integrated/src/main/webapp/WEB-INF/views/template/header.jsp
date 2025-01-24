@@ -53,6 +53,10 @@
 				<c:if test = "${sessionScope.userLevel == '관리자'}">
 				<a href = "/admin/home">[관리자메뉴]</a>
 				</c:if>
+				
+				<c:if test = "${sessionScope.userLevel != '관리자'}">
+				<a href = "/giftcard/list">포인트충전</a>
+				</c:if>
 			</c:when>
 			
 			<%-- 비로그인 --%>

@@ -7,6 +7,9 @@
 
 <h2><a href = "/admin/member/list">회원 관리</a></h2>
 
+<h2><a href = "/admin/giftcard/add">상품권 등록</a></h2>
+<h2><a href = "/admin/giftcard/list">상품권 관리</a></h2>
+
 <h2><a href = "/admin/status/pokemon">포켓몬 현황</a></h2>
 <h2><a href = "/admin/status/game-user">게임유저 현황</a></h2>
 <h2><a href = "/admin/status/member">회원 현황</a></h2>
