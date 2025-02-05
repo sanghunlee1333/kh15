@@ -1,17 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
-<h1>포켓몬 등록</h1>
+	pageEncoding="UTF-8"%>
+<jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
 <!-- <form action = "add" method="post"> 메소드=포스트를 안써주면 뺑뻉 돈다  -->
-<form action = "add" method = "post" enctype = "multipart/form-data">
+<!-- <form action = "add" method = "post" enctype = "multipart/form-data">
 	몬스터 이름 <input name = "pokemonName"> <br><br>
 	몬스터 속성 <input name = "pokemonType"> <br><br>
 	몬스터 이미지 <input type = "file" name = "attach"> <br><br>
 	<button>몬스터 등록</button>
 </form>
+ -->
+ 
+<form action="add" method="post" autocomplete="off" enctype="multipart/form-data">
+	<div class="container w-300">
+		<div class="cell center">
+			<h1>포켓몬 등록</h1>
+		</div>
+		<div class="cell">
+			<label>포켓몬 이름</label> 
+			<input type="text" name="pokemonName" class="field w-100" required>
+		</div>
+		<div class="cell">
+			<label>포켓몬 속성</label> 
+			<select name="pokemonType" required class="field w-100">
+				<option value="">선택하세요</option>
+				<option>불</option>
+				<option>물</option>
+				<option>땅</option>
+				<option>바람</option>
+				<option>전기</option>
+				<option>곤충</option>
+				<option>독</option>
+				<option>무속성</option>
+			</select>
+		</div>
+		<div class="cell">
+			<label>포켓몬 이미지</label> 
+			<input type="file" name="attach" class="field w-100">
+		</div>
+		<div class="cell">
+			<button type="submit" class="btn btn-positive w-100">등록하기</button>
+		</div>
+	</div>
+</form>
 
-<jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>
 
 <!--  
 JSP에서 POST와 GET은 데이터를 서버로 전송하는 두 가지 주요 방식
