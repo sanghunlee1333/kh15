@@ -43,7 +43,7 @@ public class BoardListViewDao {
 						+ "start with board_target is null "
 						+ "order siblings by board_group desc, board_no asc"
 					+ ")TMP"
-				+ ") where rn between and ? and ?";
+				+ ") where rn between ? and ?";
 			sql = sql.replace("#1", pageVO.getColumn());
 			Object[] data = {
 					pageVO.getKeyword(),
