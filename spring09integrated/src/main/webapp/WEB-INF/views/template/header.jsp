@@ -15,8 +15,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>KH15 homepage</title>
+	<meta charset="UTF-8">
+	<title>KH15 homepage</title>
+	<link rel="stylesheet" type="text/css" href="/css/commons.css">
 </head>
 <body>
 
