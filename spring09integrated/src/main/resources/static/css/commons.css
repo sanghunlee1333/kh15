@@ -562,3 +562,122 @@ table.table {
 	text-overflow: ellipsis;
 	white-space: nowrap; /* 자동 엔터가 아닌, 실제로 엔터를 쳤을 때만 가능하게끔 */
 }
+
+/* 
+    페이지 네이게이터 디자인
+*/
+.page-navigator {
+    text-align: center;
+}
+
+.page-navigator>a {
+    text-decoration: none;
+    color: #636e72;
+    font-size: 16px;
+    padding: 0.5em;
+    display: inline-block;
+    min-width: 2.5em;
+    text-align: center;
+    font-weight: bold;
+    /* border: 1px solid transparent; */
+    /* 애초에 투명한 선을 주고 */
+}
+
+.page-navigator>a:hover,
+.page-navigator>a.on {
+    /* border: 1px solid #636e72; */
+    /* 검은색으로 변경시키는 방법 (1) */
+    box-shadow: 0 0 2px 0 #0984e3;
+    /* 쉐도우를 이용한 방법 (2) */
+    color: #0984e3;
+}
+
+/* 
+     float box 디자인
+    - 가상 선택자(virtual selector)를 이용해서 영역의 끝 지점을 생성
+    - 시작 지점(::before), 끝 지점(::after)을 생성할 수 있음
+    - 원래 없는 영역이기 때문에 생성을 위해서 내용물을 작성해야 함
+*/
+.float-box::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.float-box>.float-left {
+    float: left;
+}
+
+.float-box>.float-right {
+    float: right;
+}
+
+/* 
+    Flexible layout 디자인
+*/
+.flex-box {
+    display: flex;
+    flex-direction: row;
+}
+.inline-flex-box {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.flex-box.flex-vertical,
+.inline-flex-box.flex-vertical
+{
+    flex-direction: column;
+}
+        
+.flex-box.flex-center,
+.inline-flex-box.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flexbox > .flex-fill,
+.inline-flex-box > .flex-fill {
+    flex-grow: 1;
+}
+
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /*
+        배경이 비치게 하는 방법
+        (1) opacity를 설정 (0~1)
+
+            background-color: black;
+            opacity: 0.5;
+        
+        (2)배경색상에 알파값을 부여(0~1)
+
+        background-color: rgba(?, ?, ?, 0.5);
+    */
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.box {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 0 0 1px black;
+    background-color: white;
+
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bounce {
+    position: relative;
+    top: 0px;
+    transition: top 0.2s ease-out; /* 변화를 부드럽게 */
+}
+.bounce:hover {
+    top: -5px;
+}
