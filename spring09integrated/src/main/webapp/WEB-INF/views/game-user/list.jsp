@@ -55,7 +55,7 @@
 	<div class = "cell center">
 		<h1>유저 목록</h1>
 	</div>
-	<div class = "cell">
+	<div class = "cell right">
 		<a href = "add" class = "btn btn-neutral">신규 등록</a>
 	</div>
 	<!-- 검색창 -->

@@ -13,7 +13,7 @@
 		<div class = "cell"><h1>자유 게시판</h1></div>
 	</c:if>
 
-	<div class = "cell">
+	<div class = "cell right">
 		<a href="write"><button class = "btn btn-neutral">글 쓰기</button></a>
 	</div>
 	
@@ -100,17 +100,16 @@
 		</table>
 	</div>
 
-
 	<!-- 검색창 - /country/list?column=국가명&keyword=한국-->
 	<form action="list" method="get">
 		<!-- get은 주소창으로 처리하는 방식 -->
 		<div class = "cell">
-			<select name="column" class = "field">
+			<select name = "column" class = "field">
 				<option value = "board_title" ${param.column == 'board_title' ? 'selected' : ''}>제목</option>
 				<option value = "board_writer" ${param.column == 'board_writer' ? 'selected' : ''}>작성자</option>
 				<!-- equals로도 가능 -->
 			</select> 
-			<input type="text" name="keyword" value="${param.keyword}" class = "field w-25">
+			<input type="text" name = "keyword" value = "${param.keyword}" class = "field w-25">
 			<button class = "btn btn-neutral">검색</button>
 		</div>
 	</form>

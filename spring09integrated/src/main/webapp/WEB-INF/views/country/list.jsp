@@ -99,7 +99,7 @@
 		<div class = "cell center"><h1>나라 목록</h1></div>
 	</c:if>
 
-	<div class = "cell">
+	<div class = "cell right">
 		<a href = "add" class = "btn btn-neutral">신규 등록</a>
 	</div>
 	
