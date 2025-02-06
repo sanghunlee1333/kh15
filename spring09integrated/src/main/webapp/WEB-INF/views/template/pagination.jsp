@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>   
-    
+
 <!-- 페이지 네이게이터 : pageVO에 기반하여 처리하도록 구현 -->
+<div class = "page-navigator">
 <!-- 이전 : startBlock > 1 일 경우 출력 -->
-<h3>
 <c:if test = "${pageVO.hasPrevBlock()}"> <!-- @Data로 표준규칙으로 만들어지지 않기 때문에 해당 메소드로만 가능 -->
 	<a href = "list?page=${pageVO.prevBlock}&${pageVO.parameters}">
 		&lt;
@@ -23,7 +23,14 @@
 <!-- 숫자 -->
 <%-- for(int i = 1; i <= 10; i++) {} --%>
 <c:forEach var = "i" begin = "${pageVO.startBlock}" end = "${pageVO.finishBlock}" step = "1">
-	<a href="list?page=${i}&${pageVO.parameters}">${i}</a>
+	<c:choose>
+		<c:when test = "${pageVO.page == i}">
+			<a class = "on">${i}</a>
+		</c:when>
+		<c:otherwise>
+			<a href="list?page=${i}&${pageVO.parameters}">${i}</a>
+		</c:otherwise>
+	</c:choose>
 <!-- 아래는 이제 필요 없음	 -->
 <%-- 	<c:choose> --%>
 <%-- 		<c:when test = "${pageVO.search}"> --%>
@@ -50,4 +57,4 @@
 <%-- 		</c:otherwise> --%>
 <%-- 	</c:choose> --%>
 </c:if>
-</h3>
+</div>
