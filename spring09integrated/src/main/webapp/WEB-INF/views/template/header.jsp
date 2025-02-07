@@ -38,7 +38,7 @@
 <body>
     
     <!-- 화면 영역 -->
-    <div class="container w-1100">
+    <div class="container w-1200">
         <!-- 헤더 영역 -->
         <div class="flex-box p-10">
             <div class="w-25 left flex-box flex-center">
@@ -49,11 +49,57 @@
             </div>
             <div class="w-25 right"></div>
         </div>
-        <!-- 메뉴 영역 -->
+        
+        <!-- 신규 메뉴 영역 -->
         <div>
-            <%-- 로그인 여부에 따라 메뉴를 다르게 표시 --%>
+        	<ul class = "menu">
+        		<li>
+        			<a>데이터관리</a>
+        			<ul>
+        				<li><a href = "/pokemon/list">포켓몬스터정보</a></li>
+        				<li><a href = "/country/list">국가정보정보</a></li>
+        				<c:if test = "${sessionScope.userId != null}">
+        					<li><a href = "/game-user/list">게임유저정보</a></li>
+        				</c:if>
+        			</ul>
+        		</li>
+        		
+        		
+        		<li><a href = "/board/list">게시판</a></li>
+        		<c:if test = "${sessionScope.userId != null && sessionScope.userLevel != '관리자'}">
+        			<li><a href = "/giftcard/list">상품권구매</a></li>
+        		</c:if>
+        		
+        		<!-- 회원 메뉴는 우측에 -->
+        		<c:if test = "${sessionScope.userId == null}">
+        		<li class = "menu-end">
+        			<a href = "/member/login">로그인</a>
+        			<ul>
+        				<li><a href = "/member/join">회원가입</a></li>
+        			</ul>
+        		</li>
+        		</c:if>
+        		
+        		<c:if test="${sessionScope.userId != null}">
+        		<li class="menu-end">
+        			<a href="/member/mypage">${sessionScope.userId}</a>
+        			<ul>
+	        			<c:if test="${sessionScope.userLevel == '관리자'}">
+    	    			<li><a href="/admin/home">관리자메뉴</a></li>
+        				</c:if>
+        				<li><a href="/member/logout">로그아웃</a></li>
+        			</ul>
+        		</li>
+        		</c:if>
+        		
+        	</ul>
+        </div>
+        
+       <%--  <!-- 기존 메뉴 영역 -->
+        <div>
+            로그인 여부에 따라 메뉴를 다르게 표시
 			<c:choose>
-				<%-- 로그인 --%>
+				로그인
 				<c:when test="${sessionScope.userId != null}">
 					<a href="/pokemon/list">포켓몬</a>
 					<a href="/country/list">국가</a>
@@ -70,7 +116,7 @@
 					<a href="/giftcard/list">[포인트충전]</a>
 					</c:if>
 				</c:when>
-				<%-- 비로그인 --%>
+				비로그인
 				<c:otherwise>
 					<a href="/pokemon/list">포켓몬</a>
 					<a href="/country/list">국가</a>
@@ -79,7 +125,8 @@
 					<a href="/board/list">게시판</a>
 				</c:otherwise>
 			</c:choose>
-        </div>
+        </div> --%>
+        
         <!-- 컨텐츠 영역 -->
         <div class="flex-box">
             <div class="w-200 p-10">

@@ -711,3 +711,109 @@ table.table {
 .bounce:hover {
     top: -5px;
 }
+
+/* 
+            계층형 구조 디자인
+            - 똑같은 요소가 중첩되는 형태를 계층형 구조라고 부름(ex: 답변형 게시판)
+            - ul과 li의 디자인을 개조해서 사용
+            
+            (1) ul의 점과 여백을 제거
+            (2) 1차 메뉴를 가로로 배치(display:flex)
+            (3) 메뉴를 동일한 폭으로 배치하고 링크 스타일을 제거
+            (4) 메뉴와 항목에 색상 부여
+            (5) 2차 메뉴 이상을 숨기고 메뉴항목에 마우스가 올라가면 하위요소를 표시
+            (6) 2차 메뉴 이상은 position을 absolute로 변경하고 모든 항목을 relative로 변경
+            (7) 3차 메뉴부터는 아래가 아니라 좌/우로 펼쳐지도록 구현
+            (8) .menu-end가 붙은 메뉴들을 우측으로 정렬하도록 처리 (1차 메뉴만)
+            (9) 우측 정렬된 메뉴들의 3차 메뉴부터는 좌측으로 펼쳐지도록 구현
+        */
+
+/* (1) */
+.menu,
+/* 1차 메뉴 */
+.menu ul
+
+/* 2차 이상 메뉴 */
+    {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* (2) */
+.menu {
+    display: flex;
+}
+
+/* (3) */
+.menu li {
+    /* 모든 메뉴 항목 */
+    width: 150px;
+}
+
+.menu a {
+    color: inherit;
+    /* 외부 색상을 따라가도록 설정 */
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    padding: 0.25em;
+}
+
+/* (4) */
+.menu,
+.menu ul {
+    background-color: #dfe6e9;
+}
+
+.menu li:hover {
+    background-color: #b2bec3;
+}
+
+/* (5) */
+.menu ul {
+    /* 모든 하위 메뉴를 숨김 */
+    display: none;
+}
+
+.menu li:hover>ul {
+    /* 마우스가 올라간 li태그 안의 ul을 표시 */
+    display: block;
+}
+
+/* (6) */
+.menu li {
+    position: relative;
+}
+
+.menu ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+
+/* (7) */
+.menu>li>ul ul {
+    left: 100%;
+    top: 0;
+}
+
+/* (8) */
+/* 1차 메뉴 중에 .menu-end가 붙은 첫 번째 */
+/* 1차 메뉴 중에 .menu-end가 안 붙은 마지막 */
+.menu>.menu-end {
+    margin-left: auto;
+}
+
+/* (9) */
+.menu>li.menu-end>ul ul,
+.menu>li.menu-end~li>ul ul
+
+/* +는 바로 뒤에 한개, ~는 뒤에 전체 */
+    {
+    top: 0;
+    left: auto;
+    right: 100%;
+}

@@ -5,7 +5,7 @@
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<div class = "container w-1000">
+<div class = "container w-900">
 	<c:if test="${search == true}">
 		<div class = "cell"><h1>글 검색</h1></div>
 	</c:if>
