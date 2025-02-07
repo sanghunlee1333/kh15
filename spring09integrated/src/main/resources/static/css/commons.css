@@ -1,15 +1,17 @@
 /*
     자주 사용하는 디자인을 보관해놓고 불러다 쓰는 파일
 */
+
 @charset "UTF-8";
 
 * {
-	box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 테스트를 위해 영역을 시각화하는 코드 */
 div {
-	box-shadow: 0 0 0 1px #b2bec3;
+    box-shadow: 0 0 0 1px #b2bec3;
 }
 
 /*
@@ -19,8 +21,8 @@ div {
     - 크기는 별도의 옵션으로 지정되도록 하는것이 재사용성이 좋음
 */
 .container {
-	margin-left: auto;
-	margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*
@@ -30,8 +32,8 @@ div {
     - 셀 내부의 요소를 어느 방향으로 배치할 것인지도 지정 가능해야 함
 */
 .cell {
-	margin-top: 10px;
-	margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /*
@@ -41,127 +43,135 @@ div {
     - 최소 150px부터 1200px까지 구현
     - 비율로도 설정가능하도록 구현(0~100)
 */
+.w-20 {
+    width: 20% !important;
+}
+
 .w-25 {
-	width: 25% !important;
+    width: 25% !important;
 }
 
 .w-30 {
-	width: 30% !important;
+    width: 30% !important;
+}
+
+.w-33 {
+    width: 33.3333% !important;
 }
 
 .w-50 {
-	width: 50% !important;
+    width: 50% !important;
 }
 
 .w-75 {
-	width: 75% !important;
+    width: 75% !important;
 }
 
 .w-100 {
-	width: 100% !important;
+    width: 100% !important;
 }
 
 .w-150 {
-	width: 150px !important;
+    width: 150px !important;
 }
 
 .w-200 {
-	width: 200px !important;
+    width: 200px !important;
 }
 
 .w-250 {
-	width: 250px !important;
+    width: 250px !important;
 }
 
 .w-300 {
-	width: 300px !important;
+    width: 300px !important;
 }
 
 .w-350 {
-	width: 350px !important;
+    width: 350px !important;
 }
 
 .w-400 {
-	width: 400px !important;
+    width: 400px !important;
 }
 
 .w-450 {
-	width: 450px !important;
+    width: 450px !important;
 }
 
 .w-500 {
-	width: 500px !important;
+    width: 500px !important;
 }
 
 .w-550 {
-	width: 550px !important;
+    width: 550px !important;
 }
 
 .w-600 {
-	width: 600px !important;
+    width: 600px !important;
 }
 
 .w-650 {
-	width: 650px !important;
+    width: 650px !important;
 }
 
 .w-700 {
-	width: 700px !important;
+    width: 700px !important;
 }
 
 .w-750 {
-	width: 750px !important;
+    width: 750px !important;
 }
 
 .w-800 {
-	width: 800px !important;
+    width: 800px !important;
 }
 
 .w-850 {
-	width: 850px !important;
+    width: 850px !important;
 }
 
 .w-900 {
-	width: 900px !important;
+    width: 900px !important;
 }
 
 .w-950 {
-	width: 950px !important;
+    width: 950px !important;
 }
 
 .w-1000 {
-	width: 1000px !important;
+    width: 1000px !important;
 }
 
 .w-1050 {
-	width: 1050px !important;
+    width: 1050px !important;
 }
 
 .w-1100 {
-	width: 1100px !important;
+    width: 1100px !important;
 }
 
 .w-1150 {
-	width: 1150px !important;
+    width: 1150px !important;
 }
 
 .w-1200 {
-	width: 1200px !important;
+    width: 1200px !important;
 }
 
 /*
     정렬 디자인
 */
 .left {
-	text-align: left !important;
+    text-align: left !important;
 }
 
 .center {
-	text-align: center !important;
+    text-align: center !important;
 }
 
 .right {
-	text-align: right !important;
+    text-align: right !important;
 }
 
 /*
@@ -173,208 +183,209 @@ div {
         - (ex) .ms-20은 margin-left : 20px; 을 의미
 */
 .m-0 {
-	margin: 0px !important;
+    margin: 0px !important;
 }
 
 .m-10 {
-	margin: 10px !important;
+    margin: 10px !important;
 }
 
 .m-20 {
-	margin: 20px !important;
+    margin: 20px !important;
 }
 
 .m-30 {
-	margin: 30px !important;
+    margin: 30px !important;
 }
 
 .m-40 {
-	margin: 40px !important;
+    margin: 40px !important;
 }
 
 .m-50 {
-	margin: 50px !important;
+    margin: 50px !important;
 }
 
 .mt-0 {
-	margin-top: 0px !important
+    margin-top: 0px !important
 }
 
 .mt-10 {
-	margin-top: 10px !important;
+    margin-top: 10px !important;
 }
 
 .mt-20 {
-	margin-top: 20px !important;
+    margin-top: 20px !important;
 }
 
 .mt-30 {
-	margin-top: 30px !important;
+    margin-top: 30px !important;
 }
 
 .mt-40 {
-	margin-top: 40px !important;
+    margin-top: 40px !important;
 }
 
 .mt-50 {
-	margin-top: 50px !important;
+    margin-top: 50px !important;
 }
 
 .mb-0 {
-	margin-bottom: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .mb-10 {
-	margin-bottom: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 .mb-20 {
-	margin-bottom: 20px !important;
+    margin-bottom: 20px !important;
 }
 
 .mb-30 {
-	margin-bottom: 30px !important;
+    margin-bottom: 30px !important;
 }
 
 .mb-40 {
-	margin-bottom: 40px !important;
+    margin-bottom: 40px !important;
 }
 
 .mb-50 {
-	margin-bottom: 50px !important;
+    margin-bottom: 50px !important;
 }
 
 .ms-0 {
-	margin-left: 0px !important;
+    margin-left: 0px !important;
 }
 
 .ms-10 {
-	margin-left: 10px !important;
+    margin-left: 10px !important;
 }
 
 .ms-20 {
-	margin-left: 20px !important;
+    margin-left: 20px !important;
 }
 
 .ms-30 {
-	margin-left: 30px !important;
+    margin-left: 30px !important;
 }
 
 .ms-40 {
-	margin-left: 40px !important;
+    margin-left: 40px !important;
 }
 
 .ms-50 {
-	margin-left: 50px !important;
+    margin-left: 50px !important;
 }
 
 .me-0 {
-	margin-right: 0px !important;
+    margin-right: 0px !important;
 }
 
 .me-10 {
-	margin-right: 10px !important;
+    margin-right: 10px !important;
 }
 
 .me-20 {
-	margin-right: 20px !important;
+    margin-right: 20px !important;
 }
 
 .me-30 {
-	margin-right: 30px !important;
+    margin-right: 30px !important;
 }
 
 .me-40 {
-	margin-right: 40px !important;
+    margin-right: 40px !important;
 }
 
 .me-50 {
-	margin-right: 50px !important;
+    margin-right: 50px !important;
 }
 
 .mx-0 {
-	margin-left: 0px !important;
-	margin-right: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
 }
 
 .mx-10 {
-	margin-left: 10px !important;
-	margin-right: 10px !important;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 .mx-20 {
-	margin-left: 20px !important;
-	margin-right: 20px !important;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
 }
 
 .mx-30 {
-	margin-left: 30px !important;
-	margin-right: 30px !important;
+    margin-left: 30px !important;
+    margin-right: 30px !important;
 }
 
 .mx-40 {
-	margin-left: 40px !important;
-	margin-right: 40px !important;
+    margin-left: 40px !important;
+    margin-right: 40px !important;
 }
 
 .mx-50 {
-	margin-left: 50px !important;
-	margin-right: 50px !important;
+    margin-left: 50px !important;
+    margin-right: 50px !important;
 }
 
 .my-0 {
-	margin-top: 0px !important;
-	margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
 }
 
 .my-10 {
-	margin-top: 10px !important;
-	margin-bottom: 10px !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
 }
 
 .my-20 {
-	margin-top: 20px !important;
-	margin-bottom: 20px !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
 }
 
 .my-30 {
-	margin-top: 30px !important;
-	margin-bottom: 30px !important;
+    margin-top: 30px !important;
+    margin-bottom: 30px !important;
 }
 
 .my-40 {
-	margin-top: 40px !important;
-	margin-bottom: 40px !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
 }
 
 .my-50 {
-	margin-top: 50px !important;
-	margin-bottom: 50px !important;
+    margin-top: 50px !important;
+    margin-bottom: 50px !important;
 }
 
 .p-0 {
-	padding: 0px !important;
+    padding: 0px !important;
 }
 
 .p-10 {
-	padding: 10px !important;
+    padding: 10px !important;
 }
 
 .p-20 {
-	padding: 20px !important;
+    padding: 20px !important;
 }
 
 .p-30 {
-	padding: 30px !important;
+    padding: 30px !important;
 }
 
 .p-40 {
-	padding: 40px !important;
+    padding: 40px !important;
 }
 
 .p-50 {
-	padding: 50px !important;
+    padding: 50px !important;
 }
+
 
 /*
     입력창 디자인
@@ -382,38 +393,38 @@ div {
     - <textarea>는 가로 방향의 크기조정(resize)을 금지해야함
 */
 .field {
-	font-size: 16px;
-	padding: 0.5em 0.75em;
-	outline: none;
-	border: 1px solid #636e72;
-	border-radius: 0.1em;
+    font-size: 16px;
+    padding: 0.5em 0.75em;
+    outline: none;
+    border: 1px solid #636e72;
+    border-radius: 0.1em;
 }
 
 .field:focus {
-	border-color: #2d3436;
+    border-color: #2d3436;
 }
 
 textarea.field {
-	resize: vertical;
+    resize: vertical;
 }
 
 /* 확장 입력창(1) - 밑줄만 있는 입력창 */
 .field.field-underline {
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	padding-left: 0;
-	padding-right: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 /* 확장 입력창(2) - 이미지가 들어가는 입력창 */
 .field.field-image {
-	/* background-image: url("./images/magnify.png"); */
-	background-size: 1em;
-	background-repeat: no-repeat;
-	background-position-x: 0.5em;
-	background-position-y: center;
-	padding-left: 2em;
+    /* background-image: url("./images/magnify.png"); */
+    background-size: 1em;
+    background-repeat: no-repeat;
+    background-position-x: 0.5em;
+    background-position-y: center;
+    padding-left: 2em;
 }
 
 /*
@@ -426,40 +437,42 @@ textarea.field {
         - 부정버튼(.btn-negative) - 붉은색 계열
 */
 .btn {
-	font-size: 16px;
-	padding: 0.5em 0.75em;
-	color: #2d3436;
-	border: 1px solid #2d3436;
-	border-radius: 0.1em;
-	cursor: pointer;
-	/* a태그를 위한 추가 디자인 */
-	text-decoration: none;
-	background-color: #dfe6e9;
-	display: inline-block;
-	text-align: center;
+    font-size: 16px;
+    padding: 0.5em 0.75em;
+    color: #2d3436;
+    border: 1px solid #2d3436;
+    border-radius: 0.1em;
+    cursor: pointer;
+    /* a태그를 위한 추가 디자인 */
+    text-decoration: none;
+    background-color: #dfe6e9;
+    display: inline-block;
+    text-align: center;
 }
 
 .btn:hover {
-	filter: brightness(1.05);
+    filter: brightness(1.05);
 }
 
 /* 긍정 버튼 */
 .btn.btn-positive {
-	border-color: #0984e3;
-	background-color: #0984e3;
-	color: white;
+    border-color: #0984e3;
+    background-color: #0984e3;
+    color: white;
 }
+
 /* 부정 버튼 */
 .btn.btn-negative {
-	border-color: #d63031;
-	background-color: #d63031;
-	color: white;
+    border-color: #d63031;
+    background-color: #d63031;
+    color: white;
 }
+
 /* 중립 버튼 */
 .btn.btn-neutral {
-	border-color: #636e72;
-	background-color: #636e72;
-	color: white;
+    border-color: #636e72;
+    background-color: #636e72;
+    color: white;
 }
 
 /*
@@ -467,9 +480,10 @@ textarea.field {
     - 단, textarea는 높이를 제한하면 안된다
     - 선택항목에서 제외할 때는 :not(선택자) 를 사용
 */
-.field:not(textarea), .btn {
-	height: 2.5em;
-	vertical-align: middle;
+.field:not(textarea),
+.btn {
+    height: 2.5em;
+    vertical-align: middle;
 }
 
 /*
@@ -480,39 +494,40 @@ textarea.field {
     - 아무때나 쓰면 안됨
 */
 .red {
-	color: #d63031 !important;
+    color: #d63031 !important;
 }
 
 .orange {
-	color: #e17055 !important;
+    color: #e17055 !important;
 }
 
 .yellow {
-	color: #fdcb6e !important;
+    color: #fdcb6e !important;
 }
 
 .green {
-	color: #00b894 !important;
+    color: #00b894 !important;
 }
 
 .blue {
-	color: #0984e3 !important;
+    color: #0984e3 !important;
 }
 
 .purple {
-	color: #6c5ce7 !important;
+    color: #6c5ce7 !important;
 }
 
 .black {
-	color: #2d3436 !important;
+    color: #2d3436 !important;
 }
 
 .white {
-	color: white !important;
+    color: white !important;
 }
 
-.grey, .gray {
-	color: #636e72 !important;
+.grey,
+.gray {
+    color: #636e72 !important;
 }
 
 /* 
@@ -520,47 +535,60 @@ textarea.field {
     - 후손 선택자(띄어쓰기)를 이용하거나, 자식 선택자(>)를 이용하여 선택
     * 띄어쓰기 = "(앞에 것) 내부의 존재하는 ~ (ex)table th -> 문제가 있음(테이블이 중첩될 수도 있기 때문에 자식 선택자가 더 정확)"
 */
+
 table.table {
-	/* table태그인데 class가 table인, 태그는 안적어도 되긴 함 */
-	/* border: 1px solid #2d3436; */
-	border-collapse: collapse;
-	/* 테이블 병합 */
-	width: 100%;
-	font-size: 16px;
-	font-weight: 400;
-	/* 400이 일반 굵기, 700이 bold */
+    /* table태그인데 class가 table인, 태그는 안적어도 되긴 함 */
+    /* border: 1px solid #2d3436; */
+    border-collapse: collapse;
+    /* 테이블 병합 */
+    width: 100%;
+    font-size: 16px;
+    font-weight: 400;
+    /* 400이 일반 굵기, 700이 bold */
 }
 
-.table>thead>tr>th, .table>thead>tr>td, .table>tbody>tr>th, .table>tbody>tr>td,
-	.table>tfoot>tr>th, .table>tfoot>tr>td {
-	/* border: 1px solid #2d3436; */
-	padding: 0.25em;
-	font-weight: inherit;
-	/* inherit: 디자인 상속 - 바깥의 것을 똑같이 따라하겠다는 뜻 */
+.table>thead>tr>th,
+.table>thead>tr>td,
+.table>tbody>tr>th,
+.table>tbody>tr>td,
+.table>tfoot>tr>th,
+.table>tfoot>tr>td {
+    /* border: 1px solid #2d3436; */
+    padding: 0.25em;
+    font-weight: inherit;
+    /* inherit: 디자인 상속 - 바깥의 것을 똑같이 따라하겠다는 뜻 */
 }
 
 /* 확장 스타일(1) 기본 테두리 */
-.table.table-border, .table.table-border>thead>tr>th, .table.table-border>thead>tr>td,
-	.table.table-border>tbody>tr>th, .table.table-border>tbody>tr>td,
-	.table.table-border>tfoot>tr>th, .table.table-border>tfoot>tr>td {
-	border: 1px solid #2d3436;
+.table.table-border,
+.table.table-border>thead>tr>th,
+.table.table-border>thead>tr>td,
+.table.table-border>tbody>tr>th,
+.table.table-border>tbody>tr>td,
+.table.table-border>tfoot>tr>th,
+.table.table-border>tfoot>tr>td {
+    border: 1px solid #2d3436;
 }
 
 /* 확장 스타일(2) 줄무늬 테이블 */
-.table.table-stripe>thead, .table.table-stripe>tbody>tr:nth-child(2n) {
-	background-color: rgb(235, 245, 245);
+.table.table-stripe>thead,
+.table.table-stripe>tbody>tr:nth-child(2n) {
+    background-color: rgb(235, 245, 245);
 }
 
 /* 확장 스타일(3) 마우스 반응 테이블 */
 .table.table-hover>tbody>tr:hover {
-	background-color: rgb(217, 248, 248);
+    background-color: rgb(217, 248, 248);
 }
 
 /* 확장 스타일(4) - 말줄임표 처리되는 테이블 */
-.table.table-ellipsis>tbody>tr>th, .table.table-ellipsis>tbody>tr>td {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap; /* 자동 엔터가 아닌, 실제로 엔터를 쳤을 때만 가능하게끔 */
+.table.table-ellipsis>tbody>tr>th,
+.table.table-ellipsis>tbody>tr>td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* 자동 엔터가 아닌, 실제로 엔터를 쳤을 때만 가능하게끔 */
+
 }
 
 /* 
@@ -612,32 +640,32 @@ table.table {
     float: right;
 }
 
-/* 
+/*
     Flexible layout 디자인
 */
 .flex-box {
     display: flex;
     flex-direction: row;
 }
+
 .inline-flex-box {
     display: inline-flex;
     flex-direction: row;
 }
 
 .flex-box.flex-vertical,
-.inline-flex-box.flex-vertical
-{
+.inline-flex-box.flex-vertical {
     flex-direction: column;
 }
-        
+
 .flex-box.flex-center,
 .inline-flex-box.flex-center {
     justify-content: center;
     align-items: center;
 }
 
-.flexbox > .flex-fill,
-.inline-flex-box > .flex-fill {
+.flex-box>.flex-fill,
+.inline-flex-box>.flex-fill {
     flex-grow: 1;
 }
 
@@ -668,7 +696,7 @@ table.table {
     box-shadow: 0 0 0 1px black;
     background-color: white;
 
-    display:flex;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -676,8 +704,10 @@ table.table {
 .bounce {
     position: relative;
     top: 0px;
-    transition: top 0.2s ease-out; /* 변화를 부드럽게 */
+    transition: top 0.2s ease-out;
+    /* 변화를 부드럽게 */
 }
+
 .bounce:hover {
     top: -5px;
 }

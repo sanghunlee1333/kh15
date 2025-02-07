@@ -12,11 +12,11 @@
 <!-- 정적 include -->
 <%-- <%@ include file = "/WEB-INF/views/template/header.jsp"%> --%>
     
-<!-- 동적 include -->
+<!-- 동적 include -->	
 <jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
     
 <h1>어서오세요!</h1>
-<img src = "http://placehold.co/700x400">
+<img src = "/images/welcome.jpg">
 
 <!-- 정적 include -->
 <%-- <%@ include file = "/WEB-INF/views/template/footer.jsp"%> --%>
