@@ -817,3 +817,26 @@ table.table {
     left: auto;
     right: 100%;
 }
+
+.success-feedback {
+    color: blue;
+    display: none;
+}
+
+.fail-feedback {
+    color: red;
+    display: none;
+}
+
+.field.success {
+    border-color: blue;
+}
+
+.field.fail {
+    border-color: red;
+}
+
+.field.success~.success-feedback,
+.field.fail~.fail-feedback {
+    display: block;
+}
