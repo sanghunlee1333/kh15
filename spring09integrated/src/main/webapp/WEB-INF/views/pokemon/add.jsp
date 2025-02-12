@@ -2,6 +2,39 @@
 	pageEncoding="UTF-8"%>
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
+<!-- head가 없으므로 상단에 배치 -->
+<script type="text/javascript">
+function checkPokemonName() {
+    var tag = document.querySelector("[name=pokemonName]");
+
+    var regex = /^[가-힣]{1,10}$/;
+    var isValid = regex.test(tag.value);
+
+    tag.classList.remove("success", "fail");
+    tag.classList.add(isValid ? "success" : "fail");
+    
+    return isValid;
+}
+function checkPokemonType() {
+    var tag = document.querySelector("[name=pokemonType]");
+
+    //var regex = /^.+$/;
+    var isValid = tag.value.length > 0;
+
+    tag.classList.remove("success", "fail");
+    tag.classList.add(isValid ? "success" : "fail");
+
+    return isValid;
+}
+
+//폼 검사 함수 - 기존 입력창 검사를 재활용
+function checkForm() {
+    var nameValid = checkPokemonName();
+    var typeValid = checkPokemonType();
+    return nameValid && typeValid;
+}
+</script>
+
 <!-- <form action = "add" method="post"> 메소드=포스트를 안써주면 뺑뻉 돈다  -->
 <!-- <form action = "add" method = "post" enctype = "multipart/form-data">
 	몬스터 이름 <input name = "pokemonName"> <br><br>
@@ -18,28 +51,34 @@
 		</div>
 		<div class="cell">
 			<label>포켓몬 이름</label> 
-			<input type="text" name="pokemonName" class="field w-100" required>
+			<input type="text" class="field w-100" name="pokemonName" placeholder="(ex) 피카츄" onblur="checkPokemonName();">
+            <div class="success-feedback">올바른 형식입니다</div>
+            <div class="fail-feedback">몬스터 이름을 한글로 작성하세요</div>
 		</div>
 		<div class="cell">
 			<label>포켓몬 속성</label> 
-			<select name="pokemonType" required class="field w-100">
-				<option value="">선택하세요</option>
-				<option>불</option>
-				<option>물</option>
-				<option>땅</option>
-				<option>바람</option>
-				<option>전기</option>
-				<option>곤충</option>
-				<option>독</option>
-				<option>무속성</option>
-			</select>
+			<select name="pokemonType" required class="field w-100" oninput="checkPokemonType();">
+                 <!-- onblur 안됨 -->
+                 <option value="">선택하세요</option>
+                 <option>불</option>
+                 <option>물</option>
+                 <option>땅</option>
+                 <option>바람</option>
+                 <option>전기</option>
+                 <option>곤충</option>
+                 <option>독</option>
+                 <option>무속성</option>
+             </select>
+             <div class="fail-feedback">속성은 반드시 선택해야 합니다</div>
 		</div>
 		<div class="cell">
 			<label>포켓몬 이미지</label> 
-			<input type="file" name="attach" class="field w-100">
+			<input type = "file" name = "attach" class = "field w-100" accept = ".png, .jpg">  	
 		</div>
-		<div class="cell">
-			<button type="submit" class="btn btn-positive w-100">등록하기</button>
+		<div class="cell mt-30">
+                <button type="submit" class="btn btn-positive w-100">
+                    <i class="fa-solid fa-plus"></i> 등록하기
+                </button>
 		</div>
 	</div>
 </form>
