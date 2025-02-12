@@ -38,7 +38,7 @@
 <div class="container w-400">
 	<div class="cell center"><h1>포켓몬 목록</h1></div>
 	<div class="cell right">
-        <a href = "list" class = "btn btn-neutral">신규 등록</a>
+        <a href = "add" class = "btn btn-neutral">신규 등록</a>
     </div>
 
 	<div class="cell">
