@@ -34,6 +34,9 @@
     <style>
         
     </style>
+    <script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src = "/js/link-confirm.js"></script>
+    <script src = "/js/checkbox.js"></script>
 </head>
 <body>
     
