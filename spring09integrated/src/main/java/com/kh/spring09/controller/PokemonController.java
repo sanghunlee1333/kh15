@@ -183,5 +183,23 @@ public class PokemonController {
 			//return "redirect:https://placehold.co/400x400?text=P";
 		}
 	}
+	
+	//여러 개의 포켓몬 번호(PK)가 전달될 때 이를 받아서 일괄 삭제하는 매핑
+	//데이터 형태 - pokemonNo=1&pokemonNo=2&pokemonNo=3
+	@PostMapping("/deleteAll")
+	public String deleteAll(@RequestParam(value = "pokemonNo") 
+								List<Integer> pokemonNoList) {
+		for(int pokemonNo : pokemonNoList) {
+			try {// 첨부파일 삭제를 시도해보고
+				int attachmentNo = pokemonDao.findAttachment(pokemonNo);
+				attachmentService.delete(attachmentNo);
+			} catch (Exception e) {
+				/* 첨부파일이 없을 경우 예외 발생 */}
+
+			// 첨부파일 결과와 상관없이 포켓몬은 삭제하세요
+			pokemonDao.delete(pokemonNo);
+		}
+		return "redirect:list";
+	}
 
 }

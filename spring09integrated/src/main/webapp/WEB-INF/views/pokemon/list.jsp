@@ -4,6 +4,20 @@
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
+<script type = "text/javascript">
+	$(function(){
+		$(".form-delete").submit(function(){
+			var checkItems = $(".check-item:checked"); 
+			if(checkItems.length == 0) {//만약에 체크된것이 없다면
+				window.alert("항목을 먼저 선택해야 합니다");
+				return false;
+			}
+			
+			return window.confirm("정말 삭제하시겠습니까?");
+		});
+	});
+</script>
+
 
 <%-- <h1>포켓몬 목록</h1>
 <h2><a href = "add">신규 등록</a></h2> <!-- 상대경로 = add / 절대경로 = /pokemon/add -->
@@ -35,9 +49,12 @@
 	</tbody>
 </table> --%>
 
+<!-- 전체 삭제를 위해 테이블 전체를 감싸는 form 생성 -->
+<form class = "form-delete" action = "deleteAll" method = "post">
 <div class="container w-400">
 	<div class="cell center"><h1>포켓몬 목록</h1></div>
 	<div class="cell right">
+		<button type = "submit" class = "btn btn-negative">체크항목 삭제</button>
         <a href = "add" class = "btn btn-neutral">신규 등록</a>
     </div>
 
@@ -45,6 +62,9 @@
 		<table class="table table-border table-stripe table-hover table-ellipsis">
 			<thead>
 				<tr>
+					<th>
+						<input type = "checkbox" class = "check-all">
+					</th>
 					<th>이미지</th>
 					<th>번호</th>
 					<th>이름</th>
@@ -54,6 +74,9 @@
 			<tbody class="center">
 				<c:forEach var="pokemonDto" items="${list}">
 					<tr>
+						<td>
+							<input type = "checkbox" class = "check-item" name = "pokemonNo" value = "${pokemonDto.pokemonNo}">
+						</td>
 						<td>
 							<img src="image?pokemonNo=${pokemonDto.pokemonNo}" width="50" height="50">
 						</td>
@@ -70,5 +93,7 @@
 		</table>
 	</div>
 </div>
+</form>
+
 
 <jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>
