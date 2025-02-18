@@ -4,6 +4,7 @@
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
+<c:if test="${sessionScope.userLevel == '관리자'}">
 <script type = "text/javascript">
 	$(function(){
 		$(".form-delete").submit(function(){
@@ -17,6 +18,7 @@
 		});
 	});
 </script>
+</c:if>
 
 
 <%-- <h1>포켓몬 목록</h1>
@@ -49,12 +51,16 @@
 	</tbody>
 </table> --%>
 
+<c:if test="${sessionScope.userLevel == '관리자'}">
 <!-- 전체 삭제를 위해 테이블 전체를 감싸는 form 생성 -->
 <form class = "form-delete" action = "deleteAll" method = "post">
+</c:if>
 <div class="container w-400">
 	<div class="cell center"><h1>포켓몬 목록</h1></div>
 	<div class="cell right">
+		<c:if test="${sessionScope.userLevel == '관리자'}">
 		<button type = "submit" class = "btn btn-negative">체크항목 삭제</button>
+		</c:if>	
         <a href = "add" class = "btn btn-neutral">신규 등록</a>
     </div>
 
@@ -74,9 +80,11 @@
 			<tbody class="center">
 				<c:forEach var="pokemonDto" items="${list}">
 					<tr>
+						<c:if test="${sessionScope.userLevel == '관리자'}">
 						<td>
 							<input type = "checkbox" class = "check-item" name = "pokemonNo" value = "${pokemonDto.pokemonNo}">
 						</td>
+						</c:if>
 						<td>
 							<img src="image?pokemonNo=${pokemonDto.pokemonNo}" width="50" height="50">
 						</td>
@@ -93,7 +101,9 @@
 		</table>
 	</div>
 </div>
+<c:if test="${sessionScope.userLevel == '관리자'}">
 </form>
+</c:if>
 
 
 <jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>

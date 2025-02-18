@@ -23,85 +23,86 @@ public class CountryController {
 
 	@Autowired
 	private CountryDao countryDao;
-	
+
 	@Autowired
 	private AttachmentService attachmentService;
-	
+
 	@GetMapping("/add")
 	public String add() {
 		return "/WEB-INF/views/country/add.jsp";
 	}
-	
+
 //	@PostMapping("/add")
 //	public String add(@ModelAttribute CountryDto countryDto) { //메소드 오버로딩
 //		countryDao.insert(countryDto);
 //		return "redirect:addFinish"; //상대 경로
 //		//return "redirect:/country/addFinish"; //절대 경로 - 둘다 상관없지만 add.jsp파일 바로 옆에 Finish파일이 있으므로 상대 경로 사용
 //	}
-	
+
 	@PostMapping("/add")
-	public String add(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+	public String add(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach)
+			throws IllegalStateException, IOException {
 		int countryNo = countryDao.sequence();
 		countryDto.setCountryNo(countryNo);
 		countryDao.insert2(countryDto);
-		
-		if(attach.isEmpty() == false) {
+
+		if (attach.isEmpty() == false) {
 			int attachmentNo = attachmentService.save(attach);
-			
+
 			countryDao.connect(countryNo, attachmentNo);
 		}
-		return "redirect:addFinish";		
+		return "redirect:addFinish";
 	}
-	
+
 	@RequestMapping("/addFinish")
 	public String addFinish() {
 		return "/WEB-INF/views/country/addFinish.jsp";
 	}
-	
-	//목록 + 검색 매핑
+
+	// 목록 + 검색 매핑
 	@RequestMapping("/list")
-	public String list(@RequestParam(required = false) String column,
-						@RequestParam(required = false) String keyword,
-						Model model) {
+	public String list(@RequestParam(required = false) String column, @RequestParam(required = false) String keyword,
+			Model model) {
 		boolean search = column != null && keyword != null;
 		List<CountryDto> list = search ? countryDao.selectList(column, keyword) : countryDao.selectList();
-		
+
 		model.addAttribute("search", search);
 		model.addAttribute("column", column);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("list", list);
-		
+
 		return "/WEB-INF/views/country/list.jsp";
 	}
-	
-	//상세 매핑
+
+	// 상세 매핑
 	@RequestMapping("/detail")
 	public String detail(@RequestParam int countryNo, Model model) {
 		CountryDto countryDto = countryDao.selectOne(countryNo);
 		model.addAttribute("countryDto", countryDto);
 		return "/WEB-INF/views/country/detail.jsp";
 	}
-	
-	//삭제 매핑
+
+	// 삭제 매핑
 	@RequestMapping("/delete")
 	public String delete(@RequestParam int countryNo) {
 		try {
 			int attachmentNo = countryDao.findAttachment(countryNo);
 			attachmentService.delete(attachmentNo);
-		} catch(Exception e) { }
-		
+		} catch (Exception e) {
+		}
+
 		countryDao.delete(countryNo);
 		return "redirect:list";
 	}
-	
-	//수정 매핑
+
+	// 수정 매핑
 	@GetMapping("/edit")
 	public String edit(@RequestParam int countryNo, Model model) {
 		CountryDto countryDto = countryDao.selectOne(countryNo);
 		model.addAttribute("countryDto", countryDto);
 		return "/WEB-INF/views/country/edit.jsp";
 	}
-	
+
 //	@PostMapping("/edit")
 //	public String edit(@ModelAttribute CountryDto countryDto) {
 //		boolean success = countryDao.update(countryDto);
@@ -112,44 +113,60 @@ public class CountryController {
 //			return "redirect:list";
 //		}
 //	}
-	
+
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+	public String edit(@ModelAttribute CountryDto countryDto, @RequestParam MultipartFile attach)
+			throws IllegalStateException, IOException {
 		boolean success = countryDao.update(countryDto);
-		if(!success) {
+		if (!success) {
 			return "redirect:list";
 		}
-		
-		if(attach.isEmpty() == false) {
+
+		if (attach.isEmpty() == false) {
 			try {
 				int attachmentNo = countryDao.findAttachment(countryDto.getCountryNo());
 				attachmentService.delete(attachmentNo);
-			} catch(Exception e) { }
-			
+			} catch (Exception e) {
+			}
+
 			int newAttachmentNo = attachmentService.save(attach);
 			countryDao.connect(countryDto.getCountryNo(), newAttachmentNo);
 		}
-		return "redirect:detail?countryNo="+countryDto.getCountryNo();
+		return "redirect:detail?countryNo=" + countryDto.getCountryNo();
 	}
-	
+
 	@RequestMapping("/edit")
 	public String edit(@ModelAttribute CountryDto countryDto, Model model) {
 		countryDao.update(countryDto);
 		return "/WEB-INF/views/country/edit.jsp";
 	}
-	
+
 	@RequestMapping("/flag")
 	public String flag(@RequestParam int countryNo) {
 		try {
 			int attachmentNo = countryDao.findAttachment(countryNo);
 			return "redirect:/attachment/download?attachmentNo=" + attachmentNo;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return "redirect:/images/standard.jpg";
-			//return "redirect:https://placehold.co/400x400?text=P";
+			// return "redirect:https://placehold.co/400x400?text=P";
 		}
 	}
-	
-	
-	
+
+	// 여러 개의 포켓몬 번호(PK)가 전달될 때 이를 받아서 일괄 삭제하는 매핑
+	// 데이터 형태 - pokemonNo=1&pokemonNo=2&pokemonNo=3
+	@PostMapping("/deleteAll")
+	public String deleteAll(@RequestParam(value = "countryNo") List<Integer> countryNoList) {
+		for (int countryNo : countryNoList) {
+			try {// 첨부파일 삭제를 시도해보고
+				int attachmentNo = countryDao.findAttachment(countryNo);
+				attachmentService.delete(attachmentNo);
+			} catch (Exception e) {
+				/* 첨부파일이 없을 경우 예외 발생 */}
+
+			// 첨부파일 결과와 상관없이 포켓몬은 삭제하세요
+			countryDao.delete(countryNo);
+		}
+		return "redirect:list";
+	}
+
 }

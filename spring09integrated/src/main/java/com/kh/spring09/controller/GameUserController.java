@@ -1,6 +1,7 @@
 package com.kh.spring09.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class GameUserController {
 
 	@Autowired
 	private AttachmentService attachmentService;
-	
+
 	// 사용자 입력 페이지
 	@GetMapping("/add") // GET방식만 처리하는 매핑
 	public String add() {
@@ -45,23 +46,24 @@ public class GameUserController {
 //		gameUserDao.insert(gameUserDto);
 //		return "redirect:addFinish"; // addFinish으로 쫓아내는 코드(상대경로)
 //	}
-	
+
 	@PostMapping("/add")
-	public String add(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
-		
+	public String add(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach)
+			throws IllegalStateException, IOException {
+
 		if (gameUserDto.getGameUserLevel() == 0) { // 사용자가 레벨을 입력하지 않는다면
 			gameUserDto.setGameUserLevel(1);
 		}
-		
+
 		int gameUserNo = gameUserDao.sequence();
 		gameUserDto.setGameUserNo(gameUserNo);
 		gameUserDao.insert2(gameUserDto);
-		
-		if(attach.isEmpty() == false) {
+
+		if (attach.isEmpty() == false) {
 			int attachmentNo = attachmentService.save(attach);
 			gameUserDao.connect(gameUserNo, attachmentNo);
 		}
-		
+
 		return "redirect:add-finish";
 	}
 
@@ -99,30 +101,30 @@ public class GameUserController {
 		model.addAttribute("gameUserDto", gameUserDto);
 		return "/WEB-INF/views/game-user/detail.jsp";
 	}
-	
-	//삭제 매핑
+
+	// 삭제 매핑
 	@RequestMapping("/delete")
 	public String delete(@RequestParam int gameUserNo) {
 		try {
 			int attachmentNo = gameUserDao.findAttachment(gameUserNo);
 			attachmentService.delete(attachmentNo);
+		} catch (Exception e) {
 		}
-		catch(Exception e) { }
-		
+
 		gameUserDao.delete(gameUserNo);
-		return "redirect:/game-user/list"; //redirect -> 주소가 바뀜, 끝나고 다른 곳으로 이동
-		//return "redirect:list";
-		//return "/WEB-INF/views/country/list.jsp"; //forward -> 주소가 유지되고 화면만 연결
+		return "redirect:/game-user/list"; // redirect -> 주소가 바뀜, 끝나고 다른 곳으로 이동
+		// return "redirect:list";
+		// return "/WEB-INF/views/country/list.jsp"; //forward -> 주소가 유지되고 화면만 연결
 	}
-	
-	//수정 매핑
+
+	// 수정 매핑
 	@GetMapping("/edit")
 	public String edit(@RequestParam int gameUserNo, Model model) { // 어노테이션 붙은 것은 사용자 입력값, 안붙은 것은 스프링 도구
 		GameUserDto gameUserDto = gameUserDao.selectOne(gameUserNo);
 		model.addAttribute("gameUserDto", gameUserDto);
 		return "/WEB-INF/views/game-user/edit.jsp";
 	}
-	
+
 //	@PostMapping("/edit")
 //	public String edit(@ModelAttribute GameUserDto gameUserDto) {
 //		boolean success = gameUserDao.update(gameUserDto);
@@ -133,55 +135,73 @@ public class GameUserController {
 //			return "redirect:list";
 //		}
 //	}
-	
+
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+	public String edit(@ModelAttribute GameUserDto gameUserDto, @RequestParam MultipartFile attach)
+			throws IllegalStateException, IOException {
 		boolean success = gameUserDao.update(gameUserDto);
-		if(!success) {
+		if (!success) {
 			return "redirect:list";
 		}
-		if(attach.isEmpty() == false) {
+		if (attach.isEmpty() == false) {
 			try {
 				int attachmentNo = gameUserDao.findAttachment(gameUserDto.getGameUserNo());
 				attachmentService.delete(attachmentNo);
-			} catch(Exception e) { }
-			
+			} catch (Exception e) {
+			}
+
 			int newAttachmentNo = attachmentService.save(attach);
 			gameUserDao.connect(gameUserDto.getGameUserNo(), newAttachmentNo);
 		}
-		return "redirect:detail?gameUserNo="+gameUserDto.getGameUserNo();
+		return "redirect:detail?gameUserNo=" + gameUserDto.getGameUserNo();
 	}
-	
+
 	@RequestMapping("/edit")
 	public String edit(@ModelAttribute GameUserDto gameUserDto, Model model) {
 		gameUserDao.update(gameUserDto);
 		return "/WEB-INF/views/game-user/edit.jsp";
 	}
-	
-	//(+추가) 레벨업 매핑
+
+	// (+추가) 레벨업 매핑
 	@RequestMapping("/levelup")
 	public String levelup(@RequestParam int gameUserNo) {
 		GameUserDto gameUserDto = gameUserDao.selectOne(gameUserNo);
 		int level = gameUserDto.getGameUserLevel();
-		gameUserDto.setGameUserLevel(level+1);
+		gameUserDto.setGameUserLevel(level + 1);
 		gameUserDao.update(gameUserDto);
-		
-		//gameUserDao.updateGameUserLevel(gameUserNo);
-		
-		return "redirect:detail?gameUserNo="+gameUserNo;
-				
+
+		// gameUserDao.updateGameUserLevel(gameUserNo);
+
+		return "redirect:detail?gameUserNo=" + gameUserNo;
+
 	}
-	
+
 	@RequestMapping("/profile")
 	public String profile(@RequestParam int gameUserNo) {
 		try {
 			int attachmentNo = gameUserDao.findAttachment(gameUserNo);
 			return "redirect:/attachment/download?attachmentNo=" + attachmentNo;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return "redirect:/images/standard.jpg";
-			//return "redirect:https://placehold.co/400x400?text=P";
+			// return "redirect:https://placehold.co/400x400?text=P";
 		}
 	}
-	
+
+	// 여러 개의 포켓몬 번호(PK)가 전달될 때 이를 받아서 일괄 삭제하는 매핑
+	// 데이터 형태 - pokemonNo=1&pokemonNo=2&pokemonNo=3
+	@PostMapping("/deleteAll")
+	public String deleteAll(@RequestParam(value = "gameUserNo") List<Integer> gameUserNoList) {
+		for (int gameUserNo : gameUserNoList) {
+			try {// 첨부파일 삭제를 시도해보고
+				int attachmentNo = gameUserDao.findAttachment(gameUserNo);
+				attachmentService.delete(attachmentNo);
+			} catch (Exception e) {
+				/* 첨부파일이 없을 경우 예외 발생 */}
+
+			// 첨부파일 결과와 상관없이 포켓몬은 삭제하세요
+			gameUserDao.delete(gameUserNo);
+		}
+		return "redirect:list";
+	}
+
 }
