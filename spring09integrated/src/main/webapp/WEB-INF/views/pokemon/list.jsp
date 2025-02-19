@@ -55,7 +55,7 @@
 <!-- 전체 삭제를 위해 테이블 전체를 감싸는 form 생성 -->
 <form class = "form-delete" action = "deleteAll" method = "post">
 </c:if>
-<div class="container w-400">
+<div class="container w-500">
 	<div class="cell center"><h1>포켓몬 목록</h1></div>
 	<div class="cell right">
 		<c:if test="${sessionScope.userLevel == '관리자'}">
@@ -68,13 +68,16 @@
 		<table class="table table-border table-stripe table-hover table-ellipsis">
 			<thead>
 				<tr>
+					<c:if test="${sessionScope.userLevel == '관리자'}">
 					<th>
 						<input type = "checkbox" class = "check-all">
 					</th>
+					</c:if>
 					<th>이미지</th>
 					<th>번호</th>
 					<th>이름</th>
 					<th>속성</th>
+					<th>좋아요</th>
 				</tr>
 			</thead>
 			<tbody class="center">
@@ -95,6 +98,7 @@
 							</a>
 						</td>
 						<td>${pokemonDto.pokemonType}</td>
+						<td>${pokemonDto.pokemonLike}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

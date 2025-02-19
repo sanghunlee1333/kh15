@@ -19,6 +19,7 @@ public class PokemonDto {
 	private int pokemonNo;
 	private String pokemonName;
 	private String pokemonType;
+	private int pokemonLike;
 	
 	//아래는 없어도 됨
 //	@Override

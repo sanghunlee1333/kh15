@@ -1,11 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<div class = "container w-900">
+<div class = "container w-1000">
 	<c:if test="${search == true}">
 		<div class = "cell"><h1>글 검색</h1></div>
 	</c:if>
@@ -14,12 +13,14 @@
 	</c:if>
 
 	<div class = "cell right">
-		<a href="write"><button class = "btn btn-neutral">글 쓰기</button></a>
+		<a href="write">
+			<button class = "btn btn-neutral">글 쓰기</button>
+		</a>
 	</div>
 	
 	<!-- 테이블 -->
 	<div class = "cell">
-		<table class = "table table-border table-stripe table-hover">
+		<table class="table table-border table-stripe table-hover table-ellipsis">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -27,7 +28,7 @@
 					<th>작성자</th>
 					<th>작성일</th>
 					<th>조회수</th>
-					<th>좋아요</th>
+<!--					<th>좋아요</th> -->
 <!-- 					<th>그룹</th> -->
 <!-- 					<th>상위글</th> -->
 <!-- 					<th>차수</th> -->
@@ -48,11 +49,13 @@
 								<td class = "left">
 						
 									<!--[멘션버전] 답글이라면 상위글 제목을 표시 -->
+									<%-- 
 									<c:if test = "${boardListViewDto.targetNo > 0}">
 										<a href = "detail?boardNo=${boardListViewDto.targetNo}">
 											${boardListViewDto.targetTitle}
 										</a>
-									</c:if>
+									</c:if> 
+									--%>
 						
 									<!-- 글의 차수(board_depth)에 따라 띄어쓰기 부여 -->
 									<c:if test = "${boardListViewDto.boardDepth > 0}">
@@ -73,6 +76,13 @@
 									<c:if test="${boardListViewDto.boardReply > 0}">
 										[${boardListViewDto.boardReply}]
 									</c:if>
+									
+									<!-- 좋아요 표시 -->
+									<c:if test="${boardListViewDto.boardLike > 0}">
+										&nbsp;
+										<i class = "fa-solid fa-heart red"></i>
+										${boardListViewDto.boardLike}
+									</c:if>
 								</td>
 								<td>
 								<c:choose>
@@ -88,7 +98,7 @@
 					  		<%-- ${boardListViewDto.getBoardWtimeString()}  --%>
 								</td>
 								<td>${boardListViewDto.boardRead}</td>
-								<td>${boardListViewDto.boardLike}</td>
+<%--								<td>${boardListViewDto.boardLike}</td> --%>
 <%-- 								<td>${boardListViewDto.boardGroup}</td> --%>
 <%-- 								<td>${boardListViewDto.boardTarget}</td> --%>
 <%-- 								<td>${boardListViewDto.boardDepth}</td> --%>
