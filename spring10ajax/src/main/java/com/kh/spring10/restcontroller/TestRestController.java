@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 //@CrossOrigin //비동기 통신 제한 해제 //아무나 다 들어올 수 있는 상태 
-@CrossOrigin(origins = {"http://127.0.0.1:5500"})
+@CrossOrigin(origins = {"http://127.0.0.1:5500"}) //지정한 프로그램만 접근 가능(보안이 좋음)
 @RestController
 @RequestMapping("/test")
 public class TestRestController {
