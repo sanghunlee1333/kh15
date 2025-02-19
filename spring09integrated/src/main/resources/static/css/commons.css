@@ -2,11 +2,17 @@
     자주 사용하는 디자인을 보관해놓고 불러다 쓰는 파일
 */
 
+
+
 @charset "UTF-8";
 
 * {
     box-sizing: border-box;
     font-family: "Noto Sans KR", sans-serif;
+}
+
+div {
+    box-shadow: 0 0 0 1px #b2bec3;
 }
 
 /*
@@ -818,20 +824,23 @@ table.table {
     display: none;
 }
 
-.fail-feedback {
-    color: red;
+.fail-feedback,
+.fail2-feedback {
+    color: #d63031;
     display: none;
 }
 
 .field.success {
-    border-color: blue;
+    border-color: #0984e3;
 }
 
-.field.fail {
-    border-color: red;
+.field.fail,
+.field.fail2 {
+    border-color: #d63031;
 }
 
 .field.success~.success-feedback,
-.field.fail~.fail-feedback {
+.field.fail~.fail-feedback,
+.field.fail2~.fail2-feedback {
     display: block;
 }
