@@ -15,3 +15,16 @@ pokemon_no references pokemon(pokemon_no) on delete cascade,
 primary key(member_id, pokemon_no)
 --unique(member_id, pokemon_no)
 );
+
+drop sequence reply_seq;
+create sequence reply_seq;
+
+drop table reply cascade constraint;
+create table reply(
+reply_no number primary key,
+reply_writer references member(member_id) on delete set null,
+reply_origin references board(board_no) on delete cascade, 
+reply_content varchar2(1500) not null,
+reply_wtime timestamp default systimestamp not null,
+reply_etime timestamp
+);
