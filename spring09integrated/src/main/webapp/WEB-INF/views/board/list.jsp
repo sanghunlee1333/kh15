@@ -74,7 +74,11 @@
 							
 									<!-- 댓글 표시 -->
 									<c:if test="${boardListViewDto.boardReply > 0}">
-										[${boardListViewDto.boardReply}]
+										<%-- [${boardListViewDto.boardReply}] --%>
+										<span class = "ms-20">
+											<i class = "fa-solid fa-comment-dots blue"></i>
+											${boardListViewDto.boardReply}
+										</span>
 									</c:if>
 									
 									<!-- 좋아요 표시 -->
@@ -127,6 +131,5 @@
 
 <!--  페이지 네비게이터 -->
 <jsp:include page = "/WEB-INF/views/template/pagination.jsp"></jsp:include>
-
 
 <jsp:include page="/WEB-INF/views/template/footer.jsp"></jsp:include>

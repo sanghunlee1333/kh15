@@ -25,12 +25,10 @@ public class BoardDao {
 	// 게시글 목록 조회
 	public List<BoardDto> selectList() {
 		String sql = "select board_no, board_title, board_writer, board_wtime, board_etime, "
-						+ "board_like, board_read, board_reply, board_group, board_target, board_depth "
-						+ "from board "
-						+ "connect by prior board_no = board_target "
-						+ "start with board_target is null "
-						+ "order siblings by board_group desc, board_no asc"; // *와일드카드 대신 content빼고
-																								// 전부 다 쓸 수도 있다.
+				+ "board_like, board_read, board_reply, board_group, board_target, board_depth " + "from board "
+				+ "connect by prior board_no = board_target " + "start with board_target is null "
+				+ "order siblings by board_group desc, board_no asc"; // *와일드카드 대신 content빼고
+																		// 전부 다 쓸 수도 있다.
 		return jdbcTemplate.query(sql, boardListMapper);
 	}
 
@@ -38,14 +36,10 @@ public class BoardDao {
 		int begin = page * size - (size - 1);
 		int end = page * size;
 		String sql = "select * from (" + "select rownum rn , TMP.* from (" + "select "
-						+ "board_no, board_title, board_writer, board_wtime, board_etime, "
-						+ "board_like, board_read, board_reply, board_group, board_target, board_depth "
-						+ "from board "
-						+ "connect by prior board_no = board_target "
-						+ "start with board_target is null "
-						+ "order siblings by board_group desc, board_no asc"
-						+ ")TMP "
-						+ ")where rn between ? and ?";
+				+ "board_no, board_title, board_writer, board_wtime, board_etime, "
+				+ "board_like, board_read, board_reply, board_group, board_target, board_depth " + "from board "
+				+ "connect by prior board_no = board_target " + "start with board_target is null "
+				+ "order siblings by board_group desc, board_no asc" + ")TMP " + ")where rn between ? and ?";
 		Object[] data = { begin, end };
 		return jdbcTemplate.query(sql, boardListMapper, data);
 	}
@@ -61,13 +55,15 @@ public class BoardDao {
 			throw new NoPermissionException("검색할 수 없는 항목");
 		}
 
-		String sql = "select board_no, board_title, board_writer, board_wtime, board_like, " // content 제외 
-						+ "board_read, board_reply, board_group, board_target, board_depth "
-						+ "from board "
-						+ "where instr(#1, ?) > 0 "
-						+ "connect by prior board_no = board_target "
-						+ "start with board_target is null "
-						+ "order siblings by board_group desc, board_no asc"; // (그룹/상위글/차수 추가전 정렬) by #1 asc, board_no desc
+		String sql = "select board_no, board_title, board_writer, board_wtime, board_like, " // content 제외
+				+ "board_read, board_reply, board_group, board_target, board_depth " + "from board "
+				+ "where instr(#1, ?) > 0 " + "connect by prior board_no = board_target "
+				+ "start with board_target is null " + "order siblings by board_group desc, board_no asc"; // (그룹/상위글/차수
+																											// 추가전 정렬)
+																											// by #1
+																											// asc,
+																											// board_no
+																											// desc
 		sql = sql.replace("#1", column);
 		Object[] data = { keyword };
 		return jdbcTemplate.query(sql, boardListMapper, data);
@@ -87,52 +83,44 @@ public class BoardDao {
 		}
 
 		String sql = "select * from (" + "select rownum rn, TMP.* from (" + "select " + "board_no, board_title, "
-						+ "board_writer, board_wtime, board_etime, board_like, board_read, board_reply, board_group, board_target, board_depth "
-						+ "from board "
-						+ "where instr(#1, ?) > 0 "
-						+ "connect by prior board_no = board_target "
-						+ "start with board_target is null "
-						+ "order siblings by board_group desc, board_no asc"
-						+ ")TMP"
-						+ ")where rn between ? and ?";
+				+ "board_writer, board_wtime, board_etime, board_like, board_read, board_reply, board_group, board_target, board_depth "
+				+ "from board " + "where instr(#1, ?) > 0 " + "connect by prior board_no = board_target "
+				+ "start with board_target is null " + "order siblings by board_group desc, board_no asc" + ")TMP"
+				+ ")where rn between ? and ?";
 		sql = sql.replace("#1", column);
 		Object[] data = { keyword, begin, end };
 		return jdbcTemplate.query(sql, boardListMapper, data);
 	}
-	
-	//페이징용 통합 조회 메소드
-	public List<BoardDto> selectListByPaging(PageVO pageVO){
-		if(pageVO.isList()) {//목록이라면
+
+	// 페이징용 통합 조회 메소드
+	public List<BoardDto> selectListByPaging(PageVO pageVO) {
+		if (pageVO.isList()) {// 목록이라면
 			return selectListByPaging(pageVO.getPage(), pageVO.getSize());
-		}
-		else {//검색이라면
-			return selectListByPaging(
-					pageVO.getColumn(), pageVO.getKeyword(),
-					pageVO.getPage(), pageVO.getSize()
-			);
+		} else {// 검색이라면
+			return selectListByPaging(pageVO.getColumn(), pageVO.getKeyword(), pageVO.getPage(), pageVO.getSize());
 		}
 	}
-	
+
 	// 카운트 조회 명령
 	public int count() {
 		String sql = "select count(*) from board";
-		//return jdbcTemplate.queryForObject(sql, Integer.class); //int와 Integer의 차이는 null이 나오느냐의 유무
-		return jdbcTemplate.queryForObject(sql, int.class); //int와 Integer의 차이는 null이 나오느냐의 유무
+		// return jdbcTemplate.queryForObject(sql, Integer.class); //int와 Integer의 차이는
+		// null이 나오느냐의 유무
+		return jdbcTemplate.queryForObject(sql, int.class); // int와 Integer의 차이는 null이 나오느냐의 유무
 	}
-	
+
 	public int count(String column, String keyword) {
 		String sql = "select count(*) from board where instr(#1, ?) > 0";
 		sql = sql.replace("#1", column);
-		Object[] data = {keyword};
+		Object[] data = { keyword };
 		return jdbcTemplate.queryForObject(sql, int.class, data);
-		
+
 	}
-	
+
 	public int count(PageVO pageVO) {
-		if(pageVO.isList()) {
+		if (pageVO.isList()) {
 			return count();
-		}
-		else {
+		} else {
 			return count(pageVO.getColumn(), pageVO.getKeyword());
 		}
 	}
@@ -156,21 +144,16 @@ public class BoardDao {
 	// 시퀀스 발급과 등록을 분리
 	public int sequence() {
 		String sql = "select board_seq.nextval from dual"; // dual = 임시테이블
-		return jdbcTemplate.queryForObject(sql, int.class); // 기존의 query는 DTO를 반환해서 안되므로 다른 메소드를 씀. int.class는 자료형이 int라고 알려주는 것
+		return jdbcTemplate.queryForObject(sql, int.class); // 기존의 query는 DTO를 반환해서 안되므로 다른 메소드를 씀. int.class는 자료형이
+															// int라고 알려주는 것
 	}
 
 	public void insert2(BoardDto boardDto) {
-		String sql = "insert into board("
-						+ "board_no, board_title, board_content, board_writer, "
-						+ "board_group, board_target, board_depth"
-					+ ") "
-					+ "values(?, ?, ?, ?, ?, ?, ?)"; // 커피를 다 마시고 돈준다하는 느낌
-		Object[] data = { 
-				boardDto.getBoardNo(), boardDto.getBoardTitle(), 
-				boardDto.getBoardContent(),	boardDto.getBoardWriter(),
-				boardDto.getBoardGroup(), boardDto.getBoardTarget(),
-				boardDto.getBoardDepth()
-		};
+		String sql = "insert into board(" + "board_no, board_title, board_content, board_writer, "
+				+ "board_group, board_target, board_depth" + ") " + "values(?, ?, ?, ?, ?, ?, ?)"; // 커피를 다 마시고 돈준다하는 느낌
+		Object[] data = { boardDto.getBoardNo(), boardDto.getBoardTitle(), boardDto.getBoardContent(),
+				boardDto.getBoardWriter(), boardDto.getBoardGroup(), boardDto.getBoardTarget(),
+				boardDto.getBoardDepth() };
 		jdbcTemplate.update(sql, data);
 	}
 
@@ -193,48 +176,56 @@ public class BoardDao {
 		Object[] data = { boardNo };
 		return jdbcTemplate.update(sql, data) > 0;
 	}
-	
+
 	////////////////////////////////
 	// 게시글 좋아요 관련 처리 기능
 	////////////////////////////////
-	
+
 	// 좋아요 설정
 	public void insertBoardLike(String memberId, int boardNo) {
 		String sql = "insert into board_like(member_id, board_no) values(?, ?)";
-		Object[] data = {memberId, boardNo};
+		Object[] data = { memberId, boardNo };
 		jdbcTemplate.update(sql, data);
 	}
-	
+
 	// 좋아요 해제
-	public void deleteBoardLike(String memberId, int boardNo) { //boolean도 가능
+	public void deleteBoardLike(String memberId, int boardNo) { // boolean도 가능
 		String sql = "delete board_like where member_id = ? and board_no = ?";
-		Object[] data = {memberId, boardNo};
+		Object[] data = { memberId, boardNo };
 		jdbcTemplate.update(sql, data);
 	}
-	
+
 	// 좋아요 검사
 	public boolean checkBoardLike(String memberId, int boardNo) {
 		String sql = "select count(*) from board_like where member_id = ? and board_no = ?";
-		Object[] data = {memberId, boardNo};
+		Object[] data = { memberId, boardNo };
 		return jdbcTemplate.queryForObject(sql, int.class, data) > 0;
 	}
-	
-	//좋아요 개수
+
+	// 좋아요 개수
 	public int countBoardLike(int boardNo) {
 		String sql = "select count(*) from board_like where board_no = ?";
-		Object[] data = {boardNo};
-		return jdbcTemplate.queryForObject(sql,  int.class, data);
+		Object[] data = { boardNo };
+		return jdbcTemplate.queryForObject(sql, int.class, data);
 	}
-	
-	//좋아요 개수를 갱신하는 메소드
+
+	// 좋아요 개수를 갱신하는 메소드
 	public boolean updateBoardLike(int boardNo, int count) {
 		String sql = "update board set board_like = ? where board_no = ?";
-		Object[] data = {count, boardNo};
+		Object[] data = { count, boardNo };
 		return jdbcTemplate.update(sql, data) > 0;
 	}
-	public boolean updateBoardLike(int boardNo) { //니가 count를 세어서 넣어
+
+	public boolean updateBoardLike(int boardNo) { // 니가 count를 세어서 넣어
 		String sql = "update board set board_like = (select count(*) from board_like where board_no = ?) where board_no = ?";
-		Object[] data = {boardNo, boardNo}; //boardNo를 홀더 갯수에 맞게 두 번 넣어야함
+		Object[] data = { boardNo, boardNo }; // boardNo를 홀더 갯수에 맞게 두 번 넣어야함
+		return jdbcTemplate.update(sql, data) > 0;
+	}
+
+	// 댓글 개수를 갱신하는 메소드
+	public boolean updateBoardReply(int boardNo) { // 니가 count를 세어서 넣어
+		String sql = "update board set board_reply = (select count(*) from reply where reply_origin = ?) where board_no = ?";
+		Object[] data = { boardNo, boardNo }; // replyNo를 홀더 갯수에 맞게 두 번 넣어야함
 		return jdbcTemplate.update(sql, data) > 0;
 	}
 }
