@@ -54,7 +54,7 @@
 			var replyContent = $(".reply-input").val();
 			if(replyContent.length == 0){
 				window.alert("내용을 작성하세요");
-				return
+				return;
 			}
 			
 			$.ajax({
