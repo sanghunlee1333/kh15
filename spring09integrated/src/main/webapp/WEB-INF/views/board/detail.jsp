@@ -155,6 +155,12 @@
 		});
 		
 		//목록을 불러오는 함수
+		//- 현재 로그인한 사용자와 작성자를 비교해서 화면에 변화를 부여
+		//- 문제는 HttpSession의 값을 자바스크립트가 절대 접근할 수 없다는 것
+		//- EL의 도움을 받을 수밖에 없음
+		var userId = "${sessionScope.userId}"; //""를 안쓰면 null인 상태이므로, 비로그인 상태일 때 에러 뜸
+		var boardWriter = "${boardDto.boardWriter}";
+		
 		function loadList() {
 			$.ajax({
 				url: "/rest/reply/list",
@@ -168,11 +174,24 @@
 						var html = $.parseHTML(template);
 						
 						//변환할거 하고
-						$(html).find(".reply-writer").text(this.replyWriter);
+						var convertTime = moment(this.replyWtime).format("YYYY-MM-DD H:mm:ss");
+						//var convertTime = moment(this.replyWtime).fromNow(); //몇 시간전 표시 형식
+						
+						$(html).find(".reply-writer").text(this.replyWriter || "(탈퇴한 사용자)");
 						$(html).find(".reply-content").text(this.replyContent);
-						$(html).find(".reply-wtime").text(this.replyWtime);
+						$(html).find(".reply-wtime").text(convertTime);
 						$(html).find(".btn-reply-edit").attr("data-reply-no", this.replyNo);
 						$(html).find(".btn-reply-delete").attr("data-reply-no", this.replyNo);
+						
+						//내 글이 아니면 버튼, 배지들은 삭제
+						if(userId.length == 0 || this.replyWriter != userId){
+							$(html).find(".btn-reply-edit").remove();
+							$(html).find(".btn-reply-delete").remove();
+						}
+						//if(탈퇴한 유저의 댓글이거나 탈퇴한 유저의 글이거나 게시글과 댓글의 소유자가 다르면)
+						if(this.replyWriter == null || boardWriter.length == 0 || this.replyWriter != boardWriter){ 
+							$(html).find(".owner-badge").remove();
+						}
 						
 						//추가
 						$(".reply-wrapper").append(html); //prepend는 최신 것이 달림
@@ -189,7 +208,10 @@
 			<img class = "writer-profile w-75" src = "https://placehold.co/200?text=P">
 		</div>
 		<div class = "w-100 p-10">
-			<h3 class = "my-0 reply-writer">작성자</h3>
+			<h3 class = "my-0">
+				<span class = "reply-writer">작성자아이디</span>
+				<span class = "owner-badge" style = "border: 1px solid black">작성자</span>
+			</h3>
 			<p class = "reply-content">작성내용</p>
 			<span class = "reply-wtime">yyyy-MM-dd HH:mm:ss</span>
 		</div>
@@ -210,7 +232,10 @@
 			<img class = "writer-profile w-75" src = "https://placehold.co/200?text=P">
 		</div>
 		<div class = "w-100 p-10">
-			<h3 class = "my-0 reply-writer">작성자</h3>
+			<h3 class = "my-0">
+				<span class = "reply-writer">작성자아이디</span>
+				<span class = "owner-badge" style = "border: 1px solid black">작성자</span>
+			</h3>
 			<textarea class = "reply-content field w-100">작성내용</textarea>
 			<span class = "reply-wtime">yyyy-MM-dd HH:mm:ss</span>
 		</div>
@@ -248,18 +273,36 @@
 
 <!-- 댓글 목록과 댓글 작성란이 표시되는 영역 -->
 <div class = "reply-wrapper mt-20"></div>
-<div class = "mt-20">
-	<textarea class = "field w-100 reply-input" rows="4"></textarea>
-	<div class = "right">
-		<button type = "button" class = "btn btn-positive btn-reply-write">
-			<i class = "fa-solid fa-pen"></i> 등록
-		</button>
-	</div>
-</div>
+
+<!-- 댓글 작성은 회원만 가능하게 구현 -->
+<c:choose>
+	<c:when test="${sessionScope.userId != null}">
+		<div class = "mt-20">
+			<textarea class = "field w-100 reply-input" rows="4"></textarea>
+			<div class = "right">
+				<button type = "button" class = "btn btn-positive btn-reply-write">
+					<i class = "fa-solid fa-pen"></i> 등록
+				</button>
+			</div>
+		</div>
+	</c:when>
+	<c:otherwise>
+		<div class = "mt-20">
+			<textarea class = "field w-100 reply-input" rows="4" 
+				disabled placeholder = "로그인하셔야 댓글 작성이 가능합니다"></textarea>
+			<div class = "right">
+				<button type = "button" class = "btn btn-positive" disabled>
+					<i class = "fa-solid fa-pen"></i> 등록
+				</button>
+			</div>
+		</div>
+	</c:otherwise>
+</c:choose>
+
 
 <div>
-	<a href="write">글쓰기</a>
-	<a href="write?boardTarget=${boardDto.boardNo}">답글쓰기</a>
+	<a href="write" class = "btn btn-neutral">글쓰기</a>
+	<a href="write?boardTarget=${boardDto.boardNo}" class = "btn btn-neutral">답글쓰기</a>
 	
 	<!-- 소유자일 경우에만 수정과 삭제 표시 -->
 	<c:if test = "${sessionScope.userId != null}"> <!-- 탈퇴해서 작성자가 null인상태와 비로그인 상태의 null도 소유자로 판단하게 되므로 이 경우도 안되게 처럼 -->
@@ -269,7 +312,7 @@
 		</c:if>
 	</c:if>
 	
-	<a href="list">목록</a>
+	<a href="list" class = "btn btn-neutral">목록</a>
 </div>
 
 <jsp:include page = "/WEB-INF/views/template/footer.jsp"></jsp:include>

@@ -34,6 +34,12 @@
     <style>
         
     </style>
+    
+    <!-- moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/ko.min.js"></script>
+    
+    <!-- jQuery -->
     <script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src = "/js/link-confirm.js"></script>
     <script src = "/js/checkbox.js"></script>
