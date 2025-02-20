@@ -39,6 +39,31 @@
 </script>
 </c:if>
 
+<!-- 댓글 관련 스크립트 -->
+<script type = "text/javascript">
+	$(function(){
+		//글 번호 읽기
+		var params = new URLSearchParams(location.search);
+		var boardNo = params.get("boardNo");
+		
+		//최소 1회 목록을 불러오도록 처리
+		loatList();
+		
+		//목록을 불러오는 함수
+		function loatList() {
+			$.ajax({
+				url: "/rest/reply/list",
+				method: "post",
+				data: { replyOrigin: boardNo},
+				success: function(response) {
+					console.log(response);			
+				}
+				
+			});
+		}
+	});
+</script>
+
 <h1>${boardDto.boardTitle}</h1>
 <div>
 <%-- ${boardDto.boardWriter} --%>
