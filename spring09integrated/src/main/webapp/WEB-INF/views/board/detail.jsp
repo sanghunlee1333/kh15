@@ -263,7 +263,7 @@
 <hr>
 
 <div style = "min-height:200px">
-	<pre>${boardDto.boardContent}</pre></div>
+	${boardDto.boardContent}</div>
 <hr>
 <div>
 	<i class="fa-heart fa-regular red"></i>
@@ -307,8 +307,8 @@
 	<!-- 소유자일 경우에만 수정과 삭제 표시 -->
 	<c:if test = "${sessionScope.userId != null}"> <!-- 탈퇴해서 작성자가 null인상태와 비로그인 상태의 null도 소유자로 판단하게 되므로 이 경우도 안되게 처럼 -->
 		<c:if test = "${sessionScope.userId == boardDto.boardWriter}">
-			<a href="edit?boardNo=${boardDto.boardNo}">수정</a> 
-			<a href="delete?boardNo=${boardDto.boardNo}">삭제</a>
+			<a href="edit?boardNo=${boardDto.boardNo}" class="btn btn-negative">수정</a> 
+			<a href="delete?boardNo=${boardDto.boardNo}" class="btn btn-negative">삭제</a>
 		</c:if>
 	</c:if>
 	

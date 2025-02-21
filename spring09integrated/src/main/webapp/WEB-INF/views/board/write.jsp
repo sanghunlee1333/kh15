@@ -14,6 +14,19 @@
 
 <jsp:include page="/WEB-INF/views/template/header.jsp"></jsp:include>
 
+<!-- summernote cdn -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+ <style>
+ 	.note-editor {
+ 		border: 1px solid #636e72 !important;
+ 	}
+    .note-editable {
+    	background-color: white !important;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+<script src="/js/summernote-custom.js"></script>
+
 <%-- <form action = "write" method = "post">
 	<c:if test = "${param.boardTarget != null}">
 		<input type = "hidden" name = "boardTarget" value = "${param.boardTarget}">
@@ -31,17 +44,17 @@
 		<input type="hidden" name="boardTarget" value="${param.boardTarget}" class="field w-100">
 	</c:if>
 	
-	<div class="container w-400">
+	<div class="container w-800">
 		<div class = "cell center">
             <h1>게시글 작성</h1>
         </div>
 		<div class="cell">
 			<label>제목 <span class = "red">*</span></label>
-			<input type="text" name="boardTitle" placeholder="제목을 입력해주세요" required class="field w-100">
+			<input type="text" name="boardTitle" placeholder="제목을 입력해주세요" class="field w-100">
 		</div>
 		<div class="cell">
 			<label>내용 <span class = "red">*</span></label>
-			<textarea name="boardContent" required rows = "10" class="field w-100"></textarea>
+			<textarea name="boardContent" rows = "10" class="field w-100"></textarea>
 		</div>
 		<div class="cell right">
 			<a href = "list" class = "btn btn-neutral">목록보기</a>

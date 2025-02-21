@@ -1,5 +1,12 @@
 package com.kh.spring09.controller;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +21,8 @@ import com.kh.spring09.dao.BoardListViewDao;
 import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dto.BoardDto;
 import com.kh.spring09.dto.MemberDto;
+import com.kh.spring09.error.TargetNotFoundException;
+import com.kh.spring09.service.AttachmentService;
 import com.kh.spring09.vo.PageVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +39,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardListViewDao boardListViewDao;
+	
+	@Autowired
+	private AttachmentService attachmentService;
 
 	// 목록 + 검색 매핑
 	//- 검색을 위해 column, keyword 항목을 수신
@@ -156,9 +168,30 @@ public class BoardController {
 	}
 
 	// 게시글 삭제 매핑
+	// (+추가) 글 안에 들어있는 이미지(class=summernote-img)를 찾아서 모두 삭제
 	@RequestMapping("/delete")
 	public String delete(@RequestParam int boardNo) {
-		boardDao.delete(boardNo);
+		BoardDto boardDto = boardDao.selectOne(boardNo);
+		if(boardDto == null) 
+			throw new TargetNotFoundException("존재하지 않는 글");
+		
+		//게시글 본문 추출
+		String boardContent = boardDto.getBoardContent(); 
+		
+		//본문에 포함된 class = "summernote-img"를 찾아서 지울 파일번호를 추출
+		//- jQuery였다면 $(".summernote-img").data("attachment-no");
+		//-> 첨부파일 만들 때 data-attachment-no를 추가
+		
+		//- Jsoup 라이브러리를 이용하여 문서를 HTML로 해석 (Maven 사이트에서 찾고 pom.xml에 추가 -> Maven 업데이트 과정 필요)
+		Document document = Jsoup.parse(boardContent); //문서 해석
+		Elements elements = document.select(".summernote-img"); //태그 탐색 
+		for(Element element : elements) { //탐색된 결과 반복
+			String dataset = element.attr("data-attachment-no"); //속성 추출
+			int attachmentNo = Integer.parseInt(dataset); //정수로 변환
+			attachmentService.delete(attachmentNo); //삭제 요청 -> 글을 삭제하더라도 첨부파일이 지워지는 것이 아니기 때문에 먼저 첨부파일 삭제 로직까지 추가
+		}
+		
+		boardDao.delete(boardNo); //첨부파일 삭제 후, 글 삭제 (첨부파일이 잘 지워졌는지 확인하려면 upload폴더 확인해보기)
 		return "redirect:list";
 	}
 
@@ -172,6 +205,43 @@ public class BoardController {
 
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute BoardDto boardDto) {
+		//(+추가) 이미지의 변화를 감지해서 삭제할 대상을 찾아 제거
+		//- 기존 이미지 목록과 신규 이미지 목록을 비교해서 대상을 찾는다
+		//- 기존 이미지가 1,2,3,4번이고 신규 이미지가 1,2,5,6번이면?
+		//- 제거할 이미지는 3,4번
+		//- 집합연산(차집합)으로 찾는다
+		
+		//원래 글을 찾는다
+		BoardDto originDto = boardDao.selectOne(boardDto.getBoardNo());
+		if(originDto == null) throw new TargetNotFoundException("존재하지 않는 글");
+		
+		//수정 전 이미지 집합 생성 (originDto.getBoardContent())
+		Set<Integer> before = new HashSet<>();
+		Document beforeDocument = Jsoup.parse(originDto.getBoardContent());
+		for(Element element : beforeDocument.select(".summernote-img")) {
+			int attachmentNo = Integer.parseInt(element.attr("data-attachment-no"));
+			before.add(attachmentNo);
+		}
+		
+		//수정 후 이미지 집합 생성 (boardDto.getBoardContent())
+		Set<Integer> after = new HashSet<>();
+		Document afterDocument = Jsoup.parse(boardDto.getBoardContent());
+		for(Element element : afterDocument.select(".summernote-img")) {
+			int attachmentNo = Integer.parseInt(element.attr("data-attachment-no"));
+			after.add(attachmentNo);
+		}
+		
+		//수정 전 - 수정 후 차집합 계산
+		Set<Integer> minus = new HashSet<>(before);
+		minus.removeAll(after);
+		
+		// before.removeAll(after); //위와 동일한 코드
+		
+		//구해진 차집합의 내용만큼 이미지를 제거
+		for(int attachmentNo : minus) {
+			attachmentService.delete(attachmentNo);
+		}
+		
 		boardDao.update(boardDto);
 		return "redirect:detail?boardNo=" + boardDto.getBoardNo();
 	}
