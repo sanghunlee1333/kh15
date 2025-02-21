@@ -1,3 +1,4 @@
+//에디터
 $(function() {
 	$("[name=boardContent]").summernote({
 		height: 250, //높이(px)
@@ -56,3 +57,39 @@ $(function() {
 
 	});
 });
+
+//페이지를 벗어나는 행위를 어렵게 만들어보자!
+//- flag가 true면 페이지 이탈 가능, false면 불가능
+
+$(function(){
+	$("[name=boardContent]").on("summernote.change", function(){
+		checkInputState();
+	});
+	
+	$("[name=boardTitle]").on("input", function(){
+		checkInputState();
+	});
+	
+	$(".form-check").submit(function(){
+		$(window).off("beforeunload"); //이벤트 제거
+		return true;
+	});
+	
+	function checkInputState() {
+		var titleEmpty = $("[name=boardTitle]").val().length == 0;
+		var contentEmpty = $("[name=boardContent]").val().length == 0;
+		var isEmpty = titleEmpty && contentEmpty;
+		
+		if(isEmpty) {
+			$(window).off("beforeunload"); //이벤트 제거
+		}
+		else {
+			$(window).off("beforeunload"); //이벤트 제거
+			$(window).on("beforeunload", function(){ //beforeunload -> 나가기 직전 이라는 뜻
+				return false;
+			});
+		}
+	}
+
+});
+

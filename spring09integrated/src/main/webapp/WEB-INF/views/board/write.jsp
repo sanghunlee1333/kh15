@@ -39,7 +39,7 @@
 	<button>등록하기</button>
 </form> --%>
 
-<form action="write" method="post" autocomplete="off">
+<form action="write" method="post" autocomplete="off" class = "form-check">
 	<c:if test="${param.boardTarget != null}">
 		<input type="hidden" name="boardTarget" value="${param.boardTarget}" class="field w-100">
 	</c:if>

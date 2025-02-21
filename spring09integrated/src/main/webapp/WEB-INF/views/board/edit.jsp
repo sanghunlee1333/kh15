@@ -19,7 +19,7 @@
 
 <h1>글 수정</h1>
 
-<form action = "edit" method = "post">
+<form action = "edit" method = "post" class = "form-check">
 	<input type="hidden" name="boardNo" value="${boardDto.boardNo}">
 	제목 <input type = "text" name = "boardTitle" size = "55" value = "${boardDto.boardTitle}" required> <br><br>
 	내용 <br>
