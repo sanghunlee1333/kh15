@@ -1,6 +1,8 @@
 package com.kh.spring09.controller;
 
 
+import javax.naming.NoPermissionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.kh.spring09.dao.CertDao;
 import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dao.PurchaseHistoryDao;
+import com.kh.spring09.dto.CertDto;
 import com.kh.spring09.dto.MemberDto;
-import com.kh.spring09.mapper.PurchaseHistoryMapper;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +30,9 @@ public class MemberController {
 	@Autowired
 	private PurchaseHistoryDao purchaseHistoryDao;
 	
+	@Autowired
+	private CertDao certDao;
+	
 	// 회원가입 매핑
 	@GetMapping("/join") // GET방식만 처리하는 매핑
 	public String join() {
@@ -35,7 +41,20 @@ public class MemberController {
 
 	// 입력 처리
 	@PostMapping("/join") // POST방식만 처리하는 매핑
-	public String join(@ModelAttribute MemberDto memberDto) {
+	public String join(@ModelAttribute MemberDto memberDto, @RequestParam String certNumber) throws NoPermissionException {
+		//이메일과 인증번호를 이용한 이메일 진위여부 검사
+		CertDto certDto = certDao.selectOne(memberDto.getMemberEmail());
+		if(certDto == null) { //인증메일 발송내역 자체가 없을 때
+			throw new NoPermissionException("비정상적인 회원가입");
+		}
+		if(certNumber.equals(certDto.getCertNumber()) == false) { //번호 다름
+			throw new NoPermissionException("비정상적인 회원가입");
+		}
+		if(certDto.getCertConfirm() == null) { //인증을 완료하지 않은 경우
+			throw new NoPermissionException("비정상적인 회원가입");
+		}
+		
+		certDao.delete(memberDto.getMemberEmail());
 		memberDao.insert(memberDto);
 		return "redirect:joinFinish"; // joinFinish으로 쫓아내는 코드(상대경로)
 	}

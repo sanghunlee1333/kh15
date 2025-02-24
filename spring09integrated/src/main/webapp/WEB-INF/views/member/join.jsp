@@ -60,9 +60,22 @@
 			<div class="fail2-feedback">닉네임이 이미 사용중입니다</div>
 		</div>
 		<div class="cell">
-			<label>이메일 <i class="fa-solid fa-asterisk red"></i></label> 
-			<input type="email" inputmode="email" name="memberEmail" class="field w-100">
+			<label style="display:block;">이메일 <i class="fa-solid fa-asterisk red"></i></label>
+			<input type="email" inputmode="email" name="memberEmail" class="field">
+			<button type = "button" class = "btn btn-neutral btn-send-cert">
+				<i class="fa-solid fa-paper-plane"></i> 
+				<span>인증메일 발송</span>
+			</button>
 			<div class="fail-feedback">이메일은 필수 항목입니다</div>
+		</div>
+		<div class = "cell cert-input-wrapper" style = "display:none;">
+			<input type = "text" inputmode = "numeric" class = "field" placeholder = "인증번호 입력" name = "certNumber">
+			<button type = "button" class = "btn btn-positive btn-confirm-cert">
+				<i class="fa-solid fa-check"></i> 
+				<span>인증번호 확인</span>
+			</button>
+			<div class = "success-feedback">인증이 완료되었습니다</div>
+			<div class = "fail-feedback">인증번호가 일치하지 않습니다</div>
 		</div>
 		<div class="cell">
 			<label>생년월일</label> 
