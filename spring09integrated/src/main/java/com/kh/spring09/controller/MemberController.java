@@ -1,6 +1,8 @@
 package com.kh.spring09.controller;
 
 
+import java.io.IOException;
+
 import javax.naming.NoPermissionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,9 @@ import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dao.PurchaseHistoryDao;
 import com.kh.spring09.dto.CertDto;
 import com.kh.spring09.dto.MemberDto;
+import com.kh.spring09.service.EmailService;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -38,10 +42,13 @@ public class MemberController {
 	public String join() {
 		return "/WEB-INF/views/member/join.jsp";
 	}
+	
+	@Autowired
+	private EmailService emailService;
 
 	// 입력 처리
 	@PostMapping("/join") // POST방식만 처리하는 매핑
-	public String join(@ModelAttribute MemberDto memberDto, @RequestParam String certNumber) throws NoPermissionException {
+	public String join(@ModelAttribute MemberDto memberDto, @RequestParam String certNumber) throws NoPermissionException, MessagingException, IOException {
 		//이메일과 인증번호를 이용한 이메일 진위여부 검사
 		CertDto certDto = certDao.selectOne(memberDto.getMemberEmail());
 		if(certDto == null) { //인증메일 발송내역 자체가 없을 때
@@ -55,7 +62,9 @@ public class MemberController {
 		}
 		
 		certDao.delete(memberDto.getMemberEmail());
-		memberDao.insert(memberDto);
+		memberDao.insert(memberDto); //회원가입
+		emailService.sendWelcomeMail(memberDto); //환영메일 발송
+		
 		return "redirect:joinFinish"; // joinFinish으로 쫓아내는 코드(상대경로)
 	}
 
