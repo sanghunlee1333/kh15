@@ -19,6 +19,7 @@ import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dao.PurchaseHistoryDao;
 import com.kh.spring09.dto.CertDto;
 import com.kh.spring09.dto.MemberDto;
+import com.kh.spring09.error.TargetNotFoundException;
 import com.kh.spring09.service.EmailService;
 
 import jakarta.mail.MessagingException;
@@ -222,6 +223,69 @@ public class MemberController {
 	@RequestMapping("/exitFinish")
 	public String exitFinish() {
 		return "/WEB-INF/views/member/exitFinish.jsp";
+	}
+	
+	//비밀번호 찾기 매핑
+	@GetMapping("/findPw")
+	public String findPw() {
+		return "/WEB-INF/views/member/findPw.jsp";
+	}
+	
+	@PostMapping("/findPw")
+	public String findPw(@ModelAttribute MemberDto memberDto) throws NoPermissionException, MessagingException, IOException {
+		MemberDto findDto = memberDao.selectOne(memberDto.getMemberId());
+		if(findDto == null) {
+			//throw new TargetNotFoundException("존재하지 않는 아이디");
+			return "redirect:findPw?error";
+		}
+		if(!findDto.getMemberEmail().equals(memberDto.getMemberEmail())) {
+			//throw new NoPermissionException("이메일 정보 오류");
+			return "redirect:findPw?error";
+		}
+		emailService.sendResetMail(memberDto); //재설정 메일 발송
+		
+		return "redirect:findPwSend";
+	}
+	
+	@GetMapping("/findPwSend")
+	public String findPwSend() {
+		return "/WEB-INF/views/member/findPwSend.jsp";
+	}
+	
+	//이 페이지들은 인증정보가 일치할 경우에만 접근을 허용
+	@GetMapping("/reset")
+	public String reset(@RequestParam String memberId, Model model, 
+						@RequestParam String certEmail, @RequestParam String certNumber) throws NoPermissionException {
+		CertDto certDto = certDao.selectOne(certEmail);
+		if(certDto == null) throw new NoPermissionException("허용되지 않는 접근");
+		if(!certDto.getCertNumber().equals(certNumber)) throw new NoPermissionException("허용되지 않는 접근");
+		
+		model.addAttribute("memberId", memberId);
+		model.addAttribute("certEmail", certEmail);
+		model.addAttribute("certNumber", certNumber);
+		
+		return "/WEB-INF/views/member/reset.jsp";
+	}
+	
+	@PostMapping("/reset")
+	public String reset(@ModelAttribute MemberDto memberDto, 
+						@RequestParam String certEmail,
+						@RequestParam String certNumber) throws NoPermissionException {
+		CertDto certDto = certDao.selectOne(certEmail);
+		if(certDto == null) 
+			throw new NoPermissionException("허용되지 않는 접근");
+		if(!certDto.getCertNumber().equals(certNumber)) 
+			throw new NoPermissionException("허용되지 않는 접근");
+		
+		certDao.delete(certEmail); //인증정보 삭제
+		
+		memberDao.updateMemberPassword(memberDto);
+		return "redirect:resetFinish";
+	}
+	
+	@GetMapping("/resetFinish")
+	public String resetFinish() {
+		return "/WEB-INF/views/member/resetFinish.jsp";
 	}
 	
 }
