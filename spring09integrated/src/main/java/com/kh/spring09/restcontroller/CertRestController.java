@@ -47,10 +47,11 @@ public class CertRestController {
 		//2. 지정한 시간(10분) 내로 인증할 것(LocalDateTime, Duration)
 		boolean condition1 = findDto.getCertNumber().equals(certDto.getCertNumber());
 		
-		LocalDateTime t1 = findDto.getCertTime().toLocalDateTime(); //발송 시각
-		LocalDateTime t2 = LocalDateTime.now(); //현재 시각
-		Duration duration = Duration.between(t1, t2); //차이 계산
-		boolean condition2 = duration.toMinutes() < certProperties.getExpireMinutes(); //제한시간 판정
+		LocalDateTime t1 = findDto.getCertTime().toLocalDateTime();//발송시각
+		LocalDateTime t2 = LocalDateTime.now();//현재시각
+		Duration duration = Duration.between(t1, t2);//차이 계산
+		boolean condition2 = duration.toMinutes() < certProperties.getExpireMinutes();//제한시간 판정
+		
 		boolean isValid = condition1 && condition2;
 		if(isValid) { //인증번호가 일치한다면 인증번호 발송내역을 삭제
 			//certDao.delete(certDto.getCertEmail()); //나중을 위해 보류 -> memberController에서 처리했음

@@ -14,7 +14,8 @@ $(function() {
 		ok: function() {
 			return this.memberId && this.memberPw
 				&& this.memberPwReinput && this.memberNickname
-				&& this.memberEmail && this.memberEmailCert && this.memberBirth
+				&& this.memberEmail && this.memberEmailCert
+				&& this.memberBirth
 				&& this.memberContact && this.memberAddress;
 		},
 	};
@@ -29,22 +30,24 @@ $(function() {
 		var regex = /^[a-z][a-z0-9]{7,19}$/;
 		var memberId = $(this).val();
 
-		if (regex.test(memberId)) { //형식통과
+		if (regex.test(memberId)) {//형식통과
 			$.ajax({
 				url: "/rest/member/checkMemberId",
 				method: "post",
 				data: { memberId: memberId },
 				success: function(response) {
-					//response가 true면 사용 가능이므로 status.memberId = true
-					//response가 false면 사용 중이므로 status.memberId = false
+					//response가 true면 사용가능이므로 status.memberId = true
+					//response가 false면 사용중이므로 status.memberId = false
 					status.memberId = response;
-					$("[name=memberId]").removeClass("success fail fail2").addClass(response ? "success" : "fail2");
+					$("[name=memberId]").removeClass("success fail fail2")
+						.addClass(response ? "success" : "fail2");
 				}
 			});
 		}
-		else {
+		else {//형식위반
 			status.memberId = false;
-			$("[name=memberId]").removeClass("success fail fail2").addClass("fail");
+			$("[name=memberId]").removeClass("success fail fail2")
+				.addClass("fail");
 		}
 	});
 
@@ -80,20 +83,23 @@ $(function() {
 	$("[name=memberNickname]").blur(function() {
 		var regex = /^[가-힣0-9]{2,10}$/;
 		var memberNickname = $(this).val();
-		if (regex.test(memberNickname)) { //형식 통과
+
+		if (regex.test(memberNickname)) {//형식 ok
 			$.ajax({
 				url: "/rest/member/checkMemberNickname",
 				method: "post",
 				data: { memberNickname: memberNickname },
 				success: function(response) {
 					status.memberNickname = response;
-					$("[name=memberNickname]").removeClass("success fail fail2").addClass(response ? "success" : "fail2");
+					$("[name=memberNickname]").removeClass("success fail fail2")
+						.addClass(response ? "success" : "fail2");
 				}
 			});
 		}
-		else { //형식 위반
+		else {//형식 nok
 			status.memberNickname = false;
-			$(this).removeClass("success fail fail2").addClass("fail");
+			$("[name=memberNickname]").removeClass("success fail fail2")
+				.addClass("fail");
 		}
 	});
 
@@ -103,61 +109,57 @@ $(function() {
 		$(this).removeClass("success fail").addClass(isValid ? "success" : "fail");
 		status.memberEmail = isValid;
 	});
-	
+
 	$(".btn-send-cert").click(function() {
-		var email = $("[name=memberEmail").val(); //입력된 이메일 가져옴
+		var email = $("[name=memberEmail]").val();//입력된 이메일 가져옴
 		var regex = /^[A-Za-z0-9]+@[A-Za-z0-9.]+$/;
-		if(regex.test(email) == false) return; //형식에 맞지 않으면 차단
-		
+		if (regex.test(email) == false) return;//형식에 맞지 않으면 차단
+
 		$.ajax({
 			url: "/rest/cert/send",
 			method: "post",
 			data: { email: email },
-			success: function(success) {
+			success: function(response) {
 				$(".cert-input-wrapper").fadeIn();
 			},
 			beforeSend: function() {
 				$(".btn-send-cert").prop("disabled", true);
-				$(".btn-send-cert").find("span").text("이메일 발송 중...");
+				$(".btn-send-cert").find("span").text("이메일 발송중");
 				$(".btn-send-cert").find("i").removeClass("fa-paper-plane")
-											.addClass("fa-spinner fa-spin");
+					.addClass("fa-spinner fa-spin");
 			},
 			complete: function() {
 				$(".btn-send-cert").prop("disabled", false);
 				$(".btn-send-cert").find("span").text("인증메일 발송");
-				$(".btn-send-cert").find("i").removeClass("fa-spinnner fa-spin")
-											.addClass("fa-paper-plane");
+				$(".btn-send-cert").find("i").removeClass("fa-spinner fa-spin")
+					.addClass("fa-paper-plane");
 			}
 		});
-
 	});
 	$(".btn-confirm-cert").click(function() {
-		var certEmail = $("[name=memberEmail").val();
+		var certEmail = $("[name=memberEmail]").val();
 		var certNumber = $("[name=certNumber]").val();
 		var regex = /^[0-9]{8}$/;
-		if(regex.test(certNumber) == false) return;
-		
+		if (regex.test(certNumber) == false) return;
 		$.ajax({
 			url: "/rest/cert/check",
 			method: "post",
 			data: { certEmail: certEmail, certNumber: certNumber },
-			success: function(response) { // true/false 중 하나
-				status.memberEmailCert = response; //결과를 상태값에 적용
+			success: function(response) {//response는 true/false 중 하나
+				status.memberEmailCert = response;//결과를 상태값에 적용
 				$("[name=certNumber]").removeClass("success fail").addClass(response ? "success" : "fail");
-				
 				if (response == true) {
 					$(".cert-input-wrapper").hide();
 					$(".btn-send-cert").prop("disabled", true)
-										.removeClass("btn-neutral")
-										.addClass("btn-positive");
+						.removeClass("btn-neutral")
+						.addClass("btn-positive");
 					$(".btn-confirm-cert").prop("disabled", true);
 					$(".btn-send-cert").find("span").text("인증 완료");
 					$(".btn-send-cert").find("i").removeClass("fa-paper-plane")
-												.addClass("fa-thumbs-up");
+						.addClass("fa-thumbs-up");
 				}
-			}
+			},
 		});
-
 	});
 
 	//연락처 관련 처리
@@ -278,7 +280,7 @@ $(function() {
 	//폼 검사
 	$(".form-check").submit(function() {
 		$("[name], #pw-reinput").trigger("blur");
-		if(status.memberEmailCert == false) {
+		if (status.memberEmailCert == false) {
 			window.alert("반드시 이메일 인증을 진행하셔야 합니다");
 		}
 		return status.ok();
