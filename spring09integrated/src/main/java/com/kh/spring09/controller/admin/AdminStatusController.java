@@ -14,6 +14,16 @@ public class AdminStatusController {
 	@Autowired
 	private StatusDao statusDao;
 	
+	@RequestMapping("/all")
+	public String all(Model model) {
+		model.addAttribute("pokemonList", statusDao.pokemon());
+		model.addAttribute("gameUserList", statusDao.gameUser());
+		model.addAttribute("memberList", statusDao.member());
+		model.addAttribute("memberJoinList", statusDao.memberJoin());
+		model.addAttribute("boardWriteList", statusDao.boardWrite());
+		return "/WEB-INF/views/admin/status/all.jsp";
+	}
+	
 	@RequestMapping("/pokemon")
 	public String pokemon(Model model) {
 		model.addAttribute("list", statusDao.pokemon());
