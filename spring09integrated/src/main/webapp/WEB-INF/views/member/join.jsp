@@ -5,10 +5,75 @@
 <!-- Lightpick 라이브러리 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/css/lightpick.min.css">
 <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
-
 <!-- kakao post api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/member/join.js"></script>
+
+<!-- kakao map cdn -->
+<style>
+	#map {
+		width:300px;
+		height:200px;
+		display:none;
+	}
+</style>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=430cecda328081e9c3c1420be135b9dd&libraries=services"></script>
+<script type="text/javascript">
+	$(function(){
+		$("[name=memberAddress2]").blur(function(){
+			var post = $("[name=memberPost]").val();
+			var address1 = $("[name=memberAddress1]").val();
+			var address2 = $("[name=memberAddress2]").val();
+			
+			var isFill = post.length > 0 && address1.length > 0 && address2.length > 0;
+			
+			if(isFill) {
+				//지도 생성(+주소 검색)
+				$("#map").show();
+				
+				var address = address1 + " " + address2;
+				
+				//주소-좌표 변환도구 생성
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                //도구를 이용해서 좌표를 검색
+                //geocoder.addressSearch(주소, 콜백함수);
+                geocoder.addressSearch(address, function(result, status){
+                    //console.log(arguments);//함수에 전달되는 모든 인자를 확인
+                    //if(status == "OK") {//검색 성공
+                    if(status === kakao.maps.services.Status.OK) {//검색 성공
+                        //console.log(result[0].x, result[0].y);//경도, 위도
+                        
+                        var location = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        
+                        //지도 생성
+                        var container = document.querySelector("#map");//JS
+                        var options = {
+							center: new kakao.maps.LatLng(location.getLat(), location.getLng()),
+							level: 3
+                        };
+                        var map = new kakao.maps.Map(container, options);
+                        map.setDraggable(false);
+                        map.setZoomable(false);
+                        
+                        //마커 생성
+                        var marker = new kakao.maps.Marker({
+                            map: map,//지도 설정
+                            position: location,//위치 설정
+                        });
+                    }
+                    else {
+						$("#map").empty().hide();                    	
+                    }
+                });
+			}
+			else {
+				//지도 삭제
+				$("#map").empty().hide();
+			}
+		});
+	});
+</script>
 
 
 <!-- <h1>가입 정보 입력</h1>
@@ -109,6 +174,11 @@
 			<input type="text" name="memberAddress2" class="field w-100"
 				placeholder="상세주소">
 			<div class="fail-feedback">주소는 모두 작성하셔야 합니다</div>
+		</div>
+		
+		<!-- 지도 영역 -->
+		<div class="cell">
+			<div id="map"></div>
 		</div>
 
 		<div class="cell mt-30">

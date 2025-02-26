@@ -243,7 +243,7 @@ $(function() {
 	$(".btn-address-clear").click(function() {
 		$("[name=memberPost]").val("");
 		$("[name=memberAddress1]").val("");
-		$("[name=memberAddress2]").val("");
+		$("[name=memberAddress2]").val("").trigger("blur");
 		status.memberAddress = true;
 		displayClearButton();
 	});
