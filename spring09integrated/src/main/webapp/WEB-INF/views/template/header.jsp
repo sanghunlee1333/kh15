@@ -51,7 +51,9 @@
         <!-- 헤더 영역 -->
         <div class="flex-box p-10">
             <div class="w-25 left flex-box flex-center">
-                <img src="/images/kh_logo.png" width="200">
+            	<a href="/">
+                	<img src="/images/kh_logo.png" width="200">
+                </a>
             </div>
             <div class="w-50 center">
                 <h1>홈페이지 제작 수업자료</h1>
