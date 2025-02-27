@@ -4,19 +4,27 @@
 
 <jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>
 
-<form action="login" method="post">
+<form action="login" method="post" class = "form-login">
 <div class="container w-400">
 	<div class="cell center">
 		<h1>로그인</h1>
 	</div>
 	<div class="cell">
 		<label>아이디</label>
-		 <input type="text" name="memberId" required class="field w-100">
+		 <input type="text" name="memberId" class="field w-100" value="${cookie.saveId.value}">
 	</div>
 	<div class="cell">
 		<label>비밀번호</label>
-		<input type="password" name="memberPw" required class="field w-100">
+		<input type="password" name="memberPw" class="field w-100">
 	</div>
+	
+	<div class="cell">
+		<label>
+			<input type = "checkbox" name = "remember" ${cookie.saveId != null ? 'checked' : ''}>	
+			<span>아이디 저장하기</span>
+		</label>
+	</div>
+	
 	<div class="cell mt-20">
 		<button type="submit" class="btn btn-positive w-100">로그인하기</button>
 	</div>

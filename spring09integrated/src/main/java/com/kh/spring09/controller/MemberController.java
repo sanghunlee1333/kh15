@@ -19,10 +19,11 @@ import com.kh.spring09.dao.MemberDao;
 import com.kh.spring09.dao.PurchaseHistoryDao;
 import com.kh.spring09.dto.CertDto;
 import com.kh.spring09.dto.MemberDto;
-import com.kh.spring09.error.TargetNotFoundException;
 import com.kh.spring09.service.EmailService;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -89,8 +90,10 @@ public class MemberController {
 	//- 데이터 제거 : session.removeAttribute("key");
 	//- 목표 : 로그인 성공 시 이 회원의 정보를 세션에 저장 (PK)
 	@PostMapping("/login")
-	public String login(@ModelAttribute MemberDto memberDto,
-						HttpSession session) { // 사용자가 입력한 정보 //아이디와 비밀번호를 String으로 받을지, Dto로 받을지 선택의 문제
+	public String login(@ModelAttribute MemberDto memberDto, 
+						@RequestParam(required = false) String remember, 
+						HttpSession session, 
+						HttpServletResponse response) { // 사용자가 입력한 정보 //아이디와 비밀번호를 String으로 받을지, Dto로 받을지 선택의 문제
 		MemberDto findDto = memberDao.selectOne(memberDto.getMemberId()); // 데이터베이스에 있는 정보 - findDto
 		// 아이디가 없으면 findDto는 null이다
 		if (findDto == null) {
@@ -109,6 +112,18 @@ public class MemberController {
 			
 			//(+추가)최종 로그인 시각을 갱신 처리
 			memberDao.updateMemberLogin(findDto.getMemberId());
+			
+			//(+추가)아이디 저장하기에 대해 쿠키 생성/소멸 처리
+			if(remember == null) { //쿠키 소멸 -> 삭제 명령이 없어서 0초로 해둬야 함
+				Cookie cookie = new Cookie("saveId", memberDto.getMemberId()); 
+				cookie.setMaxAge(0); 
+				response.addCookie(cookie);
+			}
+			else {
+				Cookie cookie = new Cookie("saveId", memberDto.getMemberId()); 
+				cookie.setMaxAge(4 * 7 * 24 * 60 * 60); //4주 
+				response.addCookie(cookie); 
+			}
 			
 			return "redirect:/";
 		} 
