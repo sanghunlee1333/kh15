@@ -129,8 +129,8 @@
 			<div class="fail-feedback">아이디 한글, 영어, 숫자 8글자 이내로 작성하세요</div>
 		</div>
 		<div class="cell">
-			<label>직업 <span class="red">*</span></label> <select
-				name="gameUserJob" class="field w-100" oninput="checkGameUserJob();">
+			<label>직업 <span class="red">*</span></label> 
+			<select name="gameUserJob" class="field w-100" oninput="checkGameUserJob();">
 				<option value="">선택</option>
 				<option>전사</option>
 				<option>성직자</option>

@@ -18,7 +18,7 @@
 <jsp:include page = "/WEB-INF/views/template/header.jsp"></jsp:include>    
     
 <h1>어서오세요!</h1>
-<img src = "/images/welcome.jpg">
+<img src = "${pageContext.request.contextPath}/images/welcome.jpg">
 
 
 <c:if test="${cookie.adblock == null}">

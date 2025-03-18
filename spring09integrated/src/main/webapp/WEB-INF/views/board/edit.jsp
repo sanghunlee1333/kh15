@@ -15,7 +15,7 @@
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
-<script src="/js/summernote-custom.js"></script>
+<script src="${pageContext.request.contextPath}/js/summernote-custom.js"></script>
 
 <h1>글 수정</h1>
 

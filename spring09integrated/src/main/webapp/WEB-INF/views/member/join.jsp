@@ -7,7 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/lightpick@1.6.2/lightpick.min.js"></script>
 <!-- kakao post api -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="/js/member/join.js"></script>
+<script src="${pageContext.request.contextPath}/js/member/join.js"></script>
 
 <!-- kakao map cdn -->
 <style>

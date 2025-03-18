@@ -64,7 +64,7 @@
 										</c:forEach>
 										<!-- → -->
 
-										<img src="/images/reply.png" alt="Reply arrow" style="width: 15px; height: 15px;">
+										<img src="${pageContext.request.contextPath}/images/reply.png" alt="Reply arrow" style="width: 15px; height: 15px;">
 									</c:if>
 							
 									<!-- 게시글 제목 -->

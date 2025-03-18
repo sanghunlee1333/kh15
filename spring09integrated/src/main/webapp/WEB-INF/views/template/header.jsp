@@ -29,8 +29,8 @@
     <!-- font awesome cdn -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" type="text/css" href="/css/commons.css">
-    <!-- <link rel="stylesheet" type="text/css" href="/css/test.css"> -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/commons.css">
+    <!-- <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/test.css"> -->
     <style>
         
     </style>
@@ -41,8 +41,8 @@
     
     <!-- jQuery -->
     <script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src = "/js/link-confirm.js"></script>
-    <script src = "/js/checkbox.js"></script>
+    <script src = "${pageContext.request.contextPath}/js/link-confirm.js"></script>
+    <script src = "${pageContext.request.contextPath}/js/checkbox.js"></script>
 </head>
 <body>
     
@@ -51,8 +51,8 @@
         <!-- 헤더 영역 -->
         <div class="flex-box p-10">
             <div class="w-25 left flex-box flex-center">
-            	<a href="/">
-                	<img src="/images/kh_logo.png" width="200">
+            	<a href="${pageContext.request.contextPath}/">
+                	<img src="${pageContext.request.contextPath}/images/kh_logo.png" width="200">
                 </a>
             </div>
             <div class="w-50 center">
@@ -67,38 +67,37 @@
         		<li>
         			<a>데이터관리</a>
         			<ul>
-        				<li><a href = "/pokemon/list">포켓몬스터정보</a></li>
-        				<li><a href = "/country/list">국가정보정보</a></li>
+        				<li><a href = "${pageContext.request.contextPath}/pokemon/list">포켓몬스터정보</a></li>
+        				<li><a href = "${pageContext.request.contextPath}/country/list">국가정보정보</a></li>
         				<c:if test = "${sessionScope.userId != null}">
-        					<li><a href = "/game-user/list">게임유저정보</a></li>
+        					<li><a href = "${pageContext.request.contextPath}/game-user/list">게임유저정보</a></li>
         				</c:if>
         			</ul>
         		</li>
         		
-        		
-        		<li><a href = "/board/list">게시판</a></li>
+        		<li><a href = "${pageContext.request.contextPath}/board/list">게시판</a></li>
         		<c:if test = "${sessionScope.userId != null && sessionScope.userLevel != '관리자'}">
-        			<li><a href = "/giftcard/list">상품권구매</a></li>
+        			<li><a href = "${pageContext.request.contextPath}/giftcard/list">상품권구매</a></li>
         		</c:if>
         		
         		<!-- 회원 메뉴는 우측에 -->
         		<c:if test = "${sessionScope.userId == null}">
         		<li class = "menu-end">
-        			<a href = "/member/login">로그인</a>
+        			<a href = "${pageContext.request.contextPath}/member/login">로그인</a>
         			<ul>
-        				<li><a href = "/member/join">회원가입</a></li>
+        				<li><a href = "${pageContext.request.contextPath}/member/join">회원가입</a></li>
         			</ul>
         		</li>
         		</c:if>
         		
         		<c:if test="${sessionScope.userId != null}">
         		<li class="menu-end">
-        			<a href="/member/mypage">${sessionScope.userId}</a>
+        			<a href="${pageContext.request.contextPath}/member/mypage">${sessionScope.userId}</a>
         			<ul>
 	        			<c:if test="${sessionScope.userLevel == '관리자'}">
-    	    			<li><a href="/admin/home">관리자메뉴</a></li>
+    	    			<li><a href="${pageContext.request.contextPath}/admin/home">관리자메뉴</a></li>
         				</c:if>
-        				<li><a href="/member/logout">로그아웃</a></li>
+        				<li><a href="${pageContext.request.contextPath}/member/logout">로그아웃</a></li>
         			</ul>
         		</li>
         		</c:if>

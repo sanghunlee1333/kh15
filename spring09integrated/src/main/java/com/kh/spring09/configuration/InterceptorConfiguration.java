@@ -51,6 +51,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 						// "/member/join",
 						// "/member/joinFinish",
 						"/member/join*", // join어쩌구
+						"/client/join*",
 						"/member/login", "/member/exitFinish", "/member/findPw*", "/member/reset*", "/board/list", "/board/detail"));
 
 		// 게시글 소유자 검사 인터셉터 추가

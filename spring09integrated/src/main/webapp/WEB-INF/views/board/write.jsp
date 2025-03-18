@@ -25,7 +25,7 @@
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
-<script src="/js/summernote-custom.js"></script>
+<script src="${pageContext.request.contextPath}/js/summernote-custom.js"></script>
 
 <%-- <form action = "write" method = "post">
 	<c:if test = "${param.boardTarget != null}">
