@@ -29,7 +29,7 @@ public class AttachmentService {
 			return -1;
 
 		// 저장위치 생성
-		//File dir = new File("D:/upload");
+//		File dir = new File("D:/upload");
 		//File dir = new File(fileuploadProperties.getRoot());
 		File dir = fileuploadProperties.getRootDir();
 		
@@ -56,7 +56,7 @@ public class AttachmentService {
 	// 파일 삭제
 	public void delete(int attachmentNo) {
 		// [1] 실제 파일을 지우고
-		//File dir = new File("D:/upload");
+//		File dir = new File("D:/upload");
 		File dir = fileuploadProperties.getRootDir();
 		File target = new File(dir, String.valueOf(attachmentNo));
 		if (target.isFile() == false)
@@ -78,7 +78,7 @@ public class AttachmentService {
 		}
 
 		// [2] 실제 파일이 존재하는지 확인
-		//File dir = new File("D:/upload");
+//		File dir = new File("D:/upload");
 		File dir = fileuploadProperties.getRootDir();
 		File target = new File(dir, String.valueOf(attachmentNo));
 		if (target.isFile() == false) {
