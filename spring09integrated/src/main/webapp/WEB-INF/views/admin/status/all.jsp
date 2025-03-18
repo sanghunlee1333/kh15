@@ -17,7 +17,8 @@
       function loadChart(url, selector, name, type = "doughnut") {
         //페이지가 로딩되면 ajax 통신으로 포켓몬 통계정보를 불러와야한다
         $.ajax({
-          url: "http://localhost:8080/rest/status/" + url,
+          // url: "http://localhost:8080/rest/status/" + url,
+          url: "/rest/status/" + url,
           method: "get",
           //data: {},
           success: function (response) {

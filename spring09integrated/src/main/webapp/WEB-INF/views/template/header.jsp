@@ -162,13 +162,13 @@
 	                    ${sessionScope.userId} 님
 	                </div>
 	                <div class="cell center">
-	                    <a href="/member/mypage">내 정보 보기</a>
+	                    <a href="${pageContext.request.contextPath}/member/mypage">내 정보 보기</a>
 	                </div>
 				</c:when>
 				<c:otherwise>
 					<!-- 비회원일 경우 -->
 	                <div class="cell center">
-	                    <a href="/member/login">로그인</a> 하세요
+	                    <a href="${pageContext.request.contextPath}/member/login">로그인</a> 하세요
 	                </div>
 				</c:otherwise>
 			</c:choose>

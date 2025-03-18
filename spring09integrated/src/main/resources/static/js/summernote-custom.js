@@ -45,7 +45,7 @@ $(function() {
 					data: form,
 					success: function(response) { //response = 첨부파일번호들(List<Integer>)
 						for (var i = 0; i < response.length; i++) {
-							var tag = $("<img>").attr("src", "http://localhost:8080/attachment/download?attachmentNo=" + response[i])
+							var tag = $("<img>").attr("src", "/attachment/download?attachmentNo=" + response[i])
 								.addClass("summernote-img")
 								.attr("data-attachment-no", response[i]);
 							$("[name=boardContent]").summernote("insertNode", tag[0]);
