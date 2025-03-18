@@ -41,6 +41,16 @@
     
     <!-- jQuery -->
     <script src = "https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type = "text/javascript">
+    	$.ajaxSetup({ //ajax 초기 설정
+    		beforeSend: function(xhr, settings) {//전송 직전에 호출되는 전처리
+    			if(settings.url.startsWith("/")) {//통신 주소가 슬래시로 시작하면	
+    				//context path를 계산하여 추가하겠다
+			    	settings.url = "${pageContext.request.contextPath}" + settings.url; //초기 URL -> jQuery 전체 url 설정을 변경 -> (주의사항) jquery를 딱 하나만 불러와야함. 두 개 이상 불러오면 세팅이 사라짐.
+    			}
+    		}
+    	});
+    </script>
     <script src = "${pageContext.request.contextPath}/js/link-confirm.js"></script>
     <script src = "${pageContext.request.contextPath}/js/checkbox.js"></script>
 </head>
