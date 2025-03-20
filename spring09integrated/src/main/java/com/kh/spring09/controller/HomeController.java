@@ -9,6 +9,13 @@ public class HomeController {
 	
 	@RequestMapping("/")
 	public String home() {
-		return "/WEB-INF/views/home.jsp";
+		//return "/WEB-INF/views/home.jsp";
+		return "/WEB-INF/views/bootstrap-home.jsp";
+	}
+	
+	@RequestMapping("/bootstrap-home")
+	public String bootstrapHome() {
+		//return "/WEB-INF/views/home.jsp";
+		return "/WEB-INF/views/bootstrap-home.jsp";
 	}
 }
