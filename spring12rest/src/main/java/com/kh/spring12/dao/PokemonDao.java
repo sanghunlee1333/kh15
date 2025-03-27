@@ -66,7 +66,7 @@ public class PokemonDao {
 
 	// 목록조회 메소드
 	public List<PokemonDto> selectList() {
-		String sql = "select * from pokemon";
+		String sql = "select * from pokemon order by pokemon_no asc";
 		return jdbcTemplate.query(sql, pokemonMapper);
 	}
 
