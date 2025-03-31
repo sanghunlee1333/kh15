@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="country">
+	<!-- 시퀀스 자동생성 등록 -->
+	<insert id="add">
+		insert into country(
+			country_no, country_name, 
+			country_capital, country_population
+		)
+		values(
+			country_seq.nextval, #{countryName}, 
+			#{countryCapital}, #{countryPopulation}
+		)
+	</insert>
+	
+	<!-- 시퀀스 수동생성 등록 -->
+	<select id="sequence" resultType="long">
+		select country_seq.nextval from dual
+	</select>
+	<insert id="add2">
+		insert into country(
+			country_no, country_name, 
+			country_capital, country_population
+		)
+		values(
+			#{countryNo}, #{countryName}, 
+			#{countryCapital}, #{countryPopulation}
+		)
+	</insert>
+	
+	<!-- 목록 -->
+	<select id="list" resultType="CountryDto">
+		select * from country order by country_no asc
+	</select>
+	
+	<!-- 상세 -->
+	<select id="find" resultType="CountryDto">
+		select * from country where country_no = #{countryNo}
+	</select>
+	
+	<!-- 수정(전체) -->
+	<update id="edit">
+		update country
+		set 
+			country_name=#{countryName}, 
+			country_capital=#{countryCapital}, 
+			country_population=#{countryPopulation}
+		where country_no=#{countryNo}
+	</update>
+	
+	<!-- 
+		수정(일부) 
+		- PATCH 방식에 대응하는 구문
+		- <set>이라는 범위를 설정한 뒤 <if>로 상황을 알려주고 수정 처리
+		- 콤마 등은 상황에 맞게 알아서 정리가 됨
+		- 단, <set> 내에 있는 조건 중에 한개는 실행이 되어야 함
+	-->
+	<update id="editUnit">
+		update country
+		<set>
+			<if test="countryName != null">
+				country_name=#{countryName}, 
+			</if>
+			<if test="countryCapital != null">
+				country_capital=#{countryCapital}, 
+			</if>
+			<if test="countryPopulation != null">
+				country_population=#{countryPopulation},
+			</if>
+		</set>
+		where country_no=#{countryNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete">
+		delete country where country_no = #{countryNo}
+	</delete>
+	
+</mapper>

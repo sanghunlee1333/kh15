@@ -1,14 +1,15 @@
 package com.kh.spring12.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.spring12.dto.PokemonDto;
-import com.kh.spring12.mapper.PokemonMapper;
+import com.kh.spring12.vo.SearchVO;
 
 //DAO는 영속성 항목을 제어하는 도구
 //- 영속성이라는건 파일이나 데이터베이스처럼 놔두면 영원히 유지되는것을 의미
@@ -17,143 +18,143 @@ import com.kh.spring12.mapper.PokemonMapper;
 public class PokemonDao {
 
 	// 여기서 필요로 하는 도구들을 등록된 도구중에서 가지고 온다(DI)
-	@Autowired // 이 변수에 가능한 것을 넣어줘라.
-	private PokemonMapper pokemonMapper;
+//	@Autowired
+//	private JdbcTemplate jdbcTemplate; //Spring JDBC용 처리도구
+	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
-	// 객체지향스러운 등록 메소드(추천)
-	public void insert(PokemonDto pokemonDto) {
-		String sql = "insert into pokemon(" + "pokemon_no, pokemon_name, pokemon_type" + ") "
-				+ "values(pokemon_seq.nextval, ?, ?)";
-		Object[] data = { pokemonDto.getPokemonName(), pokemonDto.getPokemonType() };
-		jdbcTemplate.update(sql, data);
-	}
-
-	// 시퀀스+등록
-	public int sequence() {
-		String sql = "select pokemon_seq.nextval from dual";
-		return jdbcTemplate.queryForObject(sql, int.class);
-	}
-
-	public void insert2(PokemonDto pokemonDto) {
-		String sql = "insert into pokemon(" + "pokemon_no, pokemon_name, pokemon_type" + ") values(?, ?, ?)";
-		Object[] data = { pokemonDto.getPokemonNo(), pokemonDto.getPokemonName(), pokemonDto.getPokemonType() };
-		jdbcTemplate.update(sql, data);
-	}
-
-	// 수정 메소드
-	public boolean update(PokemonDto pokemonDto) {
-		String sql = "update pokemon " + "set pokemon_name = ?, pokemon_type = ? " + "where pokemon_no = ?";
-		Object[] data = { pokemonDto.getPokemonName(), pokemonDto.getPokemonType(), pokemonDto.getPokemonNo() };
-		int rows = jdbcTemplate.update(sql, data);
-
-//			if(rows > 0) {
-//				return true;
-//			}
-//			else {
-//				return false;
-//			}
-		return rows > 0;
-	}
-
-	// 삭제 메소드
-	public boolean delete(int pokemonNo) {
-		String sql = "delete pokemon where pokemon_no = ?";
-		Object[] data = { pokemonNo };
-		return jdbcTemplate.update(sql, data) > 0;
-	}
-
-	// 목록조회 메소드
+	private SqlSession sqlSession; //myBatis용 처리도구
+	
+	//목록
 	public List<PokemonDto> selectList() {
-		String sql = "select * from pokemon order by pokemon_no asc";
-		return jdbcTemplate.query(sql, pokemonMapper);
+		//sqlSession을 이용해서 namespace="pokemon" 영역을 찾아 id="list"인 구문을 실행하세요!
+		return sqlSession.selectList("pokemon.list");
+	}
+	
+	//검색
+	public List<PokemonDto> selectList(String column, String keyword){
+		Map<String, Object> param = new HashMap<>();
+		param.put("column", column);
+		param.put("keyword", keyword);
+		return sqlSession.selectList("pokemon.listOrSearch", param);
+	}
+	
+
+	
+	//등록(1) - 시퀀스 자동생성
+	public void insert(PokemonDto pokemonDto) {
+		sqlSession.insert("pokemon.add", pokemonDto);
 	}
 
-	// 검색에 사용할 컬럼에 대한 정보를 저장
-	private Map<String, String> columnExample = Map.of("이름", "pokemon_name", "속성", "pokemon_type");
-
-	// 검색 메소드
-	public List<PokemonDto> selectList(String column, String keyword) {
-		String columnName = columnExample.get(column);// 컬럼명 획득(없으면 null)
-		if (columnName == null) {
-			// return null;//없다고 말해주겠다
-			// return List.of();//결과가 비어있다고 말해주겠다
-			throw new RuntimeException("항목 오류");// 너는 문제가 있다고 말해주겠다
-		}
-
-		String sql = "select * from pokemon " + "where instr(" + columnName + ", ?) > 0 " + "order by " + columnName
-				+ " asc, pokemon_no asc";
-		Object[] data = { keyword };
-		return jdbcTemplate.query(sql, pokemonMapper, data);
+	//등록(2) 시퀀스+등록
+	public int sequence() {
+		return sqlSession.selectOne("pokemon.sequence");
 	}
-
-	// 상세조회 메소드
+	
+	public void insert2(PokemonDto pokemonDto) {
+		sqlSession.insert("pokemon.add2", pokemonDto);
+	}
+	
+	//삭제 메소드
+	public boolean delete(int pokemonNo) {
+		return sqlSession.delete("pokemon.delete", pokemonNo) > 0;
+	}
+	
+	//수정 메소드
+	public boolean update(PokemonDto pokemonDto) {
+		return sqlSession.update("pokemon.edit", pokemonDto) > 0;
+	}
+	
+	//상세조회 메소드
 	public PokemonDto selectOne(int pokemonNo) {
-		String sql = "select * from pokemon where pokemon_no=?";
-		Object[] data = { pokemonNo };
-		List<PokemonDto> list = jdbcTemplate.query(sql, pokemonMapper, data);
-		return list.isEmpty() ? null : list.get(0);
+		return sqlSession.selectOne("pokemon.find", pokemonNo);
 	}
 
-	// 포켓몬 이미지 등록(연결)
-	public void connect(int pokemonNo, int attachmentNo) {
-		String sql = "insert into pokemon_image (" + "pokemon_no, attachment_no" + ") values(?, ?)";
-		Object[] data = { pokemonNo, attachmentNo };
-		jdbcTemplate.update(sql, data);
+	public List<PokemonDto> selectList(SearchVO searchVO) {
+		return sqlSession.selectList("pokemon.listOrSearch", searchVO);
 	}
+	
+//	// 목록조회 메소드
+//	public List<PokemonDto> selectList() {
+//		String sql = "select * from pokemon order by pokemon_no asc";
+//		return jdbcTemplate.query(sql, pokemonMapper);
+//	}
+//
+//	// 검색에 사용할 컬럼에 대한 정보를 저장
+//	private Map<String, String> columnExample = Map.of("이름", "pokemon_name", "속성", "pokemon_type");
+//
+//	// 검색 메소드
+//	public List<PokemonDto> selectList(String column, String keyword) {
+//		String columnName = columnExample.get(column);// 컬럼명 획득(없으면 null)
+//		if (columnName == null) {
+//			// return null;//없다고 말해주겠다
+//			// return List.of();//결과가 비어있다고 말해주겠다
+//			throw new RuntimeException("항목 오류");// 너는 문제가 있다고 말해주겠다
+//		}
+//
+//		String sql = "select * from pokemon " + "where instr(" + columnName + ", ?) > 0 " + "order by " + columnName
+//				+ " asc, pokemon_no asc";
+//		Object[] data = { keyword };
+//		return jdbcTemplate.query(sql, pokemonMapper, data);
+//	}
 
-	// 포켓몬 이미지 찾기
-	// - 반환형이 int이기 때문에 만약 이미지가 없으면 예외가 발생함
-	public int findAttachment(int pokemonNo) { // Integer로도 가능함. 다만, 외부에서 null이 나올 경우를 처리해야 함
-		String sql = "select attachment_no from pokemon_image where pokemon_no = ?";
-		Object[] data = { pokemonNo };
-		return jdbcTemplate.queryForObject(sql, int.class, data);
-	}
-
-	////////////////////////////////
-	// 게시글 좋아요 관련 처리 기능
-	////////////////////////////////
-
-	// 좋아요 설정
-	public void insertPokemonLike(String memberId, int pokemonNo) {
-		String sql = "insert into pokemon_like(member_id, pokemon_no) values(?, ?)";
-		Object[] data = { memberId, pokemonNo };
-		jdbcTemplate.update(sql, data);
-	}
-
-	// 좋아요 해제
-	public void deletePokemonLike(String memberId, int pokemonNo) { // boolean도 가능
-		String sql = "delete pokemon_like where member_id = ? and pokemon_no = ?";
-		Object[] data = { memberId, pokemonNo };
-		jdbcTemplate.update(sql, data);
-	}
-
-	// 좋아요 검사
-	public boolean checkPokemonLike(String memberId, int pokemonNo) {
-		String sql = "select count(*) from pokemon_like where member_id = ? and pokemon_no = ?";
-		Object[] data = { memberId, pokemonNo };
-		return jdbcTemplate.queryForObject(sql, int.class, data) > 0;
-	}
-
-	//좋아요 개수
-	public int countPokemonLike(int pokemonNo) {
-		String sql = "select count(*) from pokemon_like where pokemon_no = ?";
-		Object[] data = { pokemonNo };
-		return jdbcTemplate.queryForObject(sql, int.class, data);
-	}
-
-	//좋아요 개수를 갱신하는 메소드
-	public boolean updatePokemonLike(int pokemonNo, int count) {
-		String sql = "update pokemon set pokemon_like = ? where pokemon_no = ?";
-		Object[] data = { count, pokemonNo };
-		return jdbcTemplate.update(sql, data) > 0;
-	}
-
-	public boolean updatePokemonLike(int pokemonNo) { // 니가 count를 세어서 넣어
-		String sql = "update pokemon set pokemon_like = (select count(*) from pokemon_like where pokemon_no = ?) where pokemon_no = ?";
-		Object[] data = { pokemonNo, pokemonNo }; // pokemonNo를 홀더 갯수에 맞게 두 번 넣어야함
-		return jdbcTemplate.update(sql, data) > 0;
-	}
+//	// 포켓몬 이미지 등록(연결)
+//	public void connect(int pokemonNo, int attachmentNo) {
+//		String sql = "insert into pokemon_image (" + "pokemon_no, attachment_no" + ") values(?, ?)";
+//		Object[] data = { pokemonNo, attachmentNo };
+//		jdbcTemplate.update(sql, data);
+//	}
+//
+//	// 포켓몬 이미지 찾기
+//	// - 반환형이 int이기 때문에 만약 이미지가 없으면 예외가 발생함
+//	public int findAttachment(int pokemonNo) { // Integer로도 가능함. 다만, 외부에서 null이 나올 경우를 처리해야 함
+//		String sql = "select attachment_no from pokemon_image where pokemon_no = ?";
+//		Object[] data = { pokemonNo };
+//		return jdbcTemplate.queryForObject(sql, int.class, data);
+//	}
+//
+//	////////////////////////////////
+//	// 게시글 좋아요 관련 처리 기능
+//	////////////////////////////////
+//
+//	// 좋아요 설정
+//	public void insertPokemonLike(String memberId, int pokemonNo) {
+//		String sql = "insert into pokemon_like(member_id, pokemon_no) values(?, ?)";
+//		Object[] data = { memberId, pokemonNo };
+//		jdbcTemplate.update(sql, data);
+//	}
+//
+//	// 좋아요 해제
+//	public void deletePokemonLike(String memberId, int pokemonNo) { // boolean도 가능
+//		String sql = "delete pokemon_like where member_id = ? and pokemon_no = ?";
+//		Object[] data = { memberId, pokemonNo };
+//		jdbcTemplate.update(sql, data);
+//	}
+//
+//	// 좋아요 검사
+//	public boolean checkPokemonLike(String memberId, int pokemonNo) {
+//		String sql = "select count(*) from pokemon_like where member_id = ? and pokemon_no = ?";
+//		Object[] data = { memberId, pokemonNo };
+//		return jdbcTemplate.queryForObject(sql, int.class, data) > 0;
+//	}
+//
+//	//좋아요 개수
+//	public int countPokemonLike(int pokemonNo) {
+//		String sql = "select count(*) from pokemon_like where pokemon_no = ?";
+//		Object[] data = { pokemonNo };
+//		return jdbcTemplate.queryForObject(sql, int.class, data);
+//	}
+//
+//	//좋아요 개수를 갱신하는 메소드
+//	public boolean updatePokemonLike(int pokemonNo, int count) {
+//		String sql = "update pokemon set pokemon_like = ? where pokemon_no = ?";
+//		Object[] data = { count, pokemonNo };
+//		return jdbcTemplate.update(sql, data) > 0;
+//	}
+//
+//	public boolean updatePokemonLike(int pokemonNo) { // 니가 count를 세어서 넣어
+//		String sql = "update pokemon set pokemon_like = (select count(*) from pokemon_like where pokemon_no = ?) where pokemon_no = ?";
+//		Object[] data = { pokemonNo, pokemonNo }; // pokemonNo를 홀더 갯수에 맞게 두 번 넣어야함
+//		return jdbcTemplate.update(sql, data) > 0;
+//	}
 
 }

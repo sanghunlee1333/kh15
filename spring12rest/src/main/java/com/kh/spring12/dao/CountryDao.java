@@ -3,12 +3,11 @@ package com.kh.spring12.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.kh.spring12.dto.CountryDto;
-import com.kh.spring12.mapper.CountryMapper;
 
 //DAO는 영속성 항목을 제어하는 도구
 //- 영속성이라는건 파일이나 데이터베이스처럼 놔두면 영원히 유지되는것을 의미
@@ -16,89 +15,44 @@ import com.kh.spring12.mapper.CountryMapper;
 @Repository
 public class CountryDao {
 
-	// 여기서 필요로 하는 도구들을 등록된 도구중에서 가지고 온다(DI)
-	@Autowired // 등록된 도구들만 Autowired로 사용할 수 있다. 당연히 없는 도구는 못함, 어노테이션은 하나밖에 적용을 못함
-	private CountryMapper countryMapper;
-	@Autowired // 그래서 각각 만들어줘야 한다
-	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private SqlSession sqlSession;
 
+	// 등록 메소드
 	public void insert(CountryDto countryDto) {
-		String sql = "insert into country(country_no, country_name, country_capital, country_population) "
-				+ "values(country_seq.nextval, ?, ?, ?)";
-		Object[] data = { countryDto.getCountryName(), countryDto.getCountryCapital(),
-				countryDto.getCountryPopulation() };
-		jdbcTemplate.update(sql, data);
+		sqlSession.insert("country.add", countryDto);
 	}
-
-	public int sequence() {
-		String sql = "select country_seq.nextval from dual";
-		return jdbcTemplate.queryForObject(sql, int.class);
+	// 시퀀스생성+등록 메소드
+	public long sequence() {
+		return sqlSession.selectOne("country.sequence");
 	}
-
 	public void insert2(CountryDto countryDto) {
-		String sql = "insert into country(country_no, country_name, country_capital, country_population) "
-				+ "values(?, ?, ?, ?)";
-		Object[] data = { countryDto.getCountryNo(), countryDto.getCountryName(), countryDto.getCountryCapital(),
-				countryDto.getCountryPopulation() };
-		jdbcTemplate.update(sql, data);
+		sqlSession.insert("country.add2", countryDto);
 	}
 
+	// 수정 메소드
 	public boolean update(CountryDto countryDto) {
-		String sql = "update country set country_name = ?, country_capital = ?, country_population = ? where country_no = ?";
-		Object[] data = {
-
-				countryDto.getCountryName(), countryDto.getCountryCapital(), countryDto.getCountryPopulation(),
-				countryDto.getCountryNo()
-
-		};
-		int rows = jdbcTemplate.update(sql, data);
-
-		return rows > 0;
+		return sqlSession.update("country.edit", countryDto) > 0;
+	}
+	public boolean updateUnit(CountryDto countryDto) {
+		return sqlSession.update("country.editUnit", countryDto) > 0;
 	}
 
-	public boolean delete(int countryNo) {
-		String sql = "delete country where country_no = ?";
-		Object[] data = { countryNo };
-		return jdbcTemplate.update(sql, data) > 0;
+	// 삭제 메소드
+	public boolean delete(long countryNo) {
+		return sqlSession.delete("country.delete", countryNo) > 0;
 	}
 
+	// 조회 메소드
 	public List<CountryDto> selectList() {
-		String sql = "select * from country order by country_no asc";
-		return jdbcTemplate.query(sql, countryMapper);
+		return sqlSession.selectList("country.list");
 	}
 
-	private Map<String, String> columnExamples = Map.of("국가명", "country_name", "수도명", "country_capital");
-
-	public List<CountryDto> selectList(String column, String keyword) {
-		// 컬럼 변환
-		String columnName = columnExamples.get(column);
-		if (columnName == null)
-			throw new RuntimeException("항목 오류");
-
-		String sql = "select * from country " + "where instr(#1, ?) > 0 " + "order by #1 asc, country_no asc";
-		sql = sql.replace("#1", columnName);
-		Object[] data = { keyword };
-		return jdbcTemplate.query(sql, countryMapper, data);
-
+	// 상세조회 메소드
+	public CountryDto selectOne(long countryNo) {
+		return sqlSession.selectOne("country.find", countryNo);
 	}
 
-	public CountryDto selectOne(int countryNo) {
-		String sql = "select * from country where country_no = ?";
-		Object[] data = { countryNo };
-		List<CountryDto> list = jdbcTemplate.query(sql, countryMapper, data);
-		return list.isEmpty() ? null : list.get(0);
-	}
 
-	public void connect(int countryNo, int attachmentNo) {
-		String sql = "insert into country_flag (" + "country_no, attachment_no" + ") values(?, ?)";
-		Object[] data = { countryNo, attachmentNo };
-		jdbcTemplate.update(sql, data);
-	}
-	
-	public int findAttachment (int countryNo) {
-		String sql = "select attachment_no from country_flag where country_no = ?";
-		Object[] data = {countryNo};
-		return jdbcTemplate.queryForObject(sql, int.class, data);
-	}
 
 }
