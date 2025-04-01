@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="account">
+	
+	<!-- 회원가입(등록) -->
+	<insert id="join">
+		insert into account(
+			account_id, account_pw, account_nickname,
+			account_email, account_birth, account_contact,
+			account_post, account_address1, account_address2
+		) 
+		values(
+			#{accountId}, #{accountPw}, #{accountNickname}, 
+			#{accountEmail}, #{accountBirth}, #{accountContact},
+			#{accountPost}, #{accountAddress1}, #{accountAddress2} <!-- 5개는 null이 가능하므로, properties에서 null이 가능하도록 타입마다 허용해줘야 함 -->
+		)
+	</insert>
+	
+	<!-- 상세조회 -->
+	<select id="find" resultType="AccountDto">
+		select * from account where account_id = #{accountId}
+	</select>
+	<select id="findNickname" resultType="AccountDto">
+		select * from account where account_nickname = #{accountNickname}
+	</select>
+	
+	
+</mapper>
