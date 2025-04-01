@@ -1,4 +1,4 @@
-package com.kh.spring12;
+package com.kh.spring12.mybatis;
 
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
@@ -8,19 +8,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.kh.spring12.dto.PokemonDto;
 
 @SpringBootTest
-public class Test04마이바티스수정 {
+public class Test02마이바티스등록2 {
 
 	@Autowired
 	private SqlSession sqlSession; //myBatis용 처리도구
 	
 	@Test
 	public void test() {
-		PokemonDto pokemonDto = new PokemonDto();
-		pokemonDto.setPokemonNo(79);
-		pokemonDto.setPokemonName("이름바꾼몬");
-		pokemonDto.setPokemonType("전기");
+		//myBatis에서는 등록 시 DTO 객체를 전송하면 된다
+		int pokemonNo = sqlSession.selectOne("pokemon.sequence");
 		
-		int count = sqlSession.update("pokemon.edit", pokemonDto);
-		System.out.println("count = " + count);
+		PokemonDto pokemonDto = new PokemonDto();
+		pokemonDto.setPokemonNo(pokemonNo);
+		pokemonDto.setPokemonName("디그다");
+		pokemonDto.setPokemonType("불");
+		
+		sqlSession.insert("pokemon.add2", pokemonDto);
+		//jdbcTemplate.update(sql, data);
+		
 	}
 }

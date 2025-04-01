@@ -1,4 +1,4 @@
-package com.kh.spring12;
+package com.kh.spring12.mybatis;
 
 import java.util.List;
 
