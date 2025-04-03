@@ -27,3 +27,12 @@ select pokemon.*, pokemon_image.attachment_no from POKEMON
 
 select country.*, country_flag.attachment_no from COUNTRY
 	left outer join country_flag on country.country_no = country_flag.COUNTRY_NO ;
+
+
+drop table book_image;
+create table book_image (
+	book_id references book(book_id) on delete cascade,
+	attachment_no references attachment(attachment_no) on delete cascade
+primary key(book_id, attachment_no)
+unique(book_id)
+);
