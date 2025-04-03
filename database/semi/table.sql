@@ -7,20 +7,22 @@ DROP TABLE company;
 DROP TABLE business_number;
 DROP TABLE review cascade constraint;
 DROP TABLE COMPANY_IMAGE;
-DROP TABLE REVIEW_LIKE ;
 DROP TABLE attachment;
 DROP TABLE reply cascade constraint;
+DROP TABLE company_history;
 
 -- 시퀀스 삭제 및 생성
 drop sequence company_seq;
 drop sequence review_seq;
 drop sequence attachment_seq;
 drop sequence reply_seq;
+drop sequence company_history_no;
 
 create sequence company_seq;
 create sequence review_seq;
 create sequence attachment_seq;
 create sequence reply_seq;
+create sequence company_history_no;
 
 -- 회원 테이블
 CREATE TABLE member (
@@ -28,6 +30,7 @@ CREATE TABLE member (
     member_pw VARCHAR2(16) NOT NULL,
     member_type VARCHAR2(12) NOT NULL,  -- '일반회원', '기업회원', '관리자' 등으로 구분
     member_name VARCHAR2(15) NOT NULL,
+    member_id_card_num VARCHAR2(14),    -- 주민등록번호 컬럼 추가
     member_contact CHAR(11),
     member_email VARCHAR2(60),
     member_post VARCHAR2(6),
@@ -40,15 +43,23 @@ CREATE TABLE member (
     member_job VARCHAR2(45),  -- 직종 (개인회원-선택, 기업회원-필수)
     member_position VARCHAR2(15),  -- 직책 (기업회원-필수)
     member_cr_number VARCHAR2(12), -- 사업자 등록번호(외래키)(기업회원)
-    member_company_no NUMBER,  -- 기업 번호(외래키)
-    CONSTRAINT FK_COMPANY_NO FOREIGN KEY (member_company_no) REFERENCES company(company_no),
-    CONSTRAINT fk_member_cr_number FOREIGN KEY (member_cr_number) 
-    REFERENCES business_number(bn_cr_number),
-    CONSTRAINT check_member_type CHECK (
+    member_company_no NUMBER REFERENCES company(company_no) ON DELETE SET NULL,  -- 기업 번호(외래키)
+    CONSTRAINT fk_member_cr_number FOREIGN KEY (member_cr_number) REFERENCES business_number(bn_cr_number),
+    CONSTRAINT unq_member_cr_number UNIQUE (member_cr_number), -- 사업자등록번호 유니크 제약 조건 추가
+    CONSTRAINT chk_member_type CHECK (
         member_type IN ('일반회원', '기업회원', '관리자') AND --member_type이 '일반회원', '기업회원', '관리자' 중 하나
     	(member_type != '기업회원' OR -- 일반회원과 관리자의 경우 아래 필드들에 대해 제약(X)
      	(member_industry IS NOT NULL AND member_job IS NOT NULL AND member_position IS NOT NULL)) -- 기업회원인 경우에만 industry, job, position이 NULL이 아니어야 함을 확인
-),
+	),
+	CONSTRAINT chk_member_id_card_num CHECK (
+    (member_type = '일반회원' AND member_id_card_num IS NOT NULL) OR
+    (member_type != '일반회원')
+	),
+	CONSTRAINT unq_member_id_card_num UNIQUE (member_id_card_num),
+    CONSTRAINT chk_member_id_card_num_format CHECK (
+        member_id_card_num IS NULL OR -- NULL 허용
+        REGEXP_LIKE(member_id_card_num, '^[0-9]{6}-[0-9]{7}$') -- 주민등록번호 형식 검사
+    ),
   check(regexp_like(member_id, '^[a-z][a-z0-9]{4,19}$')),
 check(
   regexp_like(member_pw, '^[A-Za-z0-9!@#$]{8,16}$')
@@ -72,8 +83,6 @@ check(
 )
 );
 
--- 관리자 권한 업데이트 (회원가입 후 권한을 주는 프로세스로)
-update member set member_type='관리자' where member_id='';
 
 -- (참고)기업회원 가입 시:
 -- 입력받은 사업자등록번호가 business_number 테이블에 있는지 확인.
@@ -111,7 +120,8 @@ CREATE TABLE business_number (
 -- 리뷰 테이블
 CREATE TABLE review (
     review_no NUMBER PRIMARY KEY, --리뷰번호
-    review_writer references member(member_id) on delete set NULL, --아이디
+    review_writer REFERENCES member(member_id) ON DELETE SET NULL, --아이디
+    review_company_no NUMBER REFERENCES company(company_no) ON DELETE SET NULL, -- 회사번호 (추가됨)
     review_score NUMBER not null, --리뷰평점
     review_comment VARCHAR2(300) NOT null, --리뷰 한줄평
     review_like NUMBER DEFAULT 0, --리뷰 좋아요
@@ -124,9 +134,6 @@ CREATE TABLE review (
     review_promotion NUMBER not null, --승진기회 만족도(별점)
     review_culture NUMBER not null, --사내문화 만족도(별점)
     review_director NUMBER not null, --경영진 만족도(별점)
-    review_ceo_evaluation char(1) not null, --ceo에 대한 견해(Y/N)
-    review_prediction VARCHAR2(6) not null, --기업전망(성장/비슷/하락)
-    review_recommend CHAR(1) not null, --기업추천(Y/N)
     check(review_like >= 0),
     check(review_salary >= 0),
     check(review_work_and_life >= 0),
@@ -139,14 +146,7 @@ CREATE TABLE review (
 -- 기업 이미지 테이블
 CREATE TABLE company_image (
     attachment_no references attachment(attachment_no) on delete cascade,
-    company_no references company(company_no) on delete cascade
-);
-
-
--- 좋아요 테이블 
-CREATE TABLE review_like (
-    review_no references review(review_no) on delete cascade,
-    member_id references member(member_id) on delete cascade
+    company_no references company(company_no) on delete set null
 );
 
 -- 첨부파일 테이블
@@ -161,9 +161,42 @@ create table attachment(
 -- 댓글 테이블
 CREATE TABLE reply (
     reply_no NUMBER PRIMARY KEY,
-    reply_writer references member(member_id) on delete set null,
-    reply_origin references review(review_no) on delete cascade,
+    reply_writer VARCHAR2(50) REFERENCES member(member_id) ON DELETE SET NULL,
+    reply_origin NUMBER REFERENCES review(review_no) ON DELETE CASCADE,
     reply_content VARCHAR2(1500),
-    reply_wtime timestamp default systimestamp not null,
-    reply_etime TIMESTAMP
+    reply_wtime TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+    reply_etime TIMESTAMP,
+    company_no NUMBER REFERENCES company(company_no) ON DELETE CASCADE
 );
+
+-- 회사 이력 (일반회원) (더미데이터)
+CREATE TABLE company_history (
+    company_history_no NUMBER PRIMARY KEY,
+    member_id_card_num VARCHAR2(14),  -- 외래 키 제약 조건 제거
+    company_no NUMBER REFERENCES company(company_no) on delete set null,
+    company_history_join_date DATE,
+    company_history_leave_date DATE
+);
+
+CREATE OR REPLACE VIEW review_list_view AS
+SELECT
+    R.review_no,
+    R.review_writer,
+    R.review_company_no,
+    R.review_score,
+    R.review_comment,
+    R.review_wtime,
+    R.review_etime,
+    R.review_like,
+    R.review_salary,
+    R.review_work_and_life, 
+    R.review_promotion,
+    R.review_culture, 
+    R.review_director,
+    M.member_name,
+    M.member_industry,
+    M.member_job
+FROM
+    review R
+LEFT OUTER JOIN
+    member M ON R.review_writer = M.member_id;
