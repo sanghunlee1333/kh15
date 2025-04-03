@@ -3,7 +3,7 @@ package com.kh.spring09.dto;
 import java.sql.Timestamp;
 
 import lombok.Data;
-
+ 
 @Data
 public class MemberDto {
 
