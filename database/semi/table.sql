@@ -6,6 +6,7 @@ DROP TABLE member;
 DROP TABLE company;
 DROP TABLE business_number;
 DROP TABLE review cascade constraint;
+DROP TABLE review_like;
 DROP TABLE COMPANY_IMAGE;
 DROP TABLE attachment;
 DROP TABLE reply cascade constraint;
