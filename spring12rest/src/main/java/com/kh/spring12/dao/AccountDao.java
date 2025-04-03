@@ -30,6 +30,9 @@ public class AccountDao {
 	public AccountDto selectOne(AccountDto accountDto) {
 		return sqlSession.selectOne("account.find", accountDto);
 	}
+	public AccountDto selectOneByAccountNickname(String accountNickname) {
+		return sqlSession.selectOne("account.findNickname", accountNickname);
+	}
 	public AccountDto login(AccountDto accountDto) {
 //		AccountDto findDto = sqlSession.selectOne("account.find", accountDto);
 		AccountDto findDto = selectOne(accountDto);
@@ -38,7 +41,5 @@ public class AccountDao {
 		return isValid ? findDto : null;
 	}
 	
-	public AccountDto selectOneByAccountNickname(AccountDto accountDto) {
-		return sqlSession.selectOne("account.findNickname", accountDto);
-	}
+	
 }

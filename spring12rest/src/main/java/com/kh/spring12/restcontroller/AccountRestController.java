@@ -3,6 +3,8 @@ package com.kh.spring12.restcontroller;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.spring12.dao.AccountDao;
 import com.kh.spring12.dto.AccountDto;
 import com.kh.spring12.error.TargetNotFoundException;
-import com.kh.spring12.vo.AccountFindNicknameVO;
-import com.kh.spring12.vo.AccountFindVO;
 import com.kh.spring12.vo.AccountInsertVO;
 import com.kh.spring12.vo.AccountSignInVO;
 
@@ -43,21 +43,15 @@ public class AccountRestController {
 		return findDto;
 	}
 	
-//	@PostMapping("/accountId/{accountId}")
-//	public AccountDto find(@RequestBody AccountFindVO vo) {
-//		ModelMapper mapper = new ModelMapper();
-//		AccountDto accountDto = mapper.map(vo, AccountDto.class);
-//		AccountDto findDto = accountDao.find(accountDto);
-//		if(findDto == null) throw new TargetNotFoundException("아이디 불일치");
-//		return findDto;
-//	}
-//	
-//	@PostMapping("/accountId/{accountId}/accountNickname/{accountNickname}")
-//	public AccountDto findNickname(@RequestBody AccountFindNicknameVO vo) {
-//		ModelMapper mapper = new ModelMapper();
-//		AccountDto accountDto = mapper.map(vo, AccountDto.class);
-//		AccountDto findDto = accountDao.findNickname(accountDto);
-//		if(findDto == null) throw new TargetNotFoundException("닉네임 불일치");
-//		return findDto;
-//	}
+	@GetMapping("/accountId/{accountId}")
+	public void findAccountId(@PathVariable String accountId) {
+		AccountDto accountDto = accountDao.selectOne(accountId);
+		if(accountDto == null) throw new TargetNotFoundException();
+	}
+	
+	@GetMapping("/accountNickname/{accountNickname}")
+	public void findNickname(@PathVariable String accountNickname) {
+		AccountDto accountDto = accountDao.selectOneByAccountNickname(accountNickname);
+		if(accountDto == null) throw new TargetNotFoundException();
+	}
 }

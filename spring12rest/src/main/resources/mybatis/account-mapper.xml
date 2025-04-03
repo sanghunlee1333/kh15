@@ -23,6 +23,8 @@
 	<select id="find" resultType="AccountDto">
 		select * from account where account_id = #{accountId}
 	</select>
+	
+	<!-- 닉네임 중복검사 -->
 	<select id="findNickname" resultType="AccountDto">
 		select * from account where account_nickname = #{accountNickname}
 	</select>
