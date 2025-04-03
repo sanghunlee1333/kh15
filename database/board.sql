@@ -36,6 +36,8 @@ alter table board add(
 	check(board_depth >= 0)
 );
 
+alter table board modify(board_content varchar2(4000));
+
 --더미 데이터 추가
 insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(1, '첫 번째 게시글', '.', 'testuser1', 1, null, 0);
 insert into board(board_no, board_title, board_content, board_writer, board_group, board_target, board_depth) values(2, '두 번째 게시글', '.', 'testuser1', 2, null, 0);
