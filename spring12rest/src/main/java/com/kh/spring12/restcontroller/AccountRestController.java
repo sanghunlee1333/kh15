@@ -14,6 +14,7 @@ import com.kh.spring12.dao.AccountDao;
 import com.kh.spring12.dto.AccountDto;
 import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.vo.AccountInsertVO;
+import com.kh.spring12.vo.AccountSignInResponseVO;
 import com.kh.spring12.vo.AccountSignInVO;
 
 @CrossOrigin
@@ -35,12 +36,20 @@ public class AccountRestController {
 	//로그인
 	//@GetMapping("/accountId/{accountId}/accountPw/{accountPw}")
 	@PostMapping("/login")
-	public AccountDto login(@RequestBody AccountSignInVO vo){
+	public AccountSignInResponseVO login(@RequestBody AccountSignInVO vo){
+		//사용자가 입력한 내용을 AccountDto로 변환(아이디/비밀번호)
 		ModelMapper mapper = new ModelMapper();
 		AccountDto accountDto = mapper.map(vo, AccountDto.class);
+		
+		//데이터 베이스 탐색(+비밀번호 비교)
 		AccountDto findDto = accountDao.login(accountDto);
 		if(findDto == null) throw new TargetNotFoundException("정보 불일치");
-		return findDto;
+		
+		//사용자가 받아야할 데이터를 생성하고 반환
+		return AccountSignInResponseVO.builder()
+					.userId(findDto.getAccountId())
+					.userLevel(findDto.getAccountLevel())
+				.build();
 	}
 	
 	@GetMapping("/accountId/{accountId}")
