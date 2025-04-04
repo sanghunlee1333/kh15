@@ -41,15 +41,15 @@ public class TokenService {
 	
 	public ClaimVO parse(String token) {
 		Claims claims = (Claims) Jwts.parser()
-				.verifyWith(tokenProperties.getKey())
-				.requireIssuer(tokenProperties.getIssuer())
-			.build()
-				.parse(token)
-				.getPayload();
+									.verifyWith(tokenProperties.getKey())
+									.requireIssuer(tokenProperties.getIssuer())
+								.build()
+									.parse(token)
+									.getPayload();
 		
 		return ClaimVO.builder()
-				.userId((String)claims.get("userId")) //다운캐스팅
-				.userLevel((String)claims.get("userLevel")) //다운캐스팅
-			.build();
+							.userId((String)claims.get("userId")) //다운캐스팅
+							.userLevel((String)claims.get("userLevel")) //다운캐스팅
+						.build();
 	}
 }
