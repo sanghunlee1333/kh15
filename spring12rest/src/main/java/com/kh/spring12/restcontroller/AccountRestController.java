@@ -72,7 +72,9 @@ public class AccountRestController {
 	//- 헤더에 Authorization 항목으로 여태까지 인증에 사용했으니
 	//- 갱신할 때도 Authorization 항목에 refreshToken을 담아서 보내라!
 	@PostMapping("/refresh")
-	public AccountSignInResponseVO refresh(@RequestHeader("Authorization") String refreshToken) {
+	public AccountSignInResponseVO refresh(
+			//@CookieValue("Authorization") String refreshToken
+			@RequestHeader("Authorization") String refreshToken) {
 		//[1] refreshToken이 없거나 Bearer 토큰이 아니면 차단
 		//[2] 토큰을 해석하여 ClaimVO를 추출
 		ClaimVO claimVO = tokenService.parseBearerToken(refreshToken);
