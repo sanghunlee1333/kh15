@@ -31,7 +31,7 @@ public class TokenService {
 		//시간계산
 		Calendar c = Calendar.getInstance();
 		Date now = c.getTime(); //현재시각
-		c.add(Calendar.MINUTE, tokenProperties.getExpireMinutes());
+		c.add(Calendar.MINUTE, tokenProperties.getAccessLimit());
 		Date limit = c.getTime(); //만료시각
 		
 		//토큰생성
@@ -49,7 +49,7 @@ public class TokenService {
 		//시간계산
 		Calendar c = Calendar.getInstance();
 		Date now = c.getTime(); //현재시각
-		c.add(Calendar.MINUTE, 2 * 7 * 24 * 60); //2주
+		c.add(Calendar.MINUTE, tokenProperties.getRefreshLimit()); //2주
 		Date limit = c.getTime(); //만료시각
 		
 		//토큰생성
@@ -129,6 +129,25 @@ public class TokenService {
 					.accountId(claimVO.getUserId())
 					.accountLevel(claimVO.getUserLevel())
 				.build());
+	}
+	
+	public long getRemainTime(String bearerToken) {
+		//Bearer 접두사 제거
+		String token = bearerToken.substring(7);
+		
+		//토큰 해석
+		Claims claims = (Claims) Jwts.parser()
+				.verifyWith(tokenProperties.getKey())
+				.requireIssuer(tokenProperties.getIssuer())
+			.build()
+				.parse(token)
+				.getPayload();
+		
+		//남은 시간 구하기
+		Date expire = claims.getExpiration(); //만료시간
+		Date now = new Date(); //현재시각
+		
+		return expire.getTime() - now.getTime(); //만료시간 - 현재시각
 	}
 	
 }

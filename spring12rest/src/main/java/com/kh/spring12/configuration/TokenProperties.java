@@ -16,7 +16,9 @@ import lombok.Data;
 public class TokenProperties {
 	private String issuer; //issuer
 	private String secretKey; //secret-key
-	private int expireMinutes; //expire-minutes
+	private int accessLimit; //access-limit
+	private int refreshLimit; //refresh-limit
+	private int renewalLimit; //renewal-limit
 	
 	//키 반환 메소드
 	public SecretKey getKey() {

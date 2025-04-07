@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.spring12.dao.AccountDao;
+import com.kh.spring12.dao.AccountTokenDao;
 import com.kh.spring12.dto.AccountDto;
 import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.service.TokenService;
@@ -31,6 +32,9 @@ public class AccountRestController {
 	@Autowired
 	private TokenService tokenService;
 	
+	@Autowired
+	private AccountTokenDao accountTokenDao;
+	
 	@PostMapping("/")
 	public void join(@RequestBody AccountInsertVO accountInsertVO) {
 		//vo -> dto 변경 (ModelMapper)
@@ -38,7 +42,6 @@ public class AccountRestController {
 		AccountDto accountDto = mapper.map(accountInsertVO, AccountDto.class);
 		accountDao.insert(accountDto);
 	}
-	
 	
 	//1. 화면이 로딩되면(새로고침/신규접속) sessionStorage를 조사하여 refreshToken이 존재하는지 확인 -> 없으면 더 이상 실행하지 않음
 	//2. refreshToken을 이용하여 로그인 처리를 수행 -> 성공하면 로그인 때와 동일한 결과를 반환
@@ -96,5 +99,12 @@ public class AccountRestController {
 	public void findNickname(@PathVariable String accountNickname) {
 		AccountDto accountDto = accountDao.selectOneByAccountNickname(accountNickname);
 		if(accountDto == null) throw new TargetNotFoundException();
+	}
+	
+	//로그아웃
+	@PostMapping("/logout")
+	public void logout(@RequestHeader("Authorization") String accessToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
+		accountTokenDao.clean(claimVO.getUserId());
 	}
 }
