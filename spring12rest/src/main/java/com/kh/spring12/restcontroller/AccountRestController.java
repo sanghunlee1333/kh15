@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -94,13 +95,14 @@ public class AccountRestController {
 	@GetMapping("/accountId/{accountId}")
 	public void findAccountId(@PathVariable String accountId) {
 		AccountDto accountDto = accountDao.selectOne(accountId);
-		if(accountDto == null) throw new TargetNotFoundException();
+		if(accountDto == null) 
+			throw new TargetNotFoundException();//404처리
 	}
-	
 	@GetMapping("/accountNickname/{accountNickname}")
-	public void findNickname(@PathVariable String accountNickname) {
+	public void findAccountNickname(@PathVariable String accountNickname) {
 		AccountDto accountDto = accountDao.selectOneByAccountNickname(accountNickname);
-		if(accountDto == null) throw new TargetNotFoundException();
+		if(accountDto == null)
+			throw new TargetNotFoundException();//404처리
 	}
 	
 	//로그아웃
@@ -108,5 +110,23 @@ public class AccountRestController {
 	public void logout(@RequestHeader("Authorization") String accessToken) {
 		ClaimVO claimVO = tokenService.parseBearerToken(accessToken);
 		accountTokenDao.clean(claimVO.getUserId());
+	}
+	
+	//회원탐색
+	@GetMapping("/{accountId}")
+	public AccountDto find(@PathVariable String accountId) {
+		AccountDto accountDto = accountDao.selectOne(accountId);
+		if(accountDto == null) 
+			throw new TargetNotFoundException("대상 없음");
+		accountDto.setAccountPw(null);//비밀번호 제거
+		return accountDto;
+	}
+	
+	//회원정보수정
+	@PatchMapping("/{accountId}")
+	public void edit(@PathVariable String accountId, 
+						@RequestBody AccountDto accountDto) {
+		accountDto.setAccountId(accountId);
+		accountDao.update(accountDto);
 	}
 }

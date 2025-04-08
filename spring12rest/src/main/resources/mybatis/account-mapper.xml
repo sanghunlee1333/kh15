@@ -29,5 +29,152 @@
 		select * from account where account_nickname = #{accountNickname}
 	</select>
 	
+	<!-- 회원정보수정 -->
+	<update id="editAll">
+		update account 
+		set
+			account_nickname = #{accountNickname},
+			account_birth = #{accountBirth},
+			account_contact = #{accountContact},
+			account_email = #{accountEmail},
+			account_post = #{accountPost},
+			account_address1 = #{accountAddress1},
+			account_address2 = #{accountAddress2},
+			account_change = systimestamp
+		where account_id = #{accountId}
+	</update>
+	<update id="editUnit">
+		update account 
+		<set>
+			<if test="accountNickname != null">
+				account_nickname = #{accountNickname},
+			</if>
+			<if test="accountBirth != null">
+				account_birth = #{accountBirth},
+			</if>
+			<if test="accountContact != null">
+				account_contact = #{accountContact},
+			</if>
+			<if test="accountEmail != null">
+				account_email = #{accountEmail},
+			</if>
+			<if test="accountPost != null">
+				account_post = #{accountPost},
+			</if>
+			<if test="accountAddress1 != null">
+				account_address1 = #{accountAddress1},
+			</if>
+			<if test="accountAddress2 != null">
+				account_address2 = #{accountAddress2},
+			</if>
+			account_change = systimestamp
+		</set>
+		where account_id = #{accountId}
+	</update>
+	
+	<!-- 
+		복합 검색(complex search)
+		- 테이블에 대한 다양한 컬럼을 조건으로 하는 검색
+		- 컬럼마다 존재하는 다양한 조건에 대한 처리
+		- 조건이 하나도 없다면 목록이 출력
+	 -->
+	<select id="complexSearch" resultType="AccountDto">
+		select * from account 
+			<!-- 
+				<where>를 통해 조건이 없으면 where 키워드가 생략되도록 처리
+				내부적으로 불필요한 and나 or을 제거해준다
+			 -->
+			<where> 
+				<if test="accountId != null">
+					and account_id = #{accountId}
+				</if>
+				
+				<if test="accountNickname != null">
+					and account_nickname = #{accountNickname}
+				</if>
+				
+				<!-- 연락처 시작검색 -->
+				<if test="accountContact != null">
+					and account_contact like #{accountContact} || '%'
+				</if>
+				
+				<!-- 
+					포인트
+					- 구간검사
+					- XML이기 때문에 금지 글자들이 발생
+					- 금지글자를 사용하려면 해석금지영역을 생성해야함(CDATA, Character Data Section)
+					- 형식 : <![CDATA[ ]]> 
+				-->
+				<choose>
+					<when test="minAccountPoint != null and maxAccountPoint != null">
+						and account_point between 
+							#{minAccountPoint} and #{maxAccountPoint}
+					</when>
+					<when test="minAccountPoint != null">
+						<![CDATA[
+						and account_point >= #{minAccountPoint}
+						]]>
+					</when>
+					<when test="maxAccountPoint != null">
+						<![CDATA[
+						and account_point <= #{maxAccountPoint}
+						]]>
+					</when>
+				</choose>
+				
+				<!-- 가입일 구간조회 -->
+				<choose>
+					<when test="beginAccountJoin != null and endAccountJoin != null">
+						and account_join between 
+							to_timestamp(#{beginAccountJoin} || '' || '00:00:00.000', 'YYYY-MM-DD HH24:MI:SS.FF3') 
+							and to_timestamp(#{endAccountJoin} || '' || '23:59:59.999', 'YYYY-MM-DD HH24:MI:SS.FF3')
+					</when>
+					<when test="beginAccountJoin != null">
+						<![CDATA[
+						and account_join >= to_timestamp(#{beginAccountJoin} || '' || '00:00:00.000', 'YYYY-MM-DD HH24:MI:SS.FF3') 
+						]]>
+					</when>
+					<when test="endAccountJoin != null">
+						<![CDATA[
+						and account_join <= to_timestamp(#{endAccountJoin} || '' || '23:59:59.999', 'YYYY-MM-DD HH24:MI:SS.FF3')
+						]]>
+					</when>
+				</choose>
+				
+				<!-- 
+					등급
+					- 일반회원/우수회원/관리자 체크박스 형태
+					- <foreach> 사용
+					- collection은 배열 또는 리스트 이름 지정
+					- item 추출한 데이터가 저장될 변수
+					- seperator는 반복 사이에 작성될 구분기호 
+				-->
+				<if test="accountLevels != null">
+					<foreach item="accountLevel" collection="accountLevels" 
+						separator="," open="and account_level in (" close=")">
+						#{accountLevel}
+					</foreach>
+				</if>
+				
+				<!-- 주소 -->
+				<if test="accountAddress != null">
+					<!-- and instr(account_post || account_address1 || account_address2, #{accountAddress}) > 0 -->
+					and (
+					 	instr(account_post, #{accountAddress}) > 0
+					 	or
+					 	instr(account_address1, #{accountAddress}) > 0
+					 	or
+					 	instr(account_address2, #{accountAddress}) > 0
+				 	)
+				</if> 
+				
+			</where>
+			
+			<!-- 정렬 -->
+			order by account_id asc
+			
+			<!-- top n query -->
+			
+	</select>
 	
 </mapper>
