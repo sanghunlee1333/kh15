@@ -83,8 +83,45 @@
 		<!-- 모듈화된 top n query 헤더를 불러오도록 설정 -->
 		<include refid="top-n-header"></include>
 	
-		select * from account 
-			<!-- 
+		select
+			account_id, account_nickname, account_email,
+			account_birth, account_contact, account_point,
+			account_level, account_post, account_address1, account_address2,
+			account_join, account_login, account_change 
+		from account 
+			
+			<include refid="complex-condition"></include>
+			
+			<!-- 정렬 -->
+			order by account_id asc
+			
+			<!-- 모듈화된 top n query 푸터를 불러오도록 설정 -->
+			<include refid="top-n-footer"></include>
+						
+	</select>
+	
+	<select id="complexSearchCount" resultType="long">
+		select count(*) from account
+		<include refid="complex-condition"></include>
+	</select>
+	
+	<!-- 반복적으로 사용하는 구문을 모듈화 -->
+	<sql id="top-n-header">
+		<!-- top n query -->
+		<if test="beginRow != null and endRow != null">
+			select * from (
+				select rownum rn, TMP.* from (
+		</if>
+	</sql>
+	<sql id="top-n-footer">
+		<if test="beginRow != null and endRow != null">			
+				)TMP
+			)
+			where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
+	<sql id="complex-condition">
+		<!-- 
 				<where>를 통해 조건이 없으면 where 키워드가 생략되도록 처리
 				내부적으로 불필요한 and나 or을 제거해준다
 			 -->
@@ -173,29 +210,6 @@
 				</if> 
 				
 			</where>
-			
-			<!-- 정렬 -->
-			order by account_id asc
-			
-			<!-- 모듈화된 top n query 푸터를 불러오도록 설정 -->
-			<include refid="top-n-footer"></include>
-						
-	</select>
-	
-	<!-- 반복적으로 사용하는 구문을 모듈화 -->
-	<sql id="top-n-header">
-		<!-- top n query -->
-		<if test="beginRow != null and endRow != null">
-			select * from (
-				select rownum rn, TMP.* from (
-		</if>
-	</sql>
-	<sql id="top-n-footer">
-		<if test="beginRow != null and endRow != null">			
-				)TMP
-			)
-			where rn between #{beginRow} and #{endRow}
-		</if>
 	</sql>
 	
 </mapper>

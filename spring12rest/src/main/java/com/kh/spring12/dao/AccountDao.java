@@ -1,11 +1,14 @@
 package com.kh.spring12.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.kh.spring12.dto.AccountDto;
+import com.kh.spring12.vo.AccountSearchVO;
 
 @Repository
 public class AccountDao {
@@ -39,5 +42,13 @@ public class AccountDao {
 	}
 	public boolean update(AccountDto accountDto) {
 		return sqlSession.update("account.editUnit", accountDto) > 0;
+	}
+
+	public List<AccountDto> selectList(AccountSearchVO accountSearchVO) {
+		return sqlSession.selectList("account.complexSearch", accountSearchVO);
+	}
+	
+	public long count(AccountSearchVO accountSearchVO) {
+		return sqlSession.selectOne("account.complexSearchCount", accountSearchVO);
 	}
 }
