@@ -79,6 +79,10 @@
 		- 조건이 하나도 없다면 목록이 출력
 	 -->
 	<select id="complexSearch" resultType="AccountDto">
+	
+		<!-- 모듈화된 top n query 헤더를 불러오도록 설정 -->
+		<include refid="top-n-header"></include>
+	
 		select * from account 
 			<!-- 
 				<where>를 통해 조건이 없으면 where 키워드가 생략되도록 처리
@@ -173,8 +177,25 @@
 			<!-- 정렬 -->
 			order by account_id asc
 			
-			<!-- top n query -->
-			
+			<!-- 모듈화된 top n query 푸터를 불러오도록 설정 -->
+			<include refid="top-n-footer"></include>
+						
 	</select>
+	
+	<!-- 반복적으로 사용하는 구문을 모듈화 -->
+	<sql id="top-n-header">
+		<!-- top n query -->
+		<if test="beginRow != null and endRow != null">
+			select * from (
+				select rownum rn, TMP.* from (
+		</if>
+	</sql>
+	<sql id="top-n-footer">
+		<if test="beginRow != null and endRow != null">			
+				)TMP
+			)
+			where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
 	
 </mapper>

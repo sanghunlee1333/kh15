@@ -36,7 +36,10 @@ public class Test01복합검색 {
 //		params.put("accountLevels", List.of("일반회원", "우수회원")); 
 //		params.put("accountLevels", List.of("일반회원", "우수회원", "관리자")); 
 //		params.put("accountLevels", new String[]{"일반회원", "우수회원", "관리자"});
-		params.put("accountAddress", "서울");
+//		params.put("accountAddress", "서울");
+		
+//		params.put("beginRow", 1); //조회 시작행(페이징)
+//		params.put("endRow", 10); //조회 종료행(페이징)
 		
 		List<AccountDto> list = sqlSession.selectList("account.complexSearch", params);
 		log.debug("검색 결과 : {}개", list.size());
