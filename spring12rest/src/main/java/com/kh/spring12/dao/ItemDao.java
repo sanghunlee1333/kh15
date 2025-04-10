@@ -22,4 +22,10 @@ public class ItemDao {
 	public ItemDto selectOne(ItemDto itemDto) {
 		return sqlSession.selectOne("item.find", itemDto);
 	}
+	public ItemDto insert(ItemDto itemDto) {
+		long sequence = sqlSession.selectOne("item.sequence");
+		itemDto.setItemNo(sequence);
+		sqlSession.insert("item.insert", itemDto);
+		return sqlSession.selectOne("item.find", sequence);
+	}
 }

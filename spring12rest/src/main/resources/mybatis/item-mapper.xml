@@ -14,4 +14,17 @@
 		where item_no = #{itemNo}
 	</select>
 	
+	<select id="sequence" resultType="long">
+		select item_seq.nextval from dual
+	</select>
+	<insert id="insert">
+		insert into item(
+			item_no, item_name, item_type, item_price,
+			item_discount_rate, item_qty, item_early
+		) values(
+			#{itemNo}, #{itemName}, #{itemType}, #{itemPrice},
+			#{itemDiscountRate}, #{itemQty}, #{itemEarly}
+		)
+	</insert>
+	
 </mapper>
