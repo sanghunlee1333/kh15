@@ -21,4 +21,6 @@ public class AccountSearchVO {
 	private String accountAddress;
 	private Integer beginRow;
 	private Integer endRow;
+	private String order;
+	//private List<String> orders; //mapper에 foreach 필요
 }
