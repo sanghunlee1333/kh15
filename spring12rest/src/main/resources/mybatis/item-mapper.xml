@@ -27,4 +27,15 @@
 		)
 	</insert>
 	
+	<!-- 이미지 연결 -->
+	<insert id="connect">
+		insert into item_image(item_no, attachment_no)
+		values(#{itemNo}, #{attachmentNo})
+	</insert>
+	
+	<!-- 이미지 찾기 -->
+	<select id="findImage" resultType="int">
+		select attachment_no from item_image where item_no = #{itemNo}
+	</select>
+	
 </mapper>

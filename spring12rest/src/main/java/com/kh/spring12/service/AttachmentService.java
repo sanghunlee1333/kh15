@@ -23,10 +23,10 @@ public class AttachmentService {
 	private FileuploadProperties fileuploadProperties;
 	
 	// 파일 저장
-	public int save(MultipartFile attach) throws IllegalStateException, IOException {
+	public AttachmentDto save(MultipartFile attach) throws IllegalStateException, IOException {
 
 		if (attach.isEmpty())
-			return -1;
+			return null;
 
 		// 저장위치 생성
 //		File dir = new File("D:/upload");
@@ -47,7 +47,7 @@ public class AttachmentService {
 		attach.transferTo(target); // 저장
 
 		// 파일 번호 반환
-		return resultDto.getAttachmentNo();
+		return resultDto;
 
 	}
 
@@ -67,26 +67,26 @@ public class AttachmentService {
 //	}
 
 	// 파일 불러오기 (+유효성 검사)
-//	public byte[] load(int attachmentNo) throws IOException {
-//		// [1] 유요한 파일 번호인지 확인
-//		AttachmentDto attachmentDto = attachmentDao.selectOne(attachmentNo);
-//		// if(attachmentDto == null) return;
-//		if (attachmentDto == null) {
-//			throw new TargetNotFoundException("존재하지 않는 파일번호");
-//		}
-//
-//		// [2] 실제 파일이 존재하는지 확인
-////		File dir = new File("D:/upload");
-//		File dir = fileuploadProperties.getRootDir();
-//		File target = new File(dir, String.valueOf(attachmentNo));
-//		if (target.isFile() == false) {
-//			throw new TargetNotFoundException("파일이 존재하지 않습니다");
-//		}
-//
-//		// [3] 실제 파일을 불러온다 -> 라이브러리 사용(Apache commons IO)
-//		byte[] data = FileUtils.readFileToByteArray(target);
-//
-//		return data;
-//	}
+	public byte[] load(int attachmentNo) throws IOException {
+		// [1] 유요한 파일 번호인지 확인
+		AttachmentDto attachmentDto = attachmentDao.selectOne(attachmentNo);
+		// if(attachmentDto == null) return;
+		if (attachmentDto == null) {
+			throw new TargetNotFoundException("존재하지 않는 파일번호");
+		}
+
+		// [2] 실제 파일이 존재하는지 확인
+//		File dir = new File("D:/upload");
+		File dir = fileuploadProperties.getRootDir();
+		File target = new File(dir, String.valueOf(attachmentNo));
+		if (target.isFile() == false) {
+			throw new TargetNotFoundException("파일이 존재하지 않습니다");
+		}
+
+		// [3] 실제 파일을 불러온다 -> 라이브러리 사용(Apache commons IO)
+		byte[] data = FileUtils.readFileToByteArray(target);
+
+		return data;
+	}
 
 }

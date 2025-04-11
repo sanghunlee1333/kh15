@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.spring12.dao.ItemDao;
+import com.kh.spring12.dto.AttachmentDto;
 import com.kh.spring12.dto.ItemDto;
 import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.service.AttachmentService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @CrossOrigin
 @RestController
@@ -48,6 +52,7 @@ public class ItemRestController {
 //	public void add(@RequestBody ItemDto itemDto)
 	
 	//파일이 있으면 (multipart/form-data 형태 수신)
+	//SpringDoc에서 정상적으로 이용하려면 추가 클래스 생성이 필요
 	@PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void add(@ModelAttribute ItemDto itemDto, 
 					@RequestParam MultipartFile attach) throws IllegalStateException, IOException { //@RequestParam(value="attach") List<MultipartFile> attachList -> 파일 여러 개 받을 때
@@ -55,7 +60,23 @@ public class ItemRestController {
 		
 		//파일 유무에 따라 추가 처리
 		if(attach.isEmpty() == false) {
-			int attachmentNo = attachmentService.save(attach);
+			AttachmentDto attachmentDto = attachmentService.save(attach);
+			
+			itemDao.connect(resultDto, attachmentDto);
 		}
 	}
+	
+	//이미지를 찾아서 반환하는 매핑
+	@GetMapping("/image/{itemNo}")
+	public void image(@PathVariable long itemNo, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String contextPath = request.getContextPath();
+		try {
+			int attachmentNo = itemDao.findImage(itemNo);
+			response.sendRedirect(contextPath + "/api/attachment/" + attachmentNo);
+		}
+		catch(Exception e) {
+			response.sendRedirect("https://www.placehold.co/400x400");
+		}
+	}
+	
 }
