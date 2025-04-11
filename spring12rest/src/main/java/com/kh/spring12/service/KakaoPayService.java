@@ -44,9 +44,9 @@ public class KakaoPayService {
 		body.put("quantity", "1");
 		body.put("total_amount", String.valueOf(vo.getTotalAmount()));
 		body.put("tax_free_amount", "0");
-		body.put("approval_url", "http://localhost:8080/success");
-		body.put("cancel_url", "http://localhost:8080/cancel");
-		body.put("fail_url", "http://localhost:8080/fail");
+		body.put("approval_url", "http://localhost:8080/api/kakaopay/v1/approve");
+		body.put("cancel_url", "http://localhost:8080/api/kakaopay/v1/cancel");
+		body.put("fail_url", "http://localhost:8080/api/kakaopay/v1/fail");
 		
 		//(4 + 3)
 		//HttpEntity<Map<String, String>> entity = new HttpEntity<>(body, headers);
@@ -57,4 +57,9 @@ public class KakaoPayService {
 		
 		return response;
 	}
+	
+	//결제 승인(approve)
+//	public KakaoPayApproveResponseVO approve(KakaoPayApproveVo vo) {
+//		
+//	}
 }
