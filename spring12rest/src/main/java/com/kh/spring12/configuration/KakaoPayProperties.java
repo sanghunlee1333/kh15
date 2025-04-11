@@ -10,4 +10,5 @@ import lombok.Data;
 @ConfigurationProperties(prefix="custom.kakao")
 public class KakaoPayProperties {
 	private String secretKey; //custom.kakao.secret-key
+	private String cid; //custom.kakao.cid
 }
