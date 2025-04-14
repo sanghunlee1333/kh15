@@ -14,4 +14,10 @@ public class ItemDto {
 	private Float itemDiscountRate;
 	private Integer itemQty;
 	private String itemEarly;
+	
+	public int getRealPrice() {
+		if(itemPrice == null) return 0;
+		if(itemDiscountRate == null) return itemPrice;
+		return (int)(itemPrice * (1 - itemDiscountRate));
+	}
 }
