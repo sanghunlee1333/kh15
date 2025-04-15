@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="buy">
+
+	<!-- 등록 -->
+	<select id="buySequence" resultType="long">
+		select buy_seq.nextval from dual
+	</select>
+	<insert id="addBuy">
+		insert into buy(
+			buy_no, buy_owner, buy_tid, 
+			buy_name, buy_total, buy_remain
+		)
+		values (
+			#{buyNo}, #{buyOwner}, #{buyTid}, 
+			#{buyName}, #{buyTotal}, #{buyTotal}
+		)
+	</insert>
+	
+	<select id="buyDetailSequence" resultType="long">
+		select buy_detail_seq.nextval from dual
+	</select>
+	<insert id="addBuyDetail">
+		insert into buy_detail(
+			buy_detail_no, buy_detail_origin, buy_detail_item,
+			buy_detail_name, buy_detail_price, buy_detail_qty,
+			buy_detail_status
+		)
+		values (
+			#{buyDetailNo}, #{buyDetailOrigin}, #{buyDetailItem},
+			#{buyDetailName}, #{buyDetailPrice}, #{buyDetailQty},
+			'Y'
+		)
+	</insert>
+	
+	<!-- 조회 -->
+	<select id="listBuy" resultType="BuyDto">
+		select * from buy order by buy_no desc
+	</select>
+	<select id="listBuyDetail" resultType="BuyDetailDto">
+		select * from buy_detail
+		where buy_detail_origin = #{buyDetailOrigin}
+		order by buy_detail_no asc
+	</select>
+	
+	<!-- 
+		mybatis에서 계층형 조회를 처리할 수 있도록 구현
+		- mybatis에서 자동으로 처리해주는건 1 depth 까지이다
+		- 그보다 복잡하거나 구조를 변경하여 조회할 경우는 수동으로 조회
+		- 수동으로 조회하기 위해서는 조회할 구조를 <resultMap>으로 생성
+		
+		- type = 실제 자료형
+		- id = 매퍼에서 부르기 위한 별칭
+		- association은 인스턴스를 의미
+		- collection은 컬렉션(리스트, 맵, 세트 등)을 의미
+		- property = 필드명
+		- <result>를 이용하여 DB컬럼과 필드를 연결
+		- column = DB컬럼명
+		- property = 클래스 필드명
+		- select = 데이터를 채우기 위해서 필요한 구문
+	-->
+	<resultMap type="BuyTotalVO" id="buyTotalVO">
+		<association property="buyDto" javaType="BuyDto">
+			<result column="buy_no" property="buyNo"/>
+			<result column="buy_owner" property="buyOwner"/>
+			<result column="buy_tid" property="buyTid"/>
+			<result column="buy_name" property="buyName"/>
+			<result column="buy_total" property="buyTotal"/>
+			<result column="buy_remain" property="buyRemain"/>
+			<result column="buy_time" property="buyTime"/>
+		</association>
+		<collection property="buyList" javaType="List" ofType="BuyDetailDto"
+				select="listBuyDetail" column="buy_no">
+			<result column="buy_detail_no" property="buyDetailNo"/>
+			<result column="buy_detail_origin" property="buyDetailOrigin"/>
+			<result column="buy_detail_item" property="buyDetailItem"/>
+			<result column="buy_detail_name" property="buyDetailName"/>
+			<result column="buy_detail_price" property="buyDetailPrice"/>
+			<result column="buy_detail_qty" property="buyDetailQty"/>
+			<result column="buy_detail_status" property="buyDetailStatus"/>
+		</collection>
+	</resultMap>
+	
+	<!-- resultMap을 이용한 조회 -->
+	<select id="listBuyAuto" resultMap="buyTotalVO">
+		select * from buy 
+		<if test="buyOwner != null">
+		where buy_owner = #{buyOwner}
+		</if>
+		order by buy_no desc
+	</select>
+	
+</mapper>

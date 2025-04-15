@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.spring12.dao.BuyDao;
 import com.kh.spring12.dao.ItemDao;
 import com.kh.spring12.dto.ItemDto;
 import com.kh.spring12.error.TargetNotFoundException;
@@ -32,11 +33,27 @@ import com.kh.spring12.vo.kakaopay.KakaoPayReadyResponseVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayReadyVO;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/api/kakaopay/v2")
 public class KakaoPayRestControllerV2 {
+	
+	/*
+		FE
+		[/pay/v2]
+		[/pay/v2]/success
+		[/pay/v2]/cancel
+		[/pay/v2]/fail
+	
+		BE 	KakaoPayRestControllerV2
+		[/api/kakaopay/v2/buy]
+		[/api/kakaopay/v2/buy]/success
+		[/api/kakaopay/v2/buy]/cancel
+		[/api/kakaopay/v2/buy]/fail
+	*/
 
 	@Autowired
 	private ItemDao itemDao;
@@ -47,11 +64,20 @@ public class KakaoPayRestControllerV2 {
 	@Autowired
 	private TokenService tokenService;
 	
+	@Autowired
+	private BuyDao buyDao;
+	
 	//Flash value를 저장하기 위한 저장소
 	private Map<String, KakaoPayApproveVO> flashMap = Collections.synchronizedMap(new HashMap<>()); //thread-safe
 		
 	//현재 거래번호가 완료되면 돌아갈 페이지 주소를 저장
 	private Map<String, String> returnUrlMap = Collections.synchronizedMap(new HashMap<>()); //<주문번호, 돌아갈 주소> //thread-safe
+	
+	//상품번호 + 수량 목록을 저장
+	private Map<String, List<KakaoPayBuyVO>> buyListMap = Collections.synchronizedMap(new HashMap<>()); //thread-safe
+	
+	//결제준비 요청정보를 저장
+	private Map<String, KakaoPayReadyVO> readyMap = Collections.synchronizedMap(new HashMap<>()); //thread-safe
 	
 	//구매 요청 시 클라이언트가 {상품번호, 수량}을 배열 형태로 전송
 	//- 클래스를 만들어서 받을 수 있돋록 준비해야한다
@@ -93,6 +119,8 @@ public class KakaoPayRestControllerV2 {
 					.tid(response.getTid())
 				.build());
 		returnUrlMap.put(vo.getPartnerOrderId(), frontendUrl);
+		buyListMap.put(vo.getPartnerOrderId(), buyList);
+		readyMap.put(vo.getPartnerOrderId(), vo);
 		
 		return response;
 	}
@@ -105,16 +133,40 @@ public class KakaoPayRestControllerV2 {
 		flashMap.remove(partnerOrderId);
 		vo.setPgToken(pgToken);
 		KakaoPayApproveResponseVO approveResponse = kakaoPayService.approve(vo);
+		
+		log.debug("approve = {}", approveResponse);
 	
 		//DB에 결제완료된 정보를 저장하는 처리를 추가
+		//- 저장하기 위해서는 상품번호와 상품수량이 담긴 목록이 필요
+		//- ready 시점에서 존재하는 데이터이므로 flash data로 저장해서 이동
+		List<KakaoPayBuyVO> buyList = buyListMap.get(partnerOrderId);
+		KakaoPayReadyVO readyVO = readyMap.remove(partnerOrderId);
+		
+		//DB등록
+		kakaoPayService.insertDB(vo, readyVO, buyList);
 		
 		String returnUrl = returnUrlMap.remove(partnerOrderId);
 		response.sendRedirect(returnUrl + "/success");
 	}
 	
-//	@GetMapping("/buy/cancel/{partnerOrderId}")
-//	@GetMapping("/buy/fail/{partnerOrderId}")
+	@GetMapping("/buy/cancel/{partnerOrderId}")
+	public void cancel (@PathVariable String partnerOrderId, HttpServletResponse response) throws IOException {
+		flashMap.remove(partnerOrderId);
+		buyListMap.remove(partnerOrderId); //추가
+		readyMap.remove(partnerOrderId); //추가
+		
+		String url = returnUrlMap.remove(partnerOrderId);
+		response.sendRedirect(url + "/cancel");
+	}
 	
-	
+	@GetMapping("/buy/fail/{partnerOrderId}")
+	public void fail (@PathVariable String partnerOrderId, HttpServletResponse response) throws IOException {
+		flashMap.remove(partnerOrderId);
+		buyListMap.remove(partnerOrderId); //추가
+		readyMap.remove(partnerOrderId); //추가
+		
+		String url = returnUrlMap.remove(partnerOrderId);
+		response.sendRedirect(url + "/fail");
+	}
 	
 }
