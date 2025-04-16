@@ -14,4 +14,8 @@ public class BuyDetailDto {
 	private int buyDetailPrice;
 	private int buyDetailQty;
 	private String buyDetailStatus;
+	
+	public int getTotalPrice() {
+		return buyDetailPrice * buyDetailQty;
+	}
 }

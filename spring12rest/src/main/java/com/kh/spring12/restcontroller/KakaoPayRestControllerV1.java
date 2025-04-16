@@ -22,12 +22,11 @@ import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.service.KakaoPayService;
 import com.kh.spring12.service.TokenService;
 import com.kh.spring12.vo.ClaimVO;
-import com.kh.spring12.vo.KakaoPayApproveResponseVO;
-import com.kh.spring12.vo.KakaoPayApproveVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayApproveResponseVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayApproveVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayReadyResponseVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayReadyVO;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @CrossOrigin

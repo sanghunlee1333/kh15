@@ -1,4 +1,4 @@
-package com.kh.spring12.vo;
+package com.kh.spring12.vo.kakaopay;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

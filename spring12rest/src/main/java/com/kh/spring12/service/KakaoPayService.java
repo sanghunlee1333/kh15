@@ -19,9 +19,13 @@ import com.kh.spring12.dao.ItemDao;
 import com.kh.spring12.dto.BuyDetailDto;
 import com.kh.spring12.dto.BuyDto;
 import com.kh.spring12.dto.ItemDto;
-import com.kh.spring12.vo.KakaoPayApproveResponseVO;
-import com.kh.spring12.vo.KakaoPayApproveVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayApproveResponseVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayApproveVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayBuyVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayCancelResponseVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayCancelVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayOrderResponseVO;
+import com.kh.spring12.vo.kakaopay.KakaoPayOrderVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayReadyResponseVO;
 import com.kh.spring12.vo.kakaopay.KakaoPayReadyVO;
 
@@ -30,26 +34,30 @@ public class KakaoPayService {
 	
 	@Autowired
 	private KakaoPayProperties kakaoPayProperties;
-	
 	@Autowired
 	private BuyDao buyDao;
-	
 	@Autowired
 	private ItemDao itemDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	@Autowired
+	private HttpHeaders headers;
+	
 	
 	//결제 준비(ready)
 	public KakaoPayReadyResponseVO ready(KakaoPayReadyVO vo) throws URISyntaxException {
 		
 		//(1)전송 도구 생성
-		RestTemplate restTemplate = new RestTemplate();  
+//		RestTemplate restTemplate = new RestTemplate();  
 		
 		//(2)전송 주소 확인
 		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/ready");
 		
 		//(3)헤더 설정
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "SECRET_KEY " + kakaoPayProperties.getSecretKey());
-		headers.add("Content-Type", "application/json");
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Authorization", "SECRET_KEY " + kakaoPayProperties.getSecretKey());
+//		headers.add("Content-Type", "application/json");
 		
 		//(4)바디 설정
 		Map<String, String> body = new HashMap<>();
@@ -86,15 +94,15 @@ public class KakaoPayService {
 	//결제 승인(approve)
 	public KakaoPayApproveResponseVO approve(KakaoPayApproveVO vo) throws URISyntaxException {
 		// (1)전송 도구 생성
-		RestTemplate restTemplate = new RestTemplate();
+//		RestTemplate restTemplate = new RestTemplate();
 
 		// (2)전송 주소 확인
 		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/approve");
 
 		// (3)헤더 설정
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "SECRET_KEY " + kakaoPayProperties.getSecretKey());
-		headers.add("Content-Type", "application/json");
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Authorization", "SECRET_KEY " + kakaoPayProperties.getSecretKey());
+//		headers.add("Content-Type", "application/json");
 
 		// (4)바디 설정
 		Map<String, String> body = new HashMap<>();
@@ -112,6 +120,34 @@ public class KakaoPayService {
 		KakaoPayApproveResponseVO response = restTemplate.postForObject(uri, entity, KakaoPayApproveResponseVO.class);
 		
 		return response;
+	}
+	
+	//결제 조회(order)
+	public KakaoPayOrderResponseVO order(KakaoPayOrderVO vo) throws URISyntaxException {
+		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/order");
+		
+		Map<String, String> body = new HashMap<>();
+		body.put("cid", kakaoPayProperties.getCid());
+		body.put("tid", vo.getTid());
+		
+		HttpEntity entity = new HttpEntity(body, headers);
+		
+		return restTemplate.postForObject(uri, entity, KakaoPayOrderResponseVO.class);
+	}
+	
+	//결제 취소(cancel)
+	public KakaoPayCancelResponseVO cancel(KakaoPayCancelVO vo) throws URISyntaxException {
+		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/cancel");
+		
+		Map<String, String> body = new HashMap<>();
+		body.put("cid", kakaoPayProperties.getCid());
+		body.put("tid", vo.getTid());
+		body.put("cancel_amount", String.valueOf(vo.getCancelAmount()));
+		body.put("cancel_tax_free_amount", "0");
+		
+		HttpEntity entity = new HttpEntity(body, headers);
+		
+		return restTemplate.postForObject(uri, entity, KakaoPayCancelResponseVO.class);
 	}
 	
 	//결제DB에 등록

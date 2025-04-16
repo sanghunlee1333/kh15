@@ -1,4 +1,4 @@
-package com.kh.spring12.vo;
+package com.kh.spring12.vo.kakaopay;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

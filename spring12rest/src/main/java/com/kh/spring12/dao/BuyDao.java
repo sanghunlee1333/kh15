@@ -1,7 +1,9 @@
 package com.kh.spring12.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +64,24 @@ public class BuyDao {
 		return sqlSession.selectList("buy.listBuyAuto", userId);
 	}
 	
+	public BuyDto selectOne(long buyNo) {
+		return sqlSession.selectOne("buy.findBuy", buyNo);
+	}
+	
+	public BuyDetailDto selectDetailOne(long buyDetailNo) {
+		return sqlSession.selectOne("buy.findDetail", buyDetailNo);
+	}
+//	public boolean cancelAll(long buyNo) {
+	public boolean cancelAll(long buyDetailOrigin) {
+		return sqlSession.update("buy.cancelAll", buyDetailOrigin) > 0;
+	}
+	public boolean cancelDetail(long buyDetailNo) {
+		return sqlSession.update("buy.cancelPart", buyDetailNo) > 0;
+	}
+	public boolean updateBuy(long buyNo, long buyRemain) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("buyNo", buyNo);
+		params.put("buyRemain", buyRemain);
+		return sqlSession.update("buy.updateBuy", params) > 0;
+	}
 }
