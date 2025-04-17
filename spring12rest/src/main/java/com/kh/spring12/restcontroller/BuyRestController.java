@@ -66,12 +66,19 @@ public class BuyRestController {
 
 //	DeleteMapping을 결제취소로 활용
 	@DeleteMapping("/{buyNo}") // 전체취소
-	public void cancelAll(@PathVariable long buyNo) throws URISyntaxException {
+	public void cancelAll(@PathVariable long buyNo, @RequestHeader("Authorization") String bearerToken) throws URISyntaxException {
+		// 토큰해석
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		
 		// 상세조회
 		BuyDto buyDto = buyDao.selectOne(buyNo);
 		if (buyDto == null) // 결제내역이 없다면
 			throw new TargetNotFoundException();
 		if (buyDto.getBuyRemain() == 0) // 이미 다 취소되었다면
+			throw new TargetNotFoundException();
+		
+		// 본인확인
+		if(buyDto.getBuyOwner().equals(claimVO.getUserId()) == false)
 			throw new TargetNotFoundException();
 
 		// 카카오페이 취소요청
@@ -84,7 +91,10 @@ public class BuyRestController {
 	}
 
 	@DeleteMapping("/buyDetail/{buyDetailNo}") // 부분취소
-	public void cancelPart(@PathVariable long buyDetailNo) throws URISyntaxException {
+	public void cancelPart(@PathVariable long buyDetailNo, @RequestHeader("Authorization") String bearerToken) throws URISyntaxException {
+		// 토큰해석
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		
 		// 상세내역 조회
 		BuyDetailDto buyDetailDto = buyDao.selectDetailOne(buyDetailNo);
 		if (buyDetailDto == null)
@@ -92,6 +102,10 @@ public class BuyRestController {
 
 		// TID를 알아내기 위해 BuyDao를 구할 것
 		BuyDto buyDto = buyDao.selectOne(buyDetailDto.getBuyDetailOrigin());
+		
+		// 구매자확인
+		if(buyDto.getBuyOwner().equals(claimVO.getUserId()) == false)
+			throw new TargetNotFoundException();
 
 		// 카카오페이 취소 처리
 		KakaoPayCancelResponseVO response = kakaoPayService.cancel(KakaoPayCancelVO.builder().tid(buyDto.getBuyTid())
