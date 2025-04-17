@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 //@RequestMapping("/app") -> 필요없음
-public class WebSocketController {
+public class PublicChatController {
 
 	//원래대로라면...
 	//@RequestMapping("/chat") 처럼 작성해야 하지만 웹소켓은 다르다
