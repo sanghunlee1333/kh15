@@ -70,9 +70,18 @@ public class MemberChatController {
 						.time(LocalDateTime.now())
 					.build();
 			//DM채널에 메세지 전송
-			messagingTemplate.convertAndSend("/private/member/dm/" + targetId, response);
+			messagingTemplate.convertAndSend("/private/member/dm/receive" + targetId, response);
 			//발신자에게도 메세지 전송
-			//messaging.convertAndSend("/private/member/???", ???);
+			messagingTemplate.convertAndSend("/private/member/dm/send/" + accountDto.getAccountId(), 
+						MemberChatResponseVO.builder()
+								.accountId(targetDto.getAccountId()) //받는 사람의 ID
+								.accountNickname(targetDto.getAccountNickname()) //받는 사람의 닉네임
+								.accountLevel(targetDto.getAccountLevel()) //받는 사람의 등급
+								.content(content)
+								.time(LocalDateTime.now())
+							.build()
+						
+					);
 			return; //더 이상 실행 중지
 		}
 		
