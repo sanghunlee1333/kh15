@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.spring12.dto.AccountDto;
 import com.kh.spring12.vo.AccountSearchVO;
+import com.kh.spring12.vo.websocket.UserVO;
 
 @Repository
 public class AccountDao {
@@ -50,5 +51,9 @@ public class AccountDao {
 	
 	public long count(AccountSearchVO accountSearchVO) {
 		return sqlSession.selectOne("account.complexSearchCount", accountSearchVO);
+	}
+
+	public UserVO selectOnePublicInfo(String accountId) {
+		return sqlSession.selectOne("account.findPublicInfo", accountId);
 	}
 }

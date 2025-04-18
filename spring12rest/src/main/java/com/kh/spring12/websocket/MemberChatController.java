@@ -1,5 +1,6 @@
 package com.kh.spring12.websocket;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import com.kh.spring12.dao.AccountDao;
+import com.kh.spring12.dao.websocket.MemberMessageDao;
 import com.kh.spring12.dto.AccountDto;
+import com.kh.spring12.dto.websocket.MemberMessageDto;
 import com.kh.spring12.service.TokenService;
 import com.kh.spring12.vo.ClaimVO;
 import com.kh.spring12.vo.websocket.MemberChatResponseVO;
@@ -28,6 +31,8 @@ public class MemberChatController {
 	private TokenService tokenService;
 	@Autowired
 	private AccountDao accountDao;
+	@Autowired
+	private MemberMessageDao memberMessageDao;
 	
 	@MessageMapping("/member/chat")//앞에 /app이 있다고 생각해야함
 	public void memberChat(Message<MemberChatVO> message) {
@@ -70,7 +75,7 @@ public class MemberChatController {
 						.time(LocalDateTime.now())
 					.build();
 			//DM채널에 메세지 전송
-			messagingTemplate.convertAndSend("/private/member/dm/receive" + targetId, response);
+			messagingTemplate.convertAndSend("/private/member/dm/receive/" + targetId, response);
 			//발신자에게도 메세지 전송
 			messagingTemplate.convertAndSend("/private/member/dm/send/" + accountDto.getAccountId(), 
 						MemberChatResponseVO.builder()
@@ -80,8 +85,17 @@ public class MemberChatController {
 								.content(content)
 								.time(LocalDateTime.now())
 							.build()
-						
 					);
+			
+			//DM을 DB에 등록(모든 항목이 다 존재)
+			memberMessageDao.add(MemberMessageDto.builder()
+						.memberMessageType("DM")
+						.memberMessageSender(accountDto.getAccountId())
+						.memberMessageReceiver(targetDto.getAccountId())
+						.memberMessageContent(content)
+						.memberMessageTime(Timestamp.valueOf(response.getTime()))
+					.build());
+			
 			return; //더 이상 실행 중지
 		}
 		
@@ -96,6 +110,14 @@ public class MemberChatController {
 		
 		//전송
 		messagingTemplate.convertAndSend("/public/member/chat", response);
+		
+		//일반메세지 DB등록 (수신자가 없음)
+		memberMessageDao.add(MemberMessageDto.builder()
+					.memberMessageType("CHAT")
+					.memberMessageContent(response.getContent())
+					.memberMessageSender(response.getAccountId())
+					.memberMessageTime(Timestamp.valueOf(response.getTime()))
+				.build());
 	}
 	
 }

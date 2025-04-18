@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="memberMessage">
+	
+	<!-- 등록 -->
+	<select id="sequence" resultType="long">
+		select member_message_seq.nextval from dual
+	</select>	
+	<insert id="add">
+		insert into member_message(
+			member_message_no, member_message_type, member_message_content,
+			member_message_time, member_message_sender, member_message_receiver
+		)values(
+			#{memberMessageNo}, #{memberMessageType}, #{memberMessageContent},
+			#{memberMessageTime}, #{memberMessageSender}, #{memberMessageReceiver}
+		)
+	</insert>
+	
+</mapper>
