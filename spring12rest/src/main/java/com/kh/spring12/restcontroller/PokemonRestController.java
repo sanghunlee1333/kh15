@@ -19,10 +19,32 @@ import com.kh.spring12.dto.PokemonDto;
 import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.vo.SearchVO;
 
-@CrossOrigin
-@RestController
-@RequestMapping("/api/pokemon")
+@CrossOrigin //다른 도메인(주소)에서 오는 요청도 허용해주겠다는 뜻. 현재는 아무 origin이나 허용. 브라우저는 보안상 다른 출처(origin)에서 요청하면 막아버림. 
+//ex) 프론트엔드가 localhost:3000, 백엔드는 localhost:8080이면 -> 다른 origin. 이걸 허용하려면 @CrossOrigin이 필요.
+//@CrossOrigin(origins = "http://localhost:3000") -> 해당 origin만 허용
+@RestController //이 클래스는 "웹 요청을 처리하는 컨트롤러야!" 라고 스프링에게 알려주는 것. 역할 = 사용자의 요청을 받아서, 데이터를 처리한 다음, JSON 형식으로 결과를 반환해줌
+//예전에는 @Controller @ResponseBody -> @RestController는 이걸 한 줄로 합친 것
+@RequestMapping("/api/pokemon") //이 컨트롤러의 기본 경로(URL) 를 정하는 것
 public class PokemonRestController {
+	
+	/*
+	- JSON(JavaScript Object Notation) = 데이터를 주고받을 때 쓰는 형식
+	- 말 그대로 자바스크립트 객체처럼 생긴 데이터 표현 방식
+	- ex) {
+			 "name": "피카츄",
+			 "level": 25,
+			 "type": "전기"
+		  }
+	- 이건 name, level, type이라는 속성(키)과 "피카츄", 25, "전기"라는 값을 가지고 있어
+	- 왜 쓰냐? -> 
+	1) 사람도 읽기 쉽고 (가독성 좋고)
+	2) 컴퓨터도 파싱하기 쉬움
+	3) 대부분의 언어에서 쉽게 다룰 수 있음
+	4) 프론트엔드 <-> 백엔드 간 데이터 전송에 딱!
+	- 실제 흐름 -> 프론트엔드가 서버한테 요청을 보내면 서버는 JSON 형식으로 데이터를 줌 -> 프론트가 받아서 화면에 보여줌
+	
+	 */
+	//- REST API = ?????
 
 	@Autowired
 	private PokemonDao pokemonDao;
@@ -40,7 +62,7 @@ public class PokemonRestController {
 	//	조회[GET]		/pokemon/
 	//	상세[GET]		/pokemon/{pokemonNo}
 	//	수정[PUT]		/pokemon/{pokemonNo}
-	//	     [PATCH]	/pokemon/{pokemonNo}
+	//	   [PATCH]	/pokemon/{pokemonNo}
 	//	삭제[DELETE]	/pokemon/{pokemonNo}
 	
 	//SOA - Service Oriented Architecture

@@ -12,7 +12,9 @@ import com.kh.spring12.dto.PokemonDto;
 import com.kh.spring12.vo.SearchVO;
 
 //DAO는 영속성 항목을 제어하는 도구
-//- 영속성이라는건 파일이나 데이터베이스처럼 놔두면 영원히 유지되는것을 의미
+//- 영속성이라는건 파일이나 데이터베이스처럼 놔두면 영원히 유지되는것을 의미 
+//- 예를 들어, 파일이나 데이터베이스에 저장된 데이터는 프로그램이 종료되더라도 사라지지 않고 계속 유지됨. 이와 같은 데이터를 다루는 방법을 영속성
+//- DAO (Data Access Object) = 데이터베이스나 파일과 같은 저장소에서 데이터를 읽거나 쓰는 작업을 추상화해서 처리하는 도구. 즉, 데이터베이스와 연결하여 데이터를 저장하거나 불러오는 역할
 //- 영속성 항목을 제어하는 도구들은 @Repository로 등록
 @Repository
 public class PokemonDao {
@@ -22,7 +24,14 @@ public class PokemonDao {
 //	private JdbcTemplate jdbcTemplate; //Spring JDBC용 처리도구
 	
 	@Autowired
-	private SqlSession sqlSession; //myBatis용 처리도구
+	private SqlSession sqlSession; //SqlSession = MyBatis에서 SQL 실행할 수 있게 해주는 핵심 도구
+	// PokemonDao dao = new PokemonDao(); // 직접 객체를 만드는 방식
+	/*
+	@Autowired =  "이 변수에 쓸 객체를 스프링이 알아서 넣어줘!" 라는 뜻
+	private PokemonDao dao;
+	- 이렇게만 쓰면, 스프링이 알아서 PokemonDao 객체를 찾아서 넣어줌 = 의존성 주입(Dependency Injection, DI)
+	 */
+	
 	
 	//목록
 	public List<PokemonDto> selectList() {
@@ -32,15 +41,22 @@ public class PokemonDao {
 	
 	//검색
 	public List<PokemonDto> selectList(String column, String keyword){
-		Map<String, Object> param = new HashMap<>();
+		Map<String, Object> param = new HashMap<>(); // String: 키는 보통 이름이니까 문자열, Object: 값은 어떤 타입이든 올 수 있으니까 (String이든 int든 다 받을 수 있음)
 		param.put("column", column);
 		param.put("keyword", keyword);
 		return sqlSession.selectList("pokemon.listOrSearch", param);
+		
+		/*
+		 	- Map은 인터페이스(설계도). 그걸 구현한 게 여러 개 있음
+		 	1. HashMap: 가장 기본적이고 빠른 일반 Map. 해시 함수를 이용해서 데이터의 위치(저장 위치)를 빠르게 찾아냄 -> 일반적인 상황엔 HashMap이 가장 빠르고 가벼워서 많이 씀.
+			2. TreeMap: 키 순서대로 자동 정렬됨
+		*/
 	}
 	
-
-	
 	//등록(1) - 시퀀스 자동생성
+	//메서드에서 pokemonDto 객체를 파라미터로 전달할 때, MyBatis는 pokemonDto 객체의 pokemonName과 pokemonType 속성값을 
+	//각각 #{pokemonName}과 #{pokemonType}에 바인딩. 
+	//따라서 객체의 필드 이름과 MyBatis의 쿼리에서 사용하는 이름이 일치해야 함!
 	public void insert(PokemonDto pokemonDto) {
 		sqlSession.insert("pokemon.add", pokemonDto);
 	}
@@ -55,7 +71,7 @@ public class PokemonDao {
 	}
 	
 	//삭제 메소드
-	public boolean delete(int pokemonNo) {
+	public boolean delete(int pokemonNo) { //MyBatis는 update, delete 등의 SQL을 실행하고 나면 영향을 받은 행(row)의 개수를 int로 리턴
 		return sqlSession.delete("pokemon.delete", pokemonNo) > 0;
 	}
 	
@@ -69,7 +85,8 @@ public class PokemonDao {
 		return sqlSession.selectOne("pokemon.find", pokemonNo);
 	}
 
-	public List<PokemonDto> selectList(SearchVO searchVO) {
+	//검색에서처럼 Map 쓰는 방식 대신, 객체 형태인 SearchVO를 넘겨줌. SearchVO 안에 column, keyword가 들어 있으니까 MyBatis는 알아서 .getColumn(), .getKeyword()로 값을 꺼내 씀. 훨씬 깔끔하고 객체지향적인 방식!
+	public List<PokemonDto> selectList(SearchVO searchVO) { 
 		return sqlSession.selectList("pokemon.listOrSearch", searchVO);
 	}
 	
