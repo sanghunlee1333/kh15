@@ -1,6 +1,8 @@
 package com.kh.spring12.dao.websocket;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,20 @@ public class RoomDao {
 	}
 	public boolean delete(long roomNo) {
 		return sqlSession.delete("room.delete", roomNo) > 0;
+	}
+	public void enterRoom(long roomNo, String accountId) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("roomNo", roomNo);
+		params.put("accountId", accountId);
+		sqlSession.insert("room.enter", params);
+	}
+	public boolean checkRoom(long roomNo, String accountId) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("roomNo", roomNo);
+		params.put("accountId", accountId);
+		int count = sqlSession.selectOne("room.check", params); 
+		return count > 0;
+		//select count(*) from room_user where room_user_no = ? and account_id = ?
 	}
 	
 }

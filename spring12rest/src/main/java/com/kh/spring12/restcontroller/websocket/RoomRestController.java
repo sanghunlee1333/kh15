@@ -1,4 +1,4 @@
-package com.kh.spring12.restcontroller;
+package com.kh.spring12.restcontroller.websocket;
 
 import java.util.List;
 
@@ -57,5 +57,14 @@ public class RoomRestController {
 			throw new TargetNotFoundException("소유자 불일치");
 		
 		roomDao.delete(roomNo);
+	}
+	
+	@PostMapping("/enter/{roomNo}")
+	public void enter(@RequestHeader("Authorization") String bearerToken, @PathVariable long roomNo) {
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		boolean isEnter = roomDao.checkRoom(roomNo, claimVO.getUserId());
+		if(isEnter == false) { //방에 참여한 적이 없으면
+			roomDao.enterRoom(roomNo, claimVO.getUserId());
+		}
 	}
 }
