@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.spring12.dto.websocket.RoomDto;
+import com.kh.spring12.vo.websocket.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,5 +49,15 @@ public class RoomDao {
 		return count > 0;
 		//select count(*) from room_user where room_user_no = ? and account_id = ?
 	}
-	
+	public List<UserVO> getUsers(long roomNo){
+		//return sqlSession.selectList("room.getUsers", roomNo); //모호한 표현
+		Map<String, Long> params = Map.of("roomNo", roomNo);
+		return sqlSession.selectList("room.getUsers", params); //정확한 표현
+	}
+	public boolean leaveRoom(long roomNo, String accountId) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("roomNo", roomNo);
+		params.put("accountId", accountId);
+		return sqlSession.delete("room.leave", params) > 0; 
+	}
 }

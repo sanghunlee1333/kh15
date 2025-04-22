@@ -40,4 +40,13 @@
 		where room_no = #{roomNo} and account_id = #{accountId}
 	</select>
 	
+	<!-- 방 사용자 조회 -->
+	<select id="getUsers" resultType="UserVO">
+		select * from room_user_info where room_no = #{roomNo} order by account_id asc
+	</select>
+	
+	<!-- 방 나가기 -->
+	<delete id="leave">
+		delete room_user where room_no = #{roomNo} and account_id = #{accountId}
+	</delete>	
 </mapper>

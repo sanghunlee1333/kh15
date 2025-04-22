@@ -18,6 +18,7 @@ import com.kh.spring12.dto.websocket.RoomDto;
 import com.kh.spring12.error.TargetNotFoundException;
 import com.kh.spring12.service.TokenService;
 import com.kh.spring12.vo.ClaimVO;
+import com.kh.spring12.vo.websocket.UserVO;
 
 @CrossOrigin
 @RestController
@@ -40,7 +41,7 @@ public class RoomRestController {
 	public List<RoomDto> list() {
 		return roomDao.selectList();
 	}
-	//@GetMapping("/{roomNo}")
+	@GetMapping("/{roomNo}")
 	public RoomDto find(@PathVariable long roomNo) {
 		RoomDto roomDto = roomDao.selectOne(roomNo);
 		if(roomDto == null)
@@ -67,4 +68,27 @@ public class RoomRestController {
 			roomDao.enterRoom(roomNo, claimVO.getUserId());
 		}
 	}
+	
+	@GetMapping("/check/{roomNo}")
+	public boolean checkroom(@PathVariable long roomNo, @RequestHeader("Authorization") String bearerToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		return roomDao.checkRoom(roomNo, claimVO.getUserId());
+	}
+	
+	@GetMapping("/users/{roomNo}")
+	public List<UserVO> users(@PathVariable long roomNo, @RequestHeader("Authorization") String bearerToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		boolean isEnter = roomDao.checkRoom(roomNo, claimVO.getUserId());
+		if(isEnter == false) throw new TargetNotFoundException();
+		return roomDao.getUsers(roomNo);
+	}
+	
+	@DeleteMapping("/leave/{roomNo}")
+	public void leave(@PathVariable long roomNo, @RequestHeader("Authorization") String bearerToken) {
+		ClaimVO claimVO = tokenService.parseBearerToken(bearerToken);
+		boolean isEnter = roomDao.checkRoom(roomNo, claimVO.getUserId());
+		if(isEnter == false) throw new TargetNotFoundException();
+		roomDao.leaveRoom(roomNo, claimVO.getUserId());
+	}
+	
 }
