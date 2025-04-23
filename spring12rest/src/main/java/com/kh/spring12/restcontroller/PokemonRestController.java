@@ -109,12 +109,44 @@ public class PokemonRestController {
 	//[2] 조회지만 데이터가 많으니까 POST로 수신 (기본규칙을 어기는 방식)
 	
 	//[1]
+	//@PathVariable은 URL 경로(path)에 포함된 값을 메서드 파라미터로 바로 꺼내 쓰는 어노테이션
+	/*
+		ex) URL: /users/101 -> 이 중 101라는 값(userId)을 메서드 안으로 전달하고 싶을 때 사용
+		-> URL이 곧 데이터 식별자가 되므로, 이걸 코드에서 바로 쓰기 편하게 해 줌
+		@GetMapping("/users/{no}")
+		public UserDto getUser(@PathVariable int no) {
+		    // no == 101
+		    return userService.findByNo(no);
+		}
+		-> {no} 자리와 메서드 파라미터(@PathVariable int no)가 이름으로 매칭되어 자동으로 값을 넣어 줌
+		- 주소의 "집 번호" 꺼내기
+		- 비유: 택배 상자의 겉봉투에 적힌 "101호"
+		- 어디: URL 경로 -> http://site.com/users/101 에서 101
+		- 의미: "101호 집에 가서 물건(정보)을 달라"
+	*/
 	@GetMapping("/column/{column}/keyword/{keyword}")
 	public List<PokemonDto> search(@PathVariable String column, @PathVariable String keyword){
 		return pokemonDao.selectList(column, keyword);
 	}
 	
 	//[2]
+	/*
+		// 클라이언트가 이렇게 JSON 편지를 보냄
+		// {
+		//   "title": "안녕하세요",
+		//   "content": "신상품 출시 소식입니다"
+		// }
+		@PostMapping("/notices")
+		public void createNotice(@RequestBody NoticeDto dto) {
+		    // dto.getTitle()   == "안녕하세요"
+		    // dto.getContent() == "신상품 출시 소식입니다"
+		    noticeService.save(dto);
+		}
+		- 편지봉투 안 "편지 내용" 꺼내기
+		- 비유: 택배 상자 안에 든 "편지"
+		- 어디: HTTP 요청의 본문(body) 에 JSON으로 담긴 데이터
+		- 의미: "이 봉투(요청)에 든 편지(데이터)를 읽어라"
+	*/
 	@PostMapping("/search")
 	public List<PokemonDto> search(@RequestBody SearchVO searchVO){
 		//return pokemonDao.selectList(searchVO.getColumn(), searchVO.getKeyword());
