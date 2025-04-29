@@ -21,6 +21,6 @@ public class AttachmentDao {
 	}
 	
 	public AttachmentDto selectOne(int attachmentNo) {
-		return sqlSession.selectOne("attachmetn.find", attachmentNo);
+		return sqlSession.selectOne("attachment.find", attachmentNo);
 	}
 }

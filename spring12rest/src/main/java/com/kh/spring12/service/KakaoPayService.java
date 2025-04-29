@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -151,6 +152,7 @@ public class KakaoPayService {
 	}
 	
 	//결제DB에 등록
+	@Transactional
 	public void insertDB(KakaoPayApproveVO approveVO, KakaoPayReadyVO readyVO, List<KakaoPayBuyVO> buyList) {
 		//buy 등록
 		long buyNo = buyDao.addBuy(BuyDto.builder()
