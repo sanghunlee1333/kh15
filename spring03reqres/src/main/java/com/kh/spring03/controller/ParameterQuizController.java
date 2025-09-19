@@ -127,13 +127,13 @@ public class ParameterQuizController {
 	public String pcroom (
 			@RequestParam String start, 
 			@RequestParam String finish){
-		LocalDate today = LocalDate.now();
-		LocalTime startTime = LocalTime.parse(start);
+		LocalDate today = LocalDate.now(); //LocalDate -> 연/월/일(날짜)
+		LocalTime startTime = LocalTime.parse(start); //LocalTime -> 시/분/초/나노초(시간)
 		LocalTime finishTime = LocalTime.parse(finish);
 		
 		LocalDateTime begin, end;
 		if(startTime.isBefore(finishTime)) { //시작시각이 종료시각보다 이전이라면(당일)
-			begin = LocalDateTime.of(today, startTime);
+			begin = LocalDateTime.of(today, startTime); //LocalDateTime -> 연/월/일/시/분/초/나노초(날짜+시간)
 			end = LocalDateTime.of(today, finishTime);
 		}
 		else { //시작시각이 종료시각 이후라면(날 샜다면)
