@@ -12,7 +12,7 @@ import lombok.ToString;
 //- DTO는 여러 개 존재하며 필요할 때마다 만들어야 한다
 //- 등록을 하지 않고 그때그때 new로 만들어서 사용 (DTO만)
 
-//@Setter	@Getter @NoArgsConstructor @ToString //@All -> 모든 매개변수가 있는 생성자를 추가해주는 어노테이션
+//@Setter @Getter @NoArgsConstructor @ToString //@All -> 모든 매개변수가 있는 생성자를 추가해주는 어노테이션
 @Data
 public class PokemonDto {
 	
