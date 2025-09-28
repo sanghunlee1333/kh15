@@ -18,7 +18,7 @@ public class GameUserDao {
 	@Autowired
 	private GameUserMapper gameUserMapper;
 	
-public void insert(GameUserDto gameUserDto) {
+	public void insert(GameUserDto gameUserDto) {
 		
 		String sql = "insert into game_user(game_user_no, game_user_id, game_user_job, game_user_level, game_user_money) "
 				+ "values(game_user_seq.nextval, ?, ?, ?, ?)";
